@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>StoneAgeHuts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="site-header" id="site-header">
+    <div class="wrap header-inner">
+      <div class="brand">
+        <img src="/images/hero-bg.jpg" alt="logo" class="logo" />
+        <span id="site-title">StoneAgeHuts</span>
+      </div>
+      <nav class="main-nav">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#stay" class="nav-link">Stay</a>
+        <a href="#activities" class="nav-link">Activities</a>
+        <a href="#gallery" class="nav-link">Gallery</a>
+        <a href="#blog" class="nav-link">Blog</a>
+        <a href="#reviews" class="nav-link">Reviews</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+      <div class="controls">
+        <div class="lang-toggle">
+          <button id="btn-en" class="active">EN</button>
+          <button id="btn-hi">HI</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="home" class="hero">
+      <div class="hero-content">
+        <h2 class="hero-title">Experience Nature's Embrace</h2>
+        <p class="hero-sub">Resort • Hostel • Bird Watching Retreat</p>
+        <a class="btn primary" href="#contact">Book Now</a>
+      </div>
+    </section>
+
+    <section id="stay">
+      <h3 class="section-title">Our Accommodations</h3>
+      <div class="cards">
+        <div class="card">
+          <h4 class="card-title">Resort Cottages</h4>
+          <p class="price">₹2500 / night</p>
+          <p>Private luxury cottages, mountain view, attached bathroom.</p>
+          <button class="inquire">Book / Enquire</button>
+        </div>
+        <div class="card">
+          <h4 class="card-title">Hostel Dormitories</h4>
+          <p class="price">₹600 / bed</p>
+          <p>Budget shared rooms, perfect for backpackers.</p>
+          <button class="inquire">Book / Enquire</button>
+        </div>
+        <div class="card">
+          <h4 class="card-title">Bird Watching Cabins</h4>
+          <p class="price">₹1800 / night</p>
+          <p>Special cabins near bird sanctuary with guided tours.</p>
+          <button class="inquire">Book / Enquire</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="activities">
+      <h3 class="section-title">Activities & Experiences</h3>
+      <div class="activities-grid">
+        <div class="activity primary"><h4>Bird Watching</h4><p>Primary attraction: guided birding tours.</p></div>
+        <div class="activity"><h4>Trekking</h4><p>Guided treks around Kumaon hills.</p></div>
+        <div class="activity"><h4>Nature Trails</h4><p>Leisurely trails for all fitness levels.</p></div>
+        <div class="activity"><h4>Photography Tours</h4><p>Capture landscapes and wildlife.</p></div>
+        <div class="activity"><h4>Campfire Nights</h4><p>Evening bonfires with music and stories.</p></div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <h3 class="section-title">Image Gallery</h3>
+      <div class="gallery-filters">
+        <button data-cat="all" class="filter active">All</button>
+        <button data-cat="property" class="filter">Property</button>
+        <button data-cat="rooms" class="filter">Rooms</button>
+        <button data-cat="activities" class="filter">Activities</button>
+        <button data-cat="nature" class="filter">Nature</button>
+        <button data-cat="bird" class="filter">Bird Watching</button>
+      </div>
+      <div class="gallery-grid">
+        <img src="/images/property/main-building.jpg" data-cat="property" alt="main" class="thumb" />
+        <img src="/images/rooms/resort-cottage.jpg" data-cat="rooms" alt="resort" class="thumb" />
+        <img src="/images/rooms/hostel-dorm.jpg" data-cat="rooms" alt="hostel" class="thumb" />
+        <img src="/images/activities/bird-watching.jpg" data-cat="activities,bird" alt="bird" class="thumb" />
+        <img src="/images/nature/landscape.jpg" data-cat="nature" alt="landscape" class="thumb" />
+        <img src="/images/activities/campfire.jpg" data-cat="activities" alt="campfire" class="thumb" />
+      </div>
+    </section>
+
+    <section id="blog">
+      <h3 class="section-title">Blog</h3>
+      <div id="posts"></div>
+    </section>
+
+    <section id="reviews">
+      <h3 class="section-title">Guest Reviews</h3>
+      <form id="review-form">
+        <input name="name" placeholder="Your name" required />
+        <select name="rating">
+          <option value="5">5</option>
+          <option value="4">4</option>
+          <option value="3">3</option>
+          <option value="2">2</option>
+          <option value="1">1</option>
+        </select>
+        <textarea name="text" placeholder="Your review"></textarea>
+        <button type="submit">Submit Review</button>
+      </form>
+      <div id="reviews-list"></div>
+    </section>
+
+    <section id="contact">
+      <h3 class="section-title">Contact Us</h3>
+      <div class="contact-grid">
+        <form id="contact-form">
+          <input name="name" placeholder="Name" required />
+          <input name="email" placeholder="Email" required />
+          <textarea name="message" placeholder="Message"></textarea>
+          <button type="submit">Send</button>
+        </form>
+        <div class="contact-info">
+          <p><i class="fa fa-phone"></i> +91 98765 43210</p>
+          <p><i class="fa fa-envelope"></i> info@stoneagehuts.com</p>
+          <p><i class="fa fa-map-marker-alt"></i> Near Nainital, Uttarakhand</p>
+          <p>25km from Nainital city center | ~300km from Delhi</p>
+          <div class="socials">
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="#" aria-label="TripAdvisor"><i class="fab fa-tripadvisor"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="newsletter">
+      <h3 class="section-title">Newsletter</h3>
+      <form id="newsletter-form">
+        <input name="email" placeholder="Email" required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </section>
+
+  </main>
+
+  <div id="modal" class="modal" style="display:none;"><span id="modal-close">&times;</span><img id="modal-img" src="" /></div>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>© 2024 StoneAgeHuts</p>
+      <p>Near Nainital, Kumaon Hills</p>
+    </div>
+  </footer>
+
+  <script src="/script.js"></script>
+</body>
+</html>

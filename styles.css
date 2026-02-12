@@ -1,0 +1,18 @@
+html,body{height:100%;margin:0}
+body{
+  background-image: url("file_000000001794720786896f30150a73c0.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: #fff;
+}
+.hero{
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+}
