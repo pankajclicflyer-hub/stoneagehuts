@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Login - StoneAgeHuts</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="wrap">
+    <h2>Administrator Login</h2>
+    <form method="post" action="/admin/login">
+      <div>
+        <label for="username">Username:</label>
+        <input id="username" name="username" required />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input id="password" name="password" type="password" required />
+      </div>
+      <button type="submit">Sign in</button>
+    </form>
+    <p><a href="/">Back to site</a></p>
+    <script>
+      // optionally show a simple error message if query string has error
+      if (location.search.indexOf('error=1') !== -1) {
+        const msg = document.createElement('p');
+        msg.style.color = 'red';
+        msg.textContent = 'Invalid credentials, please try again.';
+        document.body.insertBefore(msg, document.body.firstChild);
+      }
+    </script>
+  </main>
+</body>
+</html>

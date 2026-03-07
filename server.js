@@ -87,5 +87,12 @@ app.get('/api/blog', async (req, res) => {
   res.json(posts);
 });
 
+// --- admin routes (static panel) ---
+// both /admin and /admin/login simply serve the single admin page
+app.get(['/admin', '/admin/login'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

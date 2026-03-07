@@ -1,0 +1,1166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>StoneAgeHuts — Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --bg:       #0f1117;
+      --surface:  #181c24;
+      --card:     #1e2330;
+      --border:   #2a3040;
+      --moss:     #4a8c50;
+      --moss-l:   #5dab64;
+      --clay:     #c4855a;
+      --sand:     #e8d5b7;
+      --red:      #e05252;
+      --yellow:   #d4a93a;
+      --blue:     #4a7fc1;
+      --text:     #e8eaf0;
+      --muted:    #7a8299;
+      --radius:   12px;
+      --sidebar:  240px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; }
+
+    /* LOGIN */
+    #login-screen {
+      position: fixed; inset: 0; background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999; flex-direction: column; gap: 0;
+    }
+    .login-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 2.5rem; width: 100%; max-width: 400px;
+    }
+    .login-logo { text-align: center; margin-bottom: 2rem; }
+    .login-logo .icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+    .login-logo h2 { font-family: 'Playfair Display',serif; color: var(--sand); font-size: 1.5rem; }
+    .login-logo p { color: var(--muted); font-size: 0.85rem; }
+    .login-field { margin-bottom: 1rem; }
+    .login-field label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    .login-field input { width: 100%; padding: 0.85rem 1rem; background: var(--card); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-family: inherit; font-size: 0.95rem; }
+    .login-field input:focus { outline: none; border-color: var(--moss); }
+    .login-btn { width: 100%; padding: 0.9rem; background: var(--moss); color: #fff; border: none; border-radius: 10px; font-weight: 600; font-size: 1rem; cursor: pointer; margin-top: 0.5rem; font-family: inherit; transition: all 0.2s; }
+    .login-btn:hover { background: var(--moss-l); }
+    .login-error { color: var(--red); font-size: 0.85rem; text-align: center; margin-top: 0.75rem; }
+
+    /* SIDEBAR */
+    #sidebar {
+      width: var(--sidebar); background: var(--surface); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0;
+      z-index: 100; transition: transform 0.3s;
+    }
+    .sidebar-brand { padding: 1.5rem 1.25rem 1rem; border-bottom: 1px solid var(--border); }
+    .sidebar-brand span { font-family: 'Playfair Display',serif; color: var(--sand); font-size: 1.1rem; }
+    .sidebar-brand small { display: block; color: var(--muted); font-size: 0.72rem; margin-top: 0.2rem; }
+    .sidebar-nav { flex: 1; padding: 1rem 0.75rem; overflow-y: auto; }
+    .nav-section-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 0.75rem 0.75rem 0.4rem; }
+    .nav-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.65rem 0.85rem; border-radius: 9px; cursor: pointer;
+      color: var(--muted); font-size: 0.88rem; font-weight: 500;
+      transition: all 0.15s; margin-bottom: 2px; border: none; background: none;
+      width: 100%; text-align: left; font-family: inherit;
+    }
+    .nav-item:hover { background: var(--card); color: var(--text); }
+    .nav-item.active { background: rgba(74,140,80,0.2); color: var(--moss-l); }
+    .nav-item i { width: 18px; text-align: center; font-size: 0.9rem; }
+    .nav-item .badge { margin-left: auto; background: var(--red); color: #fff; font-size: 0.65rem; padding: 0.1rem 0.45rem; border-radius: 99px; font-weight: 700; }
+    .sidebar-footer { padding: 1rem 0.75rem; border-top: 1px solid var(--border); }
+    .logout-btn { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border-radius: 9px; color: var(--red); font-size: 0.88rem; font-weight: 500; cursor: pointer; width: 100%; border: none; background: none; font-family: inherit; transition: all 0.15s; }
+    .logout-btn:hover { background: rgba(224,82,82,0.1); }
+
+    /* MAIN */
+    #main-content { margin-left: var(--sidebar); flex: 1; min-height: 100vh; }
+    .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .topbar h1 { font-size: 1.2rem; font-weight: 600; color: var(--text); }
+    .topbar-actions { display: flex; align-items: center; gap: 1rem; }
+    .admin-badge { background: rgba(74,140,80,0.2); color: var(--moss-l); padding: 0.3rem 0.75rem; border-radius: 99px; font-size: 0.78rem; font-weight: 600; }
+
+    /* PAGES */
+    .page { display: none; padding: 2rem; }
+    .page.active { display: block; }
+
+    /* STATS GRID */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
+    .stat-card .sc-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+    .stat-card .sc-num { font-family: 'Playfair Display',serif; font-size: 2rem; color: var(--text); }
+    .stat-card .sc-sub { font-size: 0.78rem; color: var(--muted); margin-top: 0.25rem; }
+    .stat-card.green .sc-num { color: var(--moss-l); }
+    .stat-card.clay .sc-num  { color: var(--clay); }
+    .stat-card.blue .sc-num  { color: var(--blue); }
+    .stat-card.red .sc-num   { color: var(--red); }
+
+    /* CARDS */
+    .panel-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.5rem; overflow: hidden; }
+    .panel-card-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .panel-card-header h3 { font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+    .panel-card-body { padding: 1.5rem; }
+
+    /* BUTTONS */
+    .btn { padding: 0.6rem 1.2rem; border-radius: 9px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; font-family: inherit; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.15s; }
+    .btn-primary { background: var(--moss); color: #fff; }
+    .btn-primary:hover { background: var(--moss-l); }
+    .btn-danger  { background: rgba(224,82,82,0.15); color: var(--red); border: 1px solid rgba(224,82,82,0.3); }
+    .btn-danger:hover  { background: var(--red); color: #fff; }
+    .btn-approve { background: rgba(74,140,80,0.15); color: var(--moss-l); border: 1px solid rgba(74,140,80,0.3); }
+    .btn-approve:hover { background: var(--moss); color: #fff; }
+    .btn-reject  { background: rgba(224,82,82,0.15); color: var(--red); border: 1px solid rgba(224,82,82,0.3); }
+    .btn-reject:hover  { background: var(--red); color: #fff; }
+    .btn-edit    { background: rgba(74,127,193,0.15); color: var(--blue); border: 1px solid rgba(74,127,193,0.3); }
+    .btn-edit:hover    { background: var(--blue); color: #fff; }
+    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.78rem; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--muted); }
+    .btn-outline:hover { border-color: var(--moss); color: var(--moss-l); }
+
+    /* TABLE */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .data-table th { text-align: left; padding: 0.75rem 1rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border-bottom: 1px solid var(--border); font-weight: 600; }
+    .data-table td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .overflow-table { overflow-x: auto; }
+
+    /* BADGES */
+    .badge { padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .badge-pending  { background: rgba(212,169,58,0.2);  color: var(--yellow); }
+    .badge-approved { background: rgba(74,140,80,0.2);   color: var(--moss-l); }
+    .badge-rejected { background: rgba(224,82,82,0.2);   color: var(--red); }
+    .badge-new      { background: rgba(74,127,193,0.2);  color: var(--blue); }
+    .badge-read     { background: rgba(122,130,153,0.2); color: var(--muted); }
+    .badge-published { background: rgba(74,140,80,0.2);  color: var(--moss-l); }
+    .badge-draft    { background: rgba(122,130,153,0.2); color: var(--muted); }
+
+    /* FORMS */
+    .form-row { display: grid; gap: 1rem; margin-bottom: 1rem; }
+    .form-row.cols-2 { grid-template-columns: 1fr 1fr; }
+    .form-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-group label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 0.75rem 1rem;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 9px; color: var(--text); font-family: inherit; font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--moss); }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+    select option { background: var(--card); }
+    .form-group input[type=file] { padding: 0.5rem; }
+    .form-hint { font-size: 0.75rem; color: var(--muted); margin-top: 0.35rem; }
+
+    /* UPLOAD AREA */
+    .upload-area {
+      border: 2px dashed var(--border); border-radius: var(--radius);
+      padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s;
+      color: var(--muted);
+    }
+    .upload-area:hover, .upload-area.drag { border-color: var(--moss); background: rgba(74,140,80,0.05); color: var(--moss-l); }
+    .upload-area i { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+    .upload-area p { font-size: 0.88rem; }
+    .upload-area small { font-size: 0.75rem; display: block; margin-top: 0.3rem; }
+    .preview-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(120px,1fr)); gap: 0.75rem; margin-top: 1rem; }
+    .preview-item { position: relative; aspect-ratio: 4/3; border-radius: 9px; overflow: hidden; background: var(--surface); }
+    .preview-item img { width: 100%; height: 100%; object-fit: cover; }
+    .preview-item .remove { position: absolute; top: 4px; right: 4px; background: var(--red); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
+
+    /* GALLERY GRID (admin) */
+    .admin-gallery-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 1rem; }
+    .admin-gallery-item { position: relative; border-radius: 10px; overflow: hidden; background: var(--surface); aspect-ratio: 4/3; }
+    .admin-gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+    .admin-gallery-item .item-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; opacity: 0; transition: opacity 0.2s; }
+    .admin-gallery-item:hover .item-overlay { opacity: 1; }
+    .admin-gallery-item .item-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); padding: 0.4rem 0.6rem; font-size: 0.72rem; color: #fff; }
+
+    /* REVIEW DETAIL */
+    .review-detail { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; }
+    .rv-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .rv-name-big { font-weight: 600; font-size: 1rem; }
+    .rv-stars-big { color: #d4a93a; }
+    .rv-date-small { font-size: 0.78rem; color: var(--muted); margin-left: auto; }
+    .rv-quote { color: var(--muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1rem; font-style: italic; }
+    .rv-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+    .rv-status-select { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 0.4rem 0.7rem; border-radius: 7px; font-family: inherit; font-size: 0.82rem; }
+
+    /* ENQUIRY */
+    .enq-row { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 0.75rem; }
+    .enq-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+    .enq-name { font-weight: 600; }
+    .enq-contact { font-size: 0.82rem; color: var(--muted); display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .enq-msg { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+    /* MODAL */
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 500; backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 1rem; }
+    .modal-backdrop.open { display: flex; }
+    .modal-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .modal-header h3 { font-size: 1.1rem; font-weight: 600; }
+    .modal-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1.2rem; padding: 0.25rem; }
+    .modal-body { padding: 1.5rem; }
+    .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 0.75rem; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; background: var(--card); color: var(--text); padding: 1rem 1.5rem; border-radius: 12px; font-size: 0.9rem; font-weight: 500; box-shadow: 0 8px 24px rgba(0,0,0,0.4); transform: translateY(100px); opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--border); }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: var(--moss); }
+    .toast.error   { border-color: var(--red); }
+
+    /* PROGRESS BAR */
+    .progress-bar { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; margin-top: 0.5rem; }
+    .progress-fill { height: 100%; background: var(--moss); transition: width 0.3s; }
+
+    /* EMPTY STATE */
+    .empty-state { text-align: center; padding: 3rem; color: var(--muted); }
+    .empty-state i { font-size: 2.5rem; display: block; margin-bottom: 1rem; opacity: 0.3; }
+    .empty-state p { font-size: 0.95rem; }
+
+    /* SPINNER */
+    .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--moss); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 2rem auto; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ACTIVITY FEED */
+    .feed-item { display: flex; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--moss); flex-shrink: 0; margin-top: 6px; }
+    .feed-dot.red { background: var(--red); }
+    .feed-dot.blue { background: var(--blue); }
+    .feed-content p { font-size: 0.88rem; }
+    .feed-content small { font-size: 0.75rem; color: var(--muted); }
+
+    @media (max-width: 900px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: none; }
+      #main-content { margin-left: 0; }
+      .topbar-ham { display: flex !important; }
+    }
+    .topbar-ham { display: none; background: none; border: none; color: var(--text); cursor: pointer; font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN ═══════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <span class="icon">🏕️</span>
+      <h2>StoneAgeHuts</h2>
+      <p>Admin Panel</p>
+    </div>
+    <div class="login-field">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="admin@stoneagehuts.com" />
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" />
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <p class="login-error" id="login-error"></p>
+  </div>
+</div>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-brand">
+    <span>🏕️ StoneAgeHuts</span>
+    <small>Admin Panel</small>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <button class="nav-item active" onclick="showPage('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</button>
+
+    <div class="nav-section-label">Content</div>
+    <button class="nav-item" onclick="showPage('hero')"><i class="fas fa-image"></i> Hero Image</button>
+    <button class="nav-item" onclick="showPage('gallery')"><i class="fas fa-images"></i> Gallery</button>
+    <button class="nav-item" onclick="showPage('blog')"><i class="fas fa-pen-nib"></i> Blog Posts</button>
+
+    <div class="nav-section-label">People</div>
+    <button class="nav-item" id="nav-reviews" onclick="showPage('reviews')"><i class="fas fa-star"></i> Reviews <span class="badge" id="rv-badge" style="display:none"></span></button>
+    <button class="nav-item" id="nav-enquiries" onclick="showPage('enquiries')"><i class="fas fa-envelope"></i> Enquiries <span class="badge" id="enq-badge" style="display:none"></span></button>
+    <button class="nav-item" onclick="showPage('bookings')"><i class="fas fa-calendar-check"></i> Bookings</button>
+    <button class="nav-item" onclick="showPage('newsletter')"><i class="fas fa-mail-bulk"></i> Newsletter</button>
+
+    <div class="nav-section-label">Settings</div>
+    <button class="nav-item" onclick="showPage('contact-settings')"><i class="fas fa-address-card"></i> Contact Info</button>
+    <button class="nav-item" onclick="showPage('analytics')"><i class="fas fa-chart-bar"></i> Analytics</button>
+  </div>
+  <div class="sidebar-footer">
+    <button class="logout-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+</nav>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<div id="main-content">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="topbar-ham" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+      <h1 id="page-title">Dashboard</h1>
+    </div>
+    <div class="topbar-actions">
+      <a href="index.html" target="_blank" class="btn btn-outline btn-sm"><i class="fas fa-external-link-alt"></i> View Site</a>
+      <span class="admin-badge">● Admin</span>
+    </div>
+  </div>
+
+  <!-- ── DASHBOARD ── -->
+  <div class="page active" id="page-dashboard">
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card green"><div class="sc-label">Total Reviews</div><div class="sc-num" id="st-reviews">—</div><div class="sc-sub">Pending approval</div></div>
+      <div class="stat-card clay"><div class="sc-label">Enquiries</div><div class="sc-num" id="st-enquiries">—</div><div class="sc-sub">New messages</div></div>
+      <div class="stat-card blue"><div class="sc-label">Bookings</div><div class="sc-num" id="st-bookings">—</div><div class="sc-sub">Total requests</div></div>
+      <div class="stat-card"><div class="sc-label">Gallery Images</div><div class="sc-num" id="st-gallery">—</div><div class="sc-sub">Published</div></div>
+      <div class="stat-card"><div class="sc-label">Blog Posts</div><div class="sc-num" id="st-posts">—</div><div class="sc-sub">Published</div></div>
+      <div class="stat-card"><div class="sc-label">Subscribers</div><div class="sc-num" id="st-subs">—</div><div class="sc-sub">Newsletter</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+      <div class="panel-card">
+        <div class="panel-card-header"><h3><i class="fas fa-clock"></i> Recent Activity</h3></div>
+        <div class="panel-card-body" id="activity-feed"><div class="spinner"></div></div>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-header"><h3><i class="fas fa-star"></i> Pending Reviews</h3><button class="btn btn-sm btn-primary" onclick="showPage('reviews')">View All</button></div>
+        <div class="panel-card-body" id="dash-pending-reviews"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HERO ── -->
+  <div class="page" id="page-hero">
+    <div class="panel-card">
+      <div class="panel-card-header"><h3><i class="fas fa-image"></i> Hero Background Image</h3></div>
+      <div class="panel-card-body">
+        <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;">This image appears as the main background on the home page hero section.</p>
+        <div id="current-hero" style="margin-bottom:1.5rem;"></div>
+        <div class="upload-area" id="hero-drop" onclick="document.getElementById('hero-file').click()">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <p>Click to upload hero image</p>
+          <small>JPG, PNG, WebP — Recommended: 1920×1080px</small>
+        </div>
+        <input type="file" id="hero-file" accept="image/*" style="display:none" onchange="uploadHeroImage(this.files[0])" />
+        <div id="hero-progress" style="display:none;margin-top:1rem;">
+          <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.4rem;">Uploading...</p>
+          <div class="progress-bar"><div class="progress-fill" id="hero-prog-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── GALLERY ── -->
+  <div class="page" id="page-gallery">
+    <div class="panel-card" style="margin-bottom:1.5rem;">
+      <div class="panel-card-header"><h3><i class="fas fa-upload"></i> Upload Images</h3></div>
+      <div class="panel-card-body">
+        <div class="form-row cols-3">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="gal-category">
+              <option value="property">Property</option>
+              <option value="rooms">Rooms</option>
+              <option value="activities">Activities</option>
+              <option value="nature">Nature</option>
+              <option value="bird">Bird Watching</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Title (optional)</label>
+            <input type="text" id="gal-title" placeholder="Image title" />
+          </div>
+          <div class="form-group">
+            <label>Display Order</label>
+            <input type="number" id="gal-order" value="99" min="1" max="999" />
+          </div>
+        </div>
+        <div class="upload-area" id="gal-drop" onclick="document.getElementById('gal-files').click()">
+          <i class="fas fa-images"></i>
+          <p>Click to select images (multiple allowed)</p>
+          <small>JPG, PNG, WebP — Max 5MB each</small>
+        </div>
+        <input type="file" id="gal-files" accept="image/*" multiple style="display:none" onchange="handleGalleryFiles(this.files)" />
+        <div class="preview-grid" id="gal-preview"></div>
+        <div id="gal-progress" style="display:none;margin-top:1rem;">
+          <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.4rem;" id="gal-prog-label">Uploading...</p>
+          <div class="progress-bar"><div class="progress-fill" id="gal-prog-fill" style="width:0%"></div></div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:1rem;" onclick="uploadGalleryImages()" id="gal-upload-btn" disabled><i class="fas fa-upload"></i> Upload Selected</button>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-card-header">
+        <h3><i class="fas fa-th"></i> Manage Gallery</h3>
+        <div style="display:flex;gap:0.5rem;">
+          <select id="gal-filter-cat" onchange="loadGalleryAdmin()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:0.4rem 0.7rem;border-radius:7px;font-family:inherit;font-size:0.82rem;">
+            <option value="all">All Categories</option>
+            <option value="property">Property</option>
+            <option value="rooms">Rooms</option>
+            <option value="activities">Activities</option>
+            <option value="nature">Nature</option>
+            <option value="bird">Bird Watching</option>
+          </select>
+        </div>
+      </div>
+      <div class="panel-card-body">
+        <div class="admin-gallery-grid" id="admin-gallery-grid"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BLOG ── -->
+  <div class="page" id="page-blog">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+      <h2 style="font-size:1.1rem;font-weight:600;">Blog Posts</h2>
+      <button class="btn btn-primary" onclick="openBlogModal()"><i class="fas fa-plus"></i> New Post</button>
+    </div>
+    <div class="panel-card">
+      <div class="overflow-table">
+        <table class="data-table" id="blog-table">
+          <thead><tr><th>Title</th><th>Category</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="blog-tbody"><tr><td colspan="5"><div class="spinner"></div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── REVIEWS ── -->
+  <div class="page" id="page-reviews">
+    <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm rv-filter active" onclick="setRvFilter('all',this)">All</button>
+      <button class="btn btn-outline btn-sm rv-filter" onclick="setRvFilter('pending',this)">Pending</button>
+      <button class="btn btn-outline btn-sm rv-filter" onclick="setRvFilter('approved',this)">Approved</button>
+      <button class="btn btn-outline btn-sm rv-filter" onclick="setRvFilter('rejected',this)">Rejected</button>
+    </div>
+    <div id="reviews-list-admin"><div class="spinner"></div></div>
+  </div>
+
+  <!-- ── ENQUIRIES ── -->
+  <div class="page" id="page-enquiries">
+    <div class="panel-card">
+      <div class="panel-card-header"><h3><i class="fas fa-inbox"></i> Contact Enquiries</h3></div>
+      <div class="panel-card-body" id="enquiries-list"><div class="spinner"></div></div>
+    </div>
+  </div>
+
+  <!-- ── BOOKINGS ── -->
+  <div class="page" id="page-bookings">
+    <div class="panel-card">
+      <div class="panel-card-header"><h3><i class="fas fa-calendar-alt"></i> Booking Requests</h3></div>
+      <div class="overflow-table">
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Guests</th><th>Contact</th><th>Status</th></tr></thead>
+          <tbody id="bookings-tbody"><tr><td colspan="7"><div class="spinner"></div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── NEWSLETTER ── -->
+  <div class="page" id="page-newsletter">
+    <div class="panel-card">
+      <div class="panel-card-header">
+        <h3><i class="fas fa-mail-bulk"></i> Subscribers</h3>
+        <button class="btn btn-outline btn-sm" onclick="exportNewsletter()"><i class="fas fa-download"></i> Export CSV</button>
+      </div>
+      <div class="overflow-table">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>Email</th><th>Date Subscribed</th></tr></thead>
+          <tbody id="newsletter-tbody"><tr><td colspan="3"><div class="spinner"></div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CONTACT SETTINGS ── -->
+  <div class="page" id="page-contact-settings">
+    <div class="panel-card">
+      <div class="panel-card-header"><h3><i class="fas fa-address-card"></i> Contact Information</h3><p style="font-size:0.8rem;color:var(--muted);">Changes sync to website instantly</p></div>
+      <div class="panel-card-body">
+        <form onsubmit="saveContactInfo(event)">
+          <div class="form-row cols-2">
+            <div class="form-group"><label>Phone Number</label><input type="tel" id="ci-phone-input" placeholder="+91 98765 43210" /></div>
+            <div class="form-group"><label>Email Address</label><input type="email" id="ci-email-input" placeholder="info@stoneagehuts.com" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Address</label><input type="text" id="ci-address-input" placeholder="Near Nainital, Uttarakhand" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Check-in / Check-out Info</label><input type="text" id="ci-checkin-input" placeholder="Check-in: 12:00 PM · Check-out: 11:00 AM" /></div>
+          </div>
+          <h4 style="font-size:0.88rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin:1.5rem 0 1rem;">Social Media Links</h4>
+          <div class="form-row cols-2">
+            <div class="form-group"><label><i class="fab fa-instagram"></i> Instagram</label><input type="url" id="ci-instagram-input" placeholder="https://instagram.com/..." /></div>
+            <div class="form-group"><label><i class="fab fa-facebook"></i> Facebook</label><input type="url" id="ci-facebook-input" placeholder="https://facebook.com/..." /></div>
+            <div class="form-group"><label><i class="fab fa-x-twitter"></i> Twitter/X</label><input type="url" id="ci-twitter-input" placeholder="https://twitter.com/..." /></div>
+            <div class="form-group"><label><i class="fab fa-tripadvisor"></i> TripAdvisor</label><input type="url" id="ci-tripadvisor-input" placeholder="https://tripadvisor.com/..." /></div>
+            <div class="form-group"><label><i class="fab fa-youtube"></i> YouTube</label><input type="url" id="ci-youtube-input" placeholder="https://youtube.com/..." /></div>
+          </div>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ANALYTICS ── -->
+  <div class="page" id="page-analytics">
+    <div class="stats-grid" id="analytics-stats"></div>
+    <div class="panel-card">
+      <div class="panel-card-header"><h3><i class="fas fa-mouse-pointer"></i> Recent Clicks & Events</h3></div>
+      <div class="overflow-table">
+        <table class="data-table">
+          <thead><tr><th>Event</th><th>Details</th><th>Page</th><th>Time</th></tr></thead>
+          <tbody id="analytics-tbody"><tr><td colspan="4"><div class="spinner"></div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BLOG MODAL ═══ -->
+<div class="modal-backdrop" id="blog-modal">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h3 id="blog-modal-title">New Blog Post</h3>
+      <button class="modal-close" onclick="closeBlogModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="blog-edit-id" />
+      <div class="form-row">
+        <div class="form-group"><label>Post Title *</label><input type="text" id="blog-title" placeholder="Enter post title" /></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group"><label>Category</label>
+          <select id="blog-category">
+            <option>Bird Watching</option><option>Trekking</option><option>Travel Tips</option>
+            <option>Nature</option><option>Local Culture</option><option>Food</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Emoji Icon</label><input type="text" id="blog-emoji" placeholder="🦜" maxlength="4" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Short Excerpt *</label><textarea id="blog-excerpt" placeholder="2-3 sentence summary..." style="min-height:80px;"></textarea></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cover Image (optional)</label>
+          <div class="upload-area" style="padding:1rem;" onclick="document.getElementById('blog-img-file').click()">
+            <i class="fas fa-image"></i> <p>Click to upload cover image</p>
+          </div>
+          <input type="file" id="blog-img-file" accept="image/*" style="display:none" onchange="previewBlogImage(this)" />
+          <img id="blog-img-preview" src="" alt="" style="display:none;width:100%;border-radius:9px;margin-top:0.75rem;max-height:160px;object-fit:cover;" />
+          <input type="hidden" id="blog-img-url" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Status</label>
+          <select id="blog-status"><option value="true">Published</option><option value="false">Draft</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeBlogModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveBlogPost()"><i class="fas fa-save"></i> Save Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="admin-toast"><i class="fas fa-check-circle"></i><span id="admin-toast-msg"></span></div>
+
+<!-- ═══════════════════════════════════════════════════
+     FIREBASE + ADMIN JS
+═══════════════════════════════════════════════════ -->
+<script type="module">
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+                            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, getDoc, doc,
+         updateDoc, deleteDoc, query, orderBy, where, limit,
+         serverTimestamp, onSnapshot, setDoc }
+                            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject }
+                            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+// ── CONFIG ───────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyDbSoPFLN2XXEO4f1jlEF2bfoRG1TZsEkY",
+  authDomain: "stoneagehuts-fecda.firebaseapp.com",
+  projectId: "stoneagehuts-fecda",
+  storageBucket: "stoneagehuts-fecda.firebasestorage.app",
+  messagingSenderId: "512951842420",
+  appId: "1:512951842420:web:16fd229d1b79fdc0880321",
+  appId:             "YOUR_APP_ID"
+};
+// ─────────────────────────────────────────────────────
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+const stor = getStorage(app);
+
+// ── AUTH ─────────────────────────────────────────────
+onAuthStateChanged(auth, user => {
+  if(user) {
+    document.getElementById('login-screen').style.display = 'none';
+    initAdmin();
+  } else {
+    document.getElementById('login-screen').style.display = 'flex';
+  }
+});
+
+window.doLogin = async function() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-password').value;
+  const err   = document.getElementById('login-error');
+  err.textContent = '';
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    err.textContent = 'Invalid email or password.';
+  }
+};
+
+window.doLogout = async function() {
+  await signOut(auth);
+  location.reload();
+};
+
+// ── INIT ─────────────────────────────────────────────
+function initAdmin() {
+  loadDashboard();
+  loadContactSettingsForm();
+  watchBadges();
+}
+
+// ── NAVIGATION ───────────────────────────────────────
+window.showPage = function(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const btn = document.querySelector(`.nav-item[onclick="showPage('${id}')"]`);
+  if(btn) btn.classList.add('active');
+  const titles = { dashboard:'Dashboard', hero:'Hero Image', gallery:'Gallery', blog:'Blog Posts', reviews:'Reviews', enquiries:'Enquiries', bookings:'Bookings', newsletter:'Newsletter', 'contact-settings':'Contact Info', analytics:'Analytics' };
+  document.getElementById('page-title').textContent = titles[id] || id;
+  // Lazy load
+  const loaders = { gallery:loadGalleryAdmin, blog:loadBlogAdmin, reviews:()=>loadReviewsAdmin('all'), enquiries:loadEnquiries, bookings:loadBookings, newsletter:loadNewsletter, 'contact-settings':loadContactSettingsForm, analytics:loadAnalytics, hero:loadCurrentHero };
+  if(loaders[id]) loaders[id]();
+};
+
+// ── TOAST ─────────────────────────────────────────────
+function toast(msg, type='success') {
+  const t = document.getElementById('admin-toast');
+  document.getElementById('admin-toast-msg').textContent = msg;
+  t.className = `toast show ${type}`;
+  clearTimeout(window._at);
+  window._at = setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+// ── BADGES ───────────────────────────────────────────
+function watchBadges() {
+  onSnapshot(query(collection(db,'reviews'), where('status','==','pending')), s => {
+    const n = s.size;
+    const b = document.getElementById('rv-badge');
+    b.textContent = n; b.style.display = n ? 'inline' : 'none';
+  });
+  onSnapshot(query(collection(db,'enquiries'), where('status','==','new')), s => {
+    const n = s.size;
+    const b = document.getElementById('enq-badge');
+    b.textContent = n; b.style.display = n ? 'inline' : 'none';
+  });
+}
+
+// ── DASHBOARD ────────────────────────────────────────
+async function loadDashboard() {
+  const counts = {
+    reviews:   (await getDocs(collection(db,'reviews'))).size,
+    enquiries: (await getDocs(collection(db,'enquiries'))).size,
+    bookings:  (await getDocs(collection(db,'bookings'))).size,
+    gallery:   (await getDocs(collection(db,'gallery'))).size,
+    posts:     (await getDocs(collection(db,'posts'))).size,
+    subs:      (await getDocs(collection(db,'newsletter'))).size,
+  };
+  document.getElementById('st-reviews').textContent   = counts.reviews;
+  document.getElementById('st-enquiries').textContent = counts.enquiries;
+  document.getElementById('st-bookings').textContent  = counts.bookings;
+  document.getElementById('st-gallery').textContent   = counts.gallery;
+  document.getElementById('st-posts').textContent     = counts.posts;
+  document.getElementById('st-subs').textContent      = counts.subs;
+
+  // Activity feed (analytics)
+  const aSnap = await getDocs(query(collection(db,'analytics'), orderBy('ts','desc'), limit(8)));
+  const feed = document.getElementById('activity-feed');
+  if(aSnap.empty) { feed.innerHTML = '<div class="empty-state"><i class="fas fa-stream"></i><p>No activity yet</p></div>'; }
+  else {
+    feed.innerHTML = aSnap.docs.map(d => {
+      const ev = d.data(); const ts = ev.ts?.toDate?.()?.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) || '';
+      const dot = ev.event==='page_view'?'blue':ev.event.includes('submit')?'red':'';
+      return `<div class="feed-item"><div class="feed-dot ${dot}"></div><div class="feed-content"><p>${ev.event} ${ev.data?.label||ev.data?.section||ev.data?.title||''}</p><small>${ts}</small></div></div>`;
+    }).join('');
+  }
+
+  // Pending reviews
+  const rvSnap = await getDocs(query(collection(db,'reviews'), where('status','==','pending'), limit(5)));
+  const pv = document.getElementById('dash-pending-reviews');
+  if(rvSnap.empty) { pv.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>No pending reviews</p></div>'; }
+  else {
+    pv.innerHTML = rvSnap.docs.map(d => {
+      const r = d.data();
+      return `<div style="padding:0.75rem 0;border-bottom:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;">
+          <strong style="font-size:0.88rem;">${r.name}</strong>
+          <span style="color:#d4a93a;font-size:0.8rem;">${'⭐'.repeat(r.rating)}</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--muted);">${r.text?.slice(0,80)}...</p>
+        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+          <button class="btn btn-sm btn-approve" onclick="quickApprove('${d.id}')">Approve</button>
+          <button class="btn btn-sm btn-reject"  onclick="quickReject('${d.id}')">Reject</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+window.quickApprove = async function(id) {
+  await updateDoc(doc(db,'reviews',id), { status:'approved' });
+  toast('✅ Review approved!');
+  loadDashboard();
+};
+window.quickReject = async function(id) {
+  await updateDoc(doc(db,'reviews',id), { status:'rejected' });
+  toast('Review rejected.','error');
+  loadDashboard();
+};
+
+// ── HERO IMAGE ────────────────────────────────────────
+async function loadCurrentHero() {
+  const wrap = document.getElementById('current-hero');
+  try {
+    const snap = await getDocs(query(collection(db,'settings'), where('key','==','hero_image')));
+    if(!snap.empty && snap.docs[0].data().value) {
+      const url = snap.docs[0].data().value;
+      wrap.innerHTML = `<div style="margin-bottom:1rem;"><p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem;">Current Hero Image:</p><img src="${url}" style="width:100%;max-height:280px;object-fit:cover;border-radius:12px;border:1px solid var(--border);" /></div>`;
+    } else {
+      wrap.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">No hero image set yet.</p>';
+    }
+  } catch(e) { wrap.innerHTML = ''; }
+}
+
+window.uploadHeroImage = async function(file) {
+  if(!file) return;
+  document.getElementById('hero-progress').style.display = 'block';
+  const r = ref(stor, `hero/${Date.now()}_${file.name}`);
+  const task = uploadBytesResumable(r, file);
+  task.on('state_changed',
+    snap => {
+      const pct = Math.round(snap.bytesTransferred/snap.totalBytes*100);
+      document.getElementById('hero-prog-fill').style.width = pct+'%';
+    },
+    err => { toast('Upload failed: '+err.message, 'error'); },
+    async () => {
+      const url = await getDownloadURL(task.snapshot.ref);
+      // Save to Firestore settings
+      const snap = await getDocs(query(collection(db,'settings'), where('key','==','hero_image')));
+      if(snap.empty) await addDoc(collection(db,'settings'), { key:'hero_image', value: url });
+      else await updateDoc(doc(db,'settings',snap.docs[0].id), { value: url });
+      toast('✅ Hero image updated! It will show on the website now.');
+      document.getElementById('hero-progress').style.display = 'none';
+      loadCurrentHero();
+    }
+  );
+};
+
+// drag & drop hero
+const heroDrop = document.getElementById('hero-drop');
+['dragover','dragleave','drop'].forEach(ev => heroDrop.addEventListener(ev, e => {
+  e.preventDefault();
+  if(ev === 'dragover') heroDrop.classList.add('drag');
+  if(ev === 'dragleave') heroDrop.classList.remove('drag');
+  if(ev === 'drop') { heroDrop.classList.remove('drag'); window.uploadHeroImage(e.dataTransfer.files[0]); }
+}));
+
+// ── GALLERY ───────────────────────────────────────────
+let pendingGalleryFiles = [];
+
+window.handleGalleryFiles = function(files) {
+  pendingGalleryFiles = Array.from(files);
+  const preview = document.getElementById('gal-preview');
+  preview.innerHTML = pendingGalleryFiles.map((f,i) => {
+    const url = URL.createObjectURL(f);
+    return `<div class="preview-item"><img src="${url}" /><button class="remove" onclick="removeGalFile(${i})">×</button></div>`;
+  }).join('');
+  document.getElementById('gal-upload-btn').disabled = !pendingGalleryFiles.length;
+};
+
+window.removeGalFile = function(i) {
+  pendingGalleryFiles.splice(i,1);
+  window.handleGalleryFiles(pendingGalleryFiles);
+};
+
+window.uploadGalleryImages = async function() {
+  if(!pendingGalleryFiles.length) return;
+  const cat    = document.getElementById('gal-category').value;
+  const title  = document.getElementById('gal-title').value.trim();
+  const order  = parseInt(document.getElementById('gal-order').value) || 99;
+  const prog   = document.getElementById('gal-progress');
+  const label  = document.getElementById('gal-prog-label');
+  const fill   = document.getElementById('gal-prog-fill');
+  prog.style.display = 'block';
+
+  for(let i=0; i<pendingGalleryFiles.length; i++) {
+    const file = pendingGalleryFiles[i];
+    label.textContent = `Uploading ${i+1}/${pendingGalleryFiles.length}: ${file.name}`;
+    fill.style.width = '0%';
+    const r = ref(stor, `gallery/${cat}/${Date.now()}_${file.name}`);
+    const task = uploadBytesResumable(r, file);
+    await new Promise((res,rej) => {
+      task.on('state_changed',
+        s => fill.style.width = Math.round(s.bytesTransferred/s.totalBytes*100)+'%',
+        rej,
+        async () => {
+          const url = await getDownloadURL(task.snapshot.ref);
+          await addDoc(collection(db,'gallery'), {
+            url, category: cat, title: title || file.name.replace(/\.[^.]+$/,''), order,
+            storagePath: task.snapshot.ref.fullPath, createdAt: serverTimestamp()
+          });
+          res();
+        }
+      );
+    });
+  }
+  toast(`✅ ${pendingGalleryFiles.length} image(s) uploaded successfully!`);
+  pendingGalleryFiles = [];
+  document.getElementById('gal-preview').innerHTML = '';
+  document.getElementById('gal-upload-btn').disabled = true;
+  prog.style.display = 'none';
+  loadGalleryAdmin();
+};
+
+// drag & drop gallery
+const galDrop = document.getElementById('gal-drop');
+['dragover','dragleave','drop'].forEach(ev => galDrop.addEventListener(ev, e => {
+  e.preventDefault();
+  if(ev==='dragover') galDrop.classList.add('drag');
+  if(ev==='dragleave') galDrop.classList.remove('drag');
+  if(ev==='drop') { galDrop.classList.remove('drag'); window.handleGalleryFiles(e.dataTransfer.files); }
+}));
+
+async function loadGalleryAdmin() {
+  const grid = document.getElementById('admin-gallery-grid');
+  grid.innerHTML = '<div class="spinner"></div>';
+  const cat = document.getElementById('gal-filter-cat').value;
+  const q = cat==='all'
+    ? query(collection(db,'gallery'), orderBy('order','asc'))
+    : query(collection(db,'gallery'), where('category','==',cat), orderBy('order','asc'));
+  const snap = await getDocs(q);
+  if(snap.empty) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-images"></i><p>No images yet</p></div>'; return; }
+  grid.innerHTML = snap.docs.map(d => {
+    const item = d.data();
+    return `<div class="admin-gallery-item">
+      <img src="${item.url}" alt="${item.title||''}" loading="lazy" />
+      <div class="item-overlay">
+        <button class="btn btn-danger btn-sm" onclick="deleteGalleryItem('${d.id}','${item.storagePath||''}')"><i class="fas fa-trash"></i> Delete</button>
+      </div>
+      <div class="item-label">${item.title||''} <span style="opacity:0.6;">(${item.category})</span></div>
+    </div>`;
+  }).join('');
+}
+window.loadGalleryAdmin = loadGalleryAdmin;
+
+window.deleteGalleryItem = async function(id, path) {
+  if(!confirm('Delete this image?')) return;
+  try {
+    if(path) await deleteObject(ref(stor, path)).catch(()=>{});
+    await deleteDoc(doc(db,'gallery',id));
+    toast('Image deleted.','error');
+    loadGalleryAdmin();
+  } catch(e) { toast('Error: '+e.message,'error'); }
+};
+
+// ── BLOG ─────────────────────────────────────────────
+async function loadBlogAdmin() {
+  const tbody = document.getElementById('blog-tbody');
+  tbody.innerHTML = '<tr><td colspan="5"><div class="spinner"></div></td></tr>';
+  const snap = await getDocs(query(collection(db,'posts'), orderBy('date','desc')));
+  if(snap.empty) { tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><i class="fas fa-pen"></i><p>No posts yet</p></div></td></tr>'; return; }
+  tbody.innerHTML = snap.docs.map(d => {
+    const p = d.data();
+    const date = p.date?.toDate?.()?.toLocaleDateString('en-IN') || p.date || '—';
+    const status = p.published ? '<span class="badge badge-published">Published</span>' : '<span class="badge badge-draft">Draft</span>';
+    return `<tr>
+      <td><strong>${p.title||''}</strong></td>
+      <td><span class="badge badge-new">${p.category||''}</span></td>
+      <td style="color:var(--muted);font-size:0.82rem;">${date}</td>
+      <td>${status}</td>
+      <td><div style="display:flex;gap:0.4rem;">
+        <button class="btn btn-sm btn-edit" onclick="editBlogPost('${d.id}')"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-sm btn-danger" onclick="deleteBlogPost('${d.id}')"><i class="fas fa-trash"></i></button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+window.openBlogModal = function() {
+  document.getElementById('blog-edit-id').value = '';
+  document.getElementById('blog-modal-title').textContent = 'New Blog Post';
+  document.getElementById('blog-title').value = '';
+  document.getElementById('blog-excerpt').value = '';
+  document.getElementById('blog-emoji').value = '📝';
+  document.getElementById('blog-status').value = 'true';
+  document.getElementById('blog-img-url').value = '';
+  document.getElementById('blog-img-preview').style.display = 'none';
+  document.getElementById('blog-modal').classList.add('open');
+};
+
+window.editBlogPost = async function(id) {
+  const d = await getDoc(doc(db,'posts',id));
+  const p = d.data();
+  document.getElementById('blog-edit-id').value = id;
+  document.getElementById('blog-modal-title').textContent = 'Edit Blog Post';
+  document.getElementById('blog-title').value    = p.title||'';
+  document.getElementById('blog-category').value = p.category||'Bird Watching';
+  document.getElementById('blog-excerpt').value  = p.excerpt||'';
+  document.getElementById('blog-emoji').value    = p.emoji||'📝';
+  document.getElementById('blog-status').value   = String(p.published);
+  document.getElementById('blog-img-url').value  = p.imageUrl||'';
+  const prev = document.getElementById('blog-img-preview');
+  if(p.imageUrl) { prev.src = p.imageUrl; prev.style.display = 'block'; }
+  document.getElementById('blog-modal').classList.add('open');
+};
+
+window.closeBlogModal = function() { document.getElementById('blog-modal').classList.remove('open'); };
+
+window.previewBlogImage = async function(input) {
+  const file = input.files[0]; if(!file) return;
+  const prev = document.getElementById('blog-img-preview');
+  prev.src = URL.createObjectURL(file); prev.style.display = 'block';
+  const r = ref(stor, `blog/${Date.now()}_${file.name}`);
+  const task = uploadBytesResumable(r, file);
+  await new Promise((res,rej) => task.on('state_changed', null, rej, res));
+  const url = await getDownloadURL(task.snapshot.ref);
+  document.getElementById('blog-img-url').value = url;
+  toast('Image uploaded!');
+};
+
+window.saveBlogPost = async function() {
+  const id      = document.getElementById('blog-edit-id').value;
+  const title   = document.getElementById('blog-title').value.trim();
+  const cat     = document.getElementById('blog-category').value;
+  const excerpt = document.getElementById('blog-excerpt').value.trim();
+  const emoji   = document.getElementById('blog-emoji').value.trim();
+  const status  = document.getElementById('blog-status').value === 'true';
+  const imgUrl  = document.getElementById('blog-img-url').value;
+  if(!title || !excerpt) { toast('Title and excerpt are required.','error'); return; }
+  const data = { title, category: cat, excerpt, emoji: emoji||'📝', published: status, imageUrl: imgUrl, date: serverTimestamp() };
+  if(id) { await updateDoc(doc(db,'posts',id), data); toast('✅ Post updated!'); }
+  else   { await addDoc(collection(db,'posts'), data); toast('✅ Post published!'); }
+  window.closeBlogModal(); loadBlogAdmin();
+};
+
+window.deleteBlogPost = async function(id) {
+  if(!confirm('Delete this post?')) return;
+  await deleteDoc(doc(db,'posts',id));
+  toast('Post deleted.','error'); loadBlogAdmin();
+};
+
+// ── REVIEWS ──────────────────────────────────────────
+let rvFilter = 'all';
+
+window.setRvFilter = function(f, btn) {
+  rvFilter = f;
+  document.querySelectorAll('.rv-filter').forEach(b => b.classList.remove('active','btn-primary'));
+  btn.classList.add('active','btn-primary');
+  loadReviewsAdmin(f);
+};
+
+async function loadReviewsAdmin(filter) {
+  const list = document.getElementById('reviews-list-admin');
+  list.innerHTML = '<div class="spinner"></div>';
+  const q = filter==='all'
+    ? query(collection(db,'reviews'), orderBy('createdAt','desc'))
+    : query(collection(db,'reviews'), where('status','==',filter), orderBy('createdAt','desc'));
+  const snap = await getDocs(q);
+  if(snap.empty) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>No reviews found</p></div>'; return; }
+  list.innerHTML = snap.docs.map(d => {
+    const r = d.data();
+    const date = r.createdAt?.toDate?.()?.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) || 'Unknown';
+    return `<div class="review-detail" id="rv-${d.id}">
+      <div class="rv-meta">
+        <span class="rv-name-big">${r.name}</span>
+        <span class="rv-stars-big">${'⭐'.repeat(r.rating)}</span>
+        <span class="badge badge-${r.status}">${r.status}</span>
+        <span class="rv-date-small">${date}</span>
+      </div>
+      <p class="rv-quote">"${r.text}"</p>
+      <div class="rv-actions">
+        <select class="rv-status-select" id="rv-sel-${d.id}">
+          <option value="pending"  ${r.status==='pending' ?'selected':''}>Pending</option>
+          <option value="approved" ${r.status==='approved'?'selected':''}>Approved</option>
+          <option value="rejected" ${r.status==='rejected'?'selected':''}>Rejected</option>
+        </select>
+        <button class="btn btn-sm btn-edit" onclick="saveReviewStatus('${d.id}')"><i class="fas fa-check"></i> Update Status</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteReview('${d.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.saveReviewStatus = async function(id) {
+  const status = document.getElementById(`rv-sel-${id}`).value;
+  await updateDoc(doc(db,'reviews',id), { status });
+  toast(`✅ Review ${status}.`);
+  loadReviewsAdmin(rvFilter);
+};
+
+window.deleteReview = async function(id) {
+  if(!confirm('Delete this review?')) return;
+  await deleteDoc(doc(db,'reviews',id));
+  toast('Review deleted.','error'); loadReviewsAdmin(rvFilter);
+};
+
+// ── ENQUIRIES ─────────────────────────────────────────
+async function loadEnquiries() {
+  const wrap = document.getElementById('enquiries-list');
+  wrap.innerHTML = '<div class="spinner"></div>';
+  const snap = await getDocs(query(collection(db,'enquiries'), orderBy('createdAt','desc')));
+  if(snap.empty) { wrap.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No enquiries yet</p></div>'; return; }
+  wrap.innerHTML = snap.docs.map(d => {
+    const e = d.data();
+    const date = e.createdAt?.toDate?.()?.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) || '';
+    return `<div class="enq-row">
+      <div class="enq-header">
+        <div>
+          <div class="enq-name">${e.name}</div>
+          <div class="enq-contact">
+            <span><i class="fas fa-envelope" style="font-size:0.7rem;margin-right:3px;"></i><a href="mailto:${e.email}" style="color:inherit;text-decoration:none;">${e.email}</a></span>
+            ${e.phone ? `<span><i class="fas fa-phone" style="font-size:0.7rem;margin-right:3px;"></i>${e.phone}</span>` : ''}
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0;">
+          <span class="badge badge-${e.status||'new'}">${e.status||'new'}</span>
+          <span style="font-size:0.75rem;color:var(--muted);">${date}</span>
+          <button class="btn btn-sm btn-approve" onclick="markEnquiryRead('${d.id}')">Mark Read</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteEnquiry('${d.id}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+      <p class="enq-msg">${e.message||'—'}</p>
+    </div>`;
+  }).join('');
+}
+
+window.markEnquiryRead = async function(id) {
+  await updateDoc(doc(db,'enquiries',id), { status:'read' });
+  toast('Marked as read.'); loadEnquiries();
+};
+window.deleteEnquiry = async function(id) {
+  if(!confirm('Delete this enquiry?')) return;
+  await deleteDoc(doc(db,'enquiries',id));
+  toast('Enquiry deleted.','error'); loadEnquiries();
+};
+
+// ── BOOKINGS ──────────────────────────────────────────
+async function loadBookings() {
+  const tbody = document.getElementById('bookings-tbody');
+  tbody.innerHTML = '<tr><td colspan="7"><div class="spinner"></div></td></tr>';
+  const snap = await getDocs(query(collection(db,'bookings'), orderBy('createdAt','desc')));
+  if(snap.empty) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="fas fa-calendar"></i><p>No bookings yet</p></div></td></tr>'; return; }
+  tbody.innerHTML = snap.docs.map(d => {
+    const b = d.data();
+    return `<tr>
+      <td><strong>${b.name}</strong></td>
+      <td>${b.room||'—'}</td>
+      <td>${b.checkin||'—'}</td>
+      <td>${b.checkout||'—'}</td>
+      <td>${b.guests||'—'}</td>
+      <td style="font-size:0.8rem;color:var(--muted);">${b.email||''}<br>${b.phone||''}</td>
+      <td><span class="badge badge-${b.status||'pending'}">${b.status||'pending'}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── NEWSLETTER ────────────────────────────────────────
+async function loadNewsletter() {
+  const tbody = document.getElementById('newsletter-tbody');
+  tbody.innerHTML = '<tr><td colspan="3"><div class="spinner"></div></td></tr>';
+  const snap = await getDocs(query(collection(db,'newsletter'), orderBy('createdAt','desc')));
+  if(snap.empty) { tbody.innerHTML = '<tr><td colspan="3"><div class="empty-state">No subscribers yet</div></td></tr>'; return; }
+  tbody.innerHTML = snap.docs.map((d,i) => {
+    const s = d.data();
+    const date = s.createdAt?.toDate?.()?.toLocaleDateString('en-IN') || '—';
+    return `<tr><td style="color:var(--muted);">${i+1}</td><td>${s.email}</td><td style="color:var(--muted);">${date}</td></tr>`;
+  }).join('');
+}
+
+window.exportNewsletter = async function() {
+  const snap = await getDocs(query(collection(db,'newsletter'), orderBy('createdAt','desc')));
+  const rows = ['Email,Date'];
+  snap.docs.forEach(d => { const s = d.data(); rows.push(`${s.email},${s.createdAt?.toDate?.()?.toLocaleDateString('en-IN')||''}`); });
+  const blob = new Blob([rows.join('\n')], { type:'text/csv' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'subscribers.csv'; a.click();
+};
+
+// ── CONTACT INFO ─────────────────────────────────────
+async function loadContactSettingsForm() {
+  try {
+    const snap = await getDocs(collection(db,'contact_info'));
+    if(snap.empty) return;
+    const d = snap.docs[0].data();
+    ['phone','email','address','checkin','instagram','facebook','twitter','tripadvisor','youtube'].forEach(k => {
+      const el = document.getElementById(`ci-${k}-input`);
+      if(el && d[k]) el.value = d[k];
+    });
+  } catch(e) {}
+}
+
+window.saveContactInfo = async function(e) {
+  e.preventDefault();
+  const data = {};
+  ['phone','email','address','checkin','instagram','facebook','twitter','tripadvisor','youtube'].forEach(k => {
+    const v = document.getElementById(`ci-${k}-input`)?.value?.trim();
+    if(v) data[k] = v;
+  });
+  const snap = await getDocs(collection(db,'contact_info'));
+  if(snap.empty) await addDoc(collection(db,'contact_info'), data);
+  else await updateDoc(doc(db,'contact_info',snap.docs[0].id), data);
+  toast('✅ Contact info saved! Website updated instantly.');
+};
+
+// ── ANALYTICS ─────────────────────────────────────────
+async function loadAnalytics() {
+  const tbody = document.getElementById('analytics-tbody');
+  tbody.innerHTML = '<tr><td colspan="4"><div class="spinner"></div></td></tr>';
+  const snap = await getDocs(query(collection(db,'analytics'), orderBy('ts','desc'), limit(50)));
+  if(snap.empty) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No analytics data yet</td></tr>'; return; }
+
+  // Quick stats
+  const allEvents = snap.docs.map(d => d.data());
+  const pageViews   = allEvents.filter(e => e.event==='page_view').length;
+  const clicks      = allEvents.filter(e => e.event==='click').length;
+  const bookingClicks = allEvents.filter(e => e.event==='booking_modal_open').length;
+  const contactSubmits = allEvents.filter(e => e.event==='contact_submitted').length;
+
+  document.getElementById('analytics-stats').innerHTML = `
+    <div class="stat-card blue"><div class="sc-label">Page Views</div><div class="sc-num">${pageViews}</div></div>
+    <div class="stat-card"><div class="sc-label">Clicks Tracked</div><div class="sc-num">${clicks}</div></div>
+    <div class="stat-card green"><div class="sc-label">Booking Opens</div><div class="sc-num">${bookingClicks}</div></div>
+    <div class="stat-card clay"><div class="sc-label">Contact Submits</div><div class="sc-num">${contactSubmits}</div></div>
+  `;
+
+  tbody.innerHTML = snap.docs.map(d => {
+    const ev = d.data();
+    const ts = ev.ts?.toDate?.()?.toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) || '';
+    const detail = JSON.stringify(ev.data||{}).slice(0,60);
+    return `<tr>
+      <td><span class="badge badge-new">${ev.event}</span></td>
+      <td style="font-size:0.8rem;color:var(--muted);">${detail}</td>
+      <td style="font-size:0.8rem;color:var(--muted);">${ev.page||''}</td>
+      <td style="font-size:0.8rem;color:var(--muted);">${ts}</td>
+    </tr>`;
+  }).join('');
+}
+</script>
+</body>
+</html>

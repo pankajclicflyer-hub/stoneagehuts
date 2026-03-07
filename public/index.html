@@ -3,166 +3,891 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>StoneAgeHuts</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <title>StoneAgeHuts – Nature Retreat, Nainital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="/style.css">
+  <style>
+    :root {
+      --stone: #3d3530; --bark: #6b4f3a; --moss: #4a6741; --moss-light: #6a8f60;
+      --clay: #c4855a; --sand: #e8d5b7; --cream: #faf6ee; --fog: #f0ebe0;
+      --white: #ffffff; --text: #2a2420; --text-muted: #7a6a5a;
+      --shadow: 0 8px 40px rgba(61,53,48,0.15); --radius: 16px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--fog); }
+    ::-webkit-scrollbar-thumb { background: var(--bark); border-radius: 3px; }
+
+    /* HEADER */
+    .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0 2rem; transition: all 0.4s; background: transparent; }
+    .site-header.scrolled { background: rgba(250,246,238,0.96); backdrop-filter: blur(12px); box-shadow: 0 2px 20px rgba(61,53,48,0.12); }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 44px; height: 44px; background: var(--moss); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; overflow: hidden; }
+    .logo-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .site-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+    .site-header:not(.scrolled) .site-title { color: #fff; }
+    .site-header.scrolled .site-title { color: var(--stone); }
+    .main-nav { display: flex; gap: 0.2rem; }
+    .nav-link { padding: 0.5rem 0.9rem; text-decoration: none; font-size: 0.88rem; font-weight: 500; border-radius: 8px; transition: all 0.2s; }
+    .site-header:not(.scrolled) .nav-link { color: rgba(255,255,255,0.85); }
+    .site-header.scrolled .nav-link { color: var(--text-muted); }
+    .site-header:not(.scrolled) .nav-link:hover, .site-header:not(.scrolled) .nav-link.active { background: rgba(255,255,255,0.15); color: #fff; }
+    .site-header.scrolled .nav-link:hover, .site-header.scrolled .nav-link.active { background: var(--fog); color: var(--moss); }
+    .controls { display: flex; align-items: center; gap: 1rem; }
+    .lang-toggle { display: flex; background: rgba(255,255,255,0.15); border-radius: 8px; overflow: hidden; }
+    .site-header.scrolled .lang-toggle { background: var(--fog); }
+    .lang-toggle button { border: none; background: transparent; cursor: pointer; padding: 0.4rem 0.7rem; font-size: 0.8rem; font-weight: 600; transition: all 0.2s; }
+    .site-header:not(.scrolled) .lang-toggle button { color: rgba(255,255,255,0.7); }
+    .site-header.scrolled .lang-toggle button { color: var(--text-muted); }
+    .lang-toggle button.active { background: var(--moss); color: #fff; border-radius: 6px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+    .hamburger span { width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s; display: block; }
+    .site-header.scrolled .hamburger span { background: var(--stone); }
+    .mobile-nav { display: none; position: fixed; top: 72px; left: 0; right: 0; background: rgba(250,246,238,0.98); backdrop-filter: blur(12px); padding: 1rem 2rem 2rem; z-index: 999; flex-direction: column; gap: 0.5rem; box-shadow: 0 8px 24px rgba(61,53,48,0.15); }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav .nav-link { color: var(--text-muted); font-size: 1rem; padding: 0.75rem 1rem; }
+
+    /* HERO */
+    #home { min-height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg,#1a1208 0%,#2d2010 30%,#3a4a2a 70%,#1e2a18 100%); }
+    .hero-bg-img { position: absolute; inset: 0; object-fit: cover; width: 100%; height: 100%; opacity: 0.45; transition: opacity 0.5s; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,8,4,0.4) 0%, rgba(20,30,15,0.6) 100%); }
+    .hero-bg-pattern { position: absolute; inset: 0; opacity: 0.06; background-image: radial-gradient(circle at 2px 2px,#fff 1px,transparent 0); background-size: 40px 40px; }
+    .hero-content { text-align: center; position: relative; z-index: 2; padding: 2rem; animation: fadeUp 1s ease both; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(106,143,96,0.25); border: 1px solid rgba(106,143,96,0.5); color: #a8c89e; padding: 0.4rem 1rem; border-radius: 99px; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.5rem; }
+    .hero-title { font-family: 'Playfair Display',serif; font-size: clamp(2.8rem,8vw,6rem); font-weight: 700; color: #fff; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1rem; }
+    .hero-title em { color: var(--clay); font-style: italic; }
+    .hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.6); margin-bottom: 2.5rem; font-weight: 300; }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn { padding: 0.85rem 2rem; border-radius: 12px; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.25s; font-family: inherit; }
+    .btn.primary { background: var(--moss); color: #fff; box-shadow: 0 4px 20px rgba(74,103,65,0.4); }
+    .btn.primary:hover { background: var(--moss-light); transform: translateY(-2px); }
+    .btn.outline { background: transparent; color: rgba(255,255,255,0.85); border: 1.5px solid rgba(255,255,255,0.3); }
+    .btn.outline:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+    .hero-stats { display: flex; justify-content: center; gap: 3rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Playfair Display',serif; font-size: 2rem; font-weight: 700; color: var(--clay); }
+    .stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* SECTIONS */
+    .section-wrap { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+    .full-section { padding: 5rem 2rem; }
+    .full-section .inner { max-width: 1200px; margin: 0 auto; }
+    .section-header { margin-bottom: 3rem; }
+    .section-tag { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--moss); margin-bottom: 0.5rem; }
+    .section-title { font-family: 'Playfair Display',serif; font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 700; color: var(--stone); line-height: 1.2; }
+    .section-subtitle { font-size: 1rem; color: var(--text-muted); margin-top: 0.5rem; max-width: 500px; }
+
+    /* STAY — pricing hidden */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.5rem; }
+    .card { background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); border: 1px solid rgba(232,213,183,0.5); transition: all 0.3s; position: relative; overflow: hidden; }
+    .card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background: linear-gradient(90deg,var(--moss),var(--clay)); }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(61,53,48,0.2); }
+    .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .card-title { font-family: 'Playfair Display',serif; font-size: 1.3rem; font-weight: 700; color: var(--stone); margin-bottom: 0.5rem; }
+    .card-desc { color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .card-features { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+    .chip { background: var(--fog); color: var(--bark); padding: 0.3rem 0.7rem; border-radius: 99px; font-size: 0.75rem; font-weight: 500; }
+    .inquire { width: 100%; padding: 0.8rem; background: var(--stone); color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; font-family: inherit; }
+    .inquire:hover { background: var(--bark); }
+
+    /* ACTIVITIES */
+    .activities-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 1.2rem; margin-top: 2.5rem; }
+    .activity { background: var(--white); border-radius: var(--radius); padding: 1.8rem 1.5rem; text-align: center; border: 1px solid rgba(232,213,183,0.6); transition: all 0.3s; }
+    .activity:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--moss-light); }
+    .activity.featured { background: var(--moss); color: #fff; border-color: var(--moss); }
+    .activity.featured h4, .activity.featured p { color: #fff !important; }
+    .activity.featured p { opacity: 0.85; }
+    .activity-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .activity h4 { font-family: 'Playfair Display',serif; font-size: 1.05rem; font-weight: 700; color: var(--stone); margin-bottom: 0.4rem; }
+    .activity p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* GALLERY */
+    .gallery-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .filter { padding: 0.5rem 1.1rem; border-radius: 99px; border: 1.5px solid var(--sand); background: transparent; color: var(--text-muted); cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; font-family: inherit; }
+    .filter.active, .filter:hover { background: var(--moss); color: #fff; border-color: var(--moss); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 0.8rem; }
+    .gallery-item { width: 100%; aspect-ratio: 4/3; border-radius: 12px; cursor: pointer; transition: all 0.3s; overflow: hidden; position: relative; background: var(--fog); display: flex; align-items: center; justify-content: center; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item .placeholder-inner { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.8rem; }
+    .gallery-item .placeholder-inner i { font-size: 2rem; opacity: 0.5; }
+    .gallery-item:hover { transform: scale(1.02); box-shadow: var(--shadow); }
+    .gallery-empty { grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted); }
+
+    /* BLOG */
+    #posts-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 1.5rem; }
+    .post-card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid rgba(232,213,183,0.5); transition: all 0.3s; text-decoration: none; color: inherit; display: block; }
+    .post-card:hover { transform: translateY(-4px); }
+    .post-thumb { height: 180px; overflow: hidden; background: linear-gradient(135deg,var(--moss),var(--bark)); display: flex; align-items: center; justify-content: center; }
+    .post-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .post-thumb .post-emoji { font-size: 3.5rem; }
+    .post-body { padding: 1.5rem; }
+    .post-meta { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem; display: flex; gap: 0.75rem; align-items: center; }
+    .post-category { background: var(--fog); color: var(--moss); padding: 0.15rem 0.5rem; border-radius: 99px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+    .post-title { font-family: 'Playfair Display',serif; font-size: 1.1rem; font-weight: 700; color: var(--stone); margin-bottom: 0.5rem; line-height: 1.4; }
+    .post-excerpt { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+    .posts-empty { text-align: center; padding: 3rem; color: var(--text-muted); }
+
+    /* REVIEWS */
+    .reviews-bg { background: var(--stone); }
+    #review-form-wrap { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius); padding: 2rem; margin-bottom: 2.5rem; }
+    #review-form-wrap h4 { font-family: 'Playfair Display',serif; font-size: 1.2rem; color: var(--sand); margin-bottom: 1.5rem; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-full { grid-column: 1/-1; }
+    input, select, textarea { width: 100%; padding: 0.85rem 1rem; border: 1.5px solid rgba(255,255,255,0.15); border-radius: 10px; font-family: inherit; font-size: 0.92rem; transition: border-color 0.2s; background: rgba(255,255,255,0.08); color: #fff; }
+    input.light, select.light, textarea.light { background: var(--white); border-color: var(--sand); color: var(--text); }
+    input.light::placeholder, textarea.light::placeholder { color: var(--text-muted); }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--moss-light); }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.4); }
+    select option { background: #2a2420; color: #fff; }
+    select.light option { background: #fff; color: var(--text); }
+    textarea { resize: vertical; min-height: 100px; }
+    .form-btn { padding: 0.85rem 2rem; background: var(--moss); color: #fff; border: none; border-radius: 10px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+    .form-btn:hover { background: var(--moss-light); }
+    #reviews-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 1rem; }
+    .review-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius); padding: 1.5rem; transition: all 0.2s; }
+    .review-card:hover { background: rgba(255,255,255,0.09); }
+    .rv-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+    .rv-name { font-weight: 600; color: var(--sand); }
+    .rv-date { font-size: 0.75rem; color: rgba(255,255,255,0.35); }
+    .rv-stars { color: var(--clay); font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .rv-text { font-size: 0.88rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    .reviews-empty { text-align: center; padding: 2rem; color: rgba(255,255,255,0.4); }
+
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 1rem; }
+    #contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-info { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: 1rem; background: var(--white); padding: 1rem 1.25rem; border-radius: 12px; box-shadow: 0 2px 12px rgba(61,53,48,0.08); }
+    .cic { width: 40px; height: 40px; background: var(--fog); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--moss); font-size: 1rem; flex-shrink: 0; }
+    .contact-item p { font-size: 0.88rem; color: var(--text-muted); margin: 0; }
+    .contact-item strong { display: block; color: var(--stone); font-size: 0.93rem; margin-bottom: 0.2rem; }
+    .socials { display: flex; gap: 0.75rem; }
+    .socials a { width: 44px; height: 44px; background: var(--fog); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--bark); text-decoration: none; font-size: 1.1rem; transition: all 0.2s; }
+    .socials a:hover { background: var(--moss); color: #fff; transform: translateY(-2px); }
+
+    /* MAP */
+    .map-strip { background: var(--fog); border-top: 1px solid var(--sand); border-bottom: 1px solid var(--sand); }
+    .map-strip iframe { width: 100%; height: 280px; border: none; display: block; }
+
+    /* NEWSLETTER */
+    #newsletter-form { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+    #newsletter-form input { max-width: 340px; background: var(--white); border-color: var(--sand); color: var(--text); }
+    #newsletter-form input::placeholder { color: var(--text-muted); }
+    #newsletter-form button { padding: 0.85rem 2rem; background: var(--moss); color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    #newsletter-form button:hover { background: var(--bark); }
+
+    /* MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { position: relative; max-width: 90vw; max-height: 85vh; }
+    .modal-box img { max-width: 85vw; max-height: 80vh; border-radius: 12px; object-fit: contain; display: block; }
+    .modal-close-btn { position: absolute; top: -16px; right: -16px; width: 36px; height: 36px; background: var(--clay); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; border: none; font-weight: 700; }
+
+    /* BOOKING MODAL */
+    .bk-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); align-items: center; justify-content: center; padding: 1rem; }
+    .bk-overlay.open { display: flex; }
+    .bk-box { background: var(--cream); border-radius: 20px; padding: 2.5rem; max-width: 480px; width: 100%; position: relative; max-height: 90vh; overflow-y: auto; }
+    .bk-box h3 { font-family: 'Playfair Display',serif; font-size: 1.6rem; margin-bottom: 0.25rem; color: var(--stone); }
+    .bk-room { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
+    .bk-close { position: absolute; top: 1.5rem; right: 1.5rem; background: var(--fog); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
+    .bk-form { display: flex; flex-direction: column; gap: 1rem; }
+    .bk-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .field-label { font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 3000; background: var(--stone); color: var(--sand); padding: 1rem 1.5rem; border-radius: 12px; font-size: 0.9rem; font-weight: 500; box-shadow: 0 8px 24px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem; max-width: 320px; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* SCROLL TOP */
+    #scroll-top { position: fixed; bottom: 2rem; left: 2rem; z-index: 999; width: 44px; height: 44px; background: var(--moss); color: #fff; border-radius: 50%; border: none; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); transition: all 0.3s; opacity: 0; pointer-events: none; }
+    #scroll-top.visible { opacity: 1; pointer-events: auto; }
+    #scroll-top:hover { background: var(--bark); transform: translateY(-2px); }
+
+    /* FOOTER */
+    .site-footer { background: #1a1510; color: rgba(255,255,255,0.5); padding: 3rem 2rem 2rem; }
+    .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .footer-brand .ft { color: var(--sand); font-family: 'Playfair Display',serif; font-size: 1.3rem; display: block; margin-bottom: 0.75rem; }
+    .footer-brand p { font-size: 0.88rem; line-height: 1.7; max-width: 280px; }
+    .footer-col h5 { color: rgba(255,255,255,0.8); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-col ul a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--clay); }
+    .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-bottom p { font-size: 0.82rem; }
+
+    /* LOADING SPINNER */
+    .spinner { width: 32px; height: 32px; border: 3px solid var(--fog); border-top-color: var(--moss); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 2rem auto; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-section { text-align: center; padding: 3rem; }
+
+    /* ANALYTICS BADGE (hidden, just tracks) */
+    .analytics-pixel { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+    @media (max-width: 768px) {
+      .main-nav, .lang-toggle { display: none; }
+      .hamburger { display: flex; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .bk-2col { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .hero-title { font-size: 2.2rem; }
+      .section-wrap, .full-section { padding: 3rem 1.25rem; }
+    }
+  </style>
 </head>
 <body>
-  <header class="site-header" id="site-header">
-    <div class="wrap header-inner">
-      <div class="brand">
-        <img src="/images/hero-bg.jpg" alt="logo" class="logo" />
-        <span id="site-title">StoneAgeHuts</span>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#home">
+      <div class="logo-icon" id="header-logo">🏕️</div>
+      <span class="site-title" id="site-title-text">StoneAgeHuts</span>
+    </a>
+    <nav class="main-nav">
+      <a href="#home" class="nav-link active">Home</a>
+      <a href="#stay" class="nav-link">Stay</a>
+      <a href="#activities" class="nav-link">Activities</a>
+      <a href="#gallery" class="nav-link">Gallery</a>
+      <a href="#blog" class="nav-link">Blog</a>
+      <a href="#reviews" class="nav-link">Reviews</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+    <div class="controls">
+      <div class="lang-toggle">
+        <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+        <button id="btn-hi" onclick="setLang('hi')">HI</button>
       </div>
-      <nav class="main-nav">
-        <a href="#home" class="nav-link active">Home</a>
-        <a href="#stay" class="nav-link">Stay</a>
-        <a href="#activities" class="nav-link">Activities</a>
-        <a href="#gallery" class="nav-link">Gallery</a>
-        <a href="#blog" class="nav-link">Blog</a>
-        <a href="#reviews" class="nav-link">Reviews</a>
-        <a href="#contact" class="nav-link">Contact</a>
-      </nav>
-      <div class="controls">
-        <div class="lang-toggle">
-          <button id="btn-en" class="active">EN</button>
-          <button id="btn-hi">HI</button>
-        </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="#home" class="nav-link" onclick="closeMobileNav()">Home</a>
+  <a href="#stay" class="nav-link" onclick="closeMobileNav()">Stay</a>
+  <a href="#activities" class="nav-link" onclick="closeMobileNav()">Activities</a>
+  <a href="#gallery" class="nav-link" onclick="closeMobileNav()">Gallery</a>
+  <a href="#blog" class="nav-link" onclick="closeMobileNav()">Blog</a>
+  <a href="#reviews" class="nav-link" onclick="closeMobileNav()">Reviews</a>
+  <a href="#contact" class="nav-link" onclick="closeMobileNav()">Contact</a>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <img id="hero-bg-img" class="hero-bg-img" src="" alt="" style="display:none;" />
+  <div class="hero-overlay"></div>
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🌿 Kumaon Hills, Uttarakhand</div>
+    <h1 class="hero-title" id="hero-title">Experience<br><em>Nature's Embrace</em></h1>
+    <p class="hero-sub" id="hero-sub">Resort • Hostel • Bird Watching Retreat</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#stay">🏡 Explore Stays</a>
+      <a class="btn outline" href="#contact">📞 Contact Us</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">200+</div><div class="stat-label">Bird Species</div></div>
+      <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label">Guest Rating</div></div>
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Happy Guests</div></div>
+      <div class="stat"><div class="stat-num">5 Yrs</div><div class="stat-label">Experience</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STAY -->
+<section id="stay">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-tag">🏕️ Where You Sleep</div>
+      <h2 class="section-title">Our Accommodations</h2>
+      <p class="section-subtitle">From cozy dorms to private cottages — find your perfect nest in the hills.</p>
+    </div>
+    <div class="cards" id="rooms-grid">
+      <!-- Loaded from Firebase or defaults -->
+      <div class="card">
+        <div class="card-icon">🏡</div>
+        <h4 class="card-title">Resort Cottages</h4>
+        <p class="card-desc">Private luxury cottages with mountain views, attached bathrooms, and a cozy fireplace for cool nights.</p>
+        <div class="card-features"><span class="chip">🏔️ Mountain View</span><span class="chip">🛁 Attached Bath</span><span class="chip">🔥 Fireplace</span><span class="chip">🍳 Breakfast</span></div>
+        <button class="inquire" onclick="openBooking('Resort Cottages')">Book / Enquire</button>
+      </div>
+      <div class="card">
+        <div class="card-icon">🛏️</div>
+        <h4 class="card-title">Hostel Dormitories</h4>
+        <p class="card-desc">Budget-friendly shared rooms perfect for backpackers & solo travellers. Meet friends from around the world.</p>
+        <div class="card-features"><span class="chip">🎒 Backpacker</span><span class="chip">🔒 Lockers</span><span class="chip">☕ Common Room</span></div>
+        <button class="inquire" onclick="openBooking('Hostel Dormitories')">Book / Enquire</button>
+      </div>
+      <div class="card">
+        <div class="card-icon">🦜</div>
+        <h4 class="card-title">Bird Watching Cabins</h4>
+        <p class="card-desc">Special cabins right next to the bird sanctuary. Wake up to birdsong and guided morning tours included.</p>
+        <div class="card-features"><span class="chip">🦅 Near Sanctuary</span><span class="chip">🔭 Guided Tour</span><span class="chip">🌅 Sunrise View</span></div>
+        <button class="inquire" onclick="openBooking('Bird Watching Cabins')">Book / Enquire</button>
       </div>
     </div>
-  </header>
+  </div>
+</section>
 
-  <main class="wrap">
-    <section id="home" class="hero">
-      <div class="hero-content">
-        <h2 class="hero-title">Experience Nature's Embrace</h2>
-        <p class="hero-sub">Resort • Hostel • Bird Watching Retreat</p>
-        <a class="btn primary" href="#contact">Book Now</a>
+<!-- ACTIVITIES -->
+<section id="activities" style="background:var(--fog);">
+  <div class="full-section">
+    <div class="inner">
+      <div class="section-header">
+        <div class="section-tag">🌄 Things To Do</div>
+        <h2 class="section-title">Activities & Experiences</h2>
+        <p class="section-subtitle">Every day brings a new adventure in the Kumaon hills.</p>
       </div>
-    </section>
-
-    <section id="stay">
-      <h3 class="section-title">Our Accommodations</h3>
-      <div class="cards">
-        <div class="card">
-          <h4 class="card-title">Resort Cottages</h4>
-          <p class="price">₹2500 / night</p>
-          <p>Private luxury cottages, mountain view, attached bathroom.</p>
-          <button class="inquire">Book / Enquire</button>
-        </div>
-        <div class="card">
-          <h4 class="card-title">Hostel Dormitories</h4>
-          <p class="price">₹600 / bed</p>
-          <p>Budget shared rooms, perfect for backpackers.</p>
-          <button class="inquire">Book / Enquire</button>
-        </div>
-        <div class="card">
-          <h4 class="card-title">Bird Watching Cabins</h4>
-          <p class="price">₹1800 / night</p>
-          <p>Special cabins near bird sanctuary with guided tours.</p>
-          <button class="inquire">Book / Enquire</button>
-        </div>
+      <div class="activities-grid" id="activities-grid">
+        <div class="activity featured"><div class="activity-icon">🦜</div><h4>Bird Watching</h4><p>Guided birding tours with expert naturalists. 200+ species spotted!</p></div>
+        <div class="activity"><div class="activity-icon">🥾</div><h4>Trekking</h4><p>Guided treks through scenic Kumaon trails for all fitness levels.</p></div>
+        <div class="activity"><div class="activity-icon">🌿</div><h4>Nature Trails</h4><p>Leisurely walks through forests, meadows, and riverside paths.</p></div>
+        <div class="activity"><div class="activity-icon">📸</div><h4>Photography Tours</h4><p>Capture stunning landscapes, wildlife, and golden-hour vistas.</p></div>
+        <div class="activity"><div class="activity-icon">🔥</div><h4>Campfire Nights</h4><p>Evening bonfires under starlit skies with music and stories.</p></div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <section id="activities">
-      <h3 class="section-title">Activities & Experiences</h3>
-      <div class="activities-grid">
-        <div class="activity primary"><h4>Bird Watching</h4><p>Primary attraction: guided birding tours.</p></div>
-        <div class="activity"><h4>Trekking</h4><p>Guided treks around Kumaon hills.</p></div>
-        <div class="activity"><h4>Nature Trails</h4><p>Leisurely trails for all fitness levels.</p></div>
-        <div class="activity"><h4>Photography Tours</h4><p>Capture landscapes and wildlife.</p></div>
-        <div class="activity"><h4>Campfire Nights</h4><p>Evening bonfires with music and stories.</p></div>
-      </div>
-    </section>
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-tag">📷 Visual Tour</div>
+      <h2 class="section-title">Image Gallery</h2>
+      <p class="section-subtitle">A glimpse into life at StoneAgeHuts.</p>
+    </div>
+    <div class="gallery-filters" id="gallery-filters">
+      <button data-cat="all" class="filter active" onclick="filterGallery('all',this)">All</button>
+      <button data-cat="property" class="filter" onclick="filterGallery('property',this)">Property</button>
+      <button data-cat="rooms" class="filter" onclick="filterGallery('rooms',this)">Rooms</button>
+      <button data-cat="activities" class="filter" onclick="filterGallery('activities',this)">Activities</button>
+      <button data-cat="nature" class="filter" onclick="filterGallery('nature',this)">Nature</button>
+      <button data-cat="bird" class="filter" onclick="filterGallery('bird',this)">Bird Watching</button>
+    </div>
+    <div class="gallery-grid" id="gallery-grid">
+      <div class="loading-section"><div class="spinner"></div><p style="color:var(--text-muted);font-size:0.9rem;">Loading gallery...</p></div>
+    </div>
+  </div>
+</section>
 
-    <section id="gallery">
-      <h3 class="section-title">Image Gallery</h3>
-      <div class="gallery-filters">
-        <button data-cat="all" class="filter active">All</button>
-        <button data-cat="property" class="filter">Property</button>
-        <button data-cat="rooms" class="filter">Rooms</button>
-        <button data-cat="activities" class="filter">Activities</button>
-        <button data-cat="nature" class="filter">Nature</button>
-        <button data-cat="bird" class="filter">Bird Watching</button>
-      </div>
-      <div class="gallery-grid">
-        <img src="/images/property/main-building.jpg" data-cat="property" alt="main" class="thumb" />
-        <img src="/images/rooms/resort-cottage.jpg" data-cat="rooms" alt="resort" class="thumb" />
-        <img src="/images/rooms/hostel-dorm.jpg" data-cat="rooms" alt="hostel" class="thumb" />
-        <img src="/images/activities/bird-watching.jpg" data-cat="activities,bird" alt="bird" class="thumb" />
-        <img src="/images/nature/landscape.jpg" data-cat="nature" alt="landscape" class="thumb" />
-        <img src="/images/activities/campfire.jpg" data-cat="activities" alt="campfire" class="thumb" />
-      </div>
-    </section>
+<!-- BLOG -->
+<section id="blog">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-tag">✍️ Stories</div>
+      <h2 class="section-title">From Our Blog</h2>
+      <p class="section-subtitle">Tips, tales, and guides from the Kumaon hills.</p>
+    </div>
+    <div id="posts-grid">
+      <div class="loading-section"><div class="spinner"></div><p style="color:var(--text-muted);font-size:0.9rem;">Loading posts...</p></div>
+    </div>
+  </div>
+</section>
 
-    <section id="blog">
-      <h3 class="section-title">Blog</h3>
-      <div id="posts"></div>
-    </section>
-
-    <section id="reviews">
-      <h3 class="section-title">Guest Reviews</h3>
-      <form id="review-form">
-        <input name="name" placeholder="Your name" required />
-        <select name="rating">
-          <option value="5">5</option>
-          <option value="4">4</option>
-          <option value="3">3</option>
-          <option value="2">2</option>
-          <option value="1">1</option>
-        </select>
-        <textarea name="text" placeholder="Your review"></textarea>
-        <button type="submit">Submit Review</button>
-      </form>
-      <div id="reviews-list"></div>
-    </section>
-
-    <section id="contact">
-      <h3 class="section-title">Contact Us</h3>
-      <div class="contact-grid">
-        <form id="contact-form">
-          <input name="name" placeholder="Name" required />
-          <input name="email" placeholder="Email" required />
-          <textarea name="message" placeholder="Message"></textarea>
-          <button type="submit">Send</button>
-        </form>
-        <div class="contact-info">
-          <p><i class="fa fa-phone"></i> +91 98765 43210</p>
-          <p><i class="fa fa-envelope"></i> info@stoneagehuts.com</p>
-          <p><i class="fa fa-map-marker-alt"></i> Near Nainital, Uttarakhand</p>
-          <p>25km from Nainital city center | ~300km from Delhi</p>
-          <div class="socials">
-            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
-            <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-            <a href="#" aria-label="TripAdvisor"><i class="fab fa-tripadvisor"></i></a>
-            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+<!-- REVIEWS -->
+<section id="reviews" style="background:var(--stone);padding:5rem 0;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+    <div class="section-header">
+      <div class="section-tag" style="color:var(--clay);">⭐ Guest Stories</div>
+      <h2 class="section-title" style="color:var(--sand);">What Guests Say</h2>
+    </div>
+    <div id="review-form-wrap">
+      <h4>Share Your Experience</h4>
+      <form id="review-form" onsubmit="submitReview(event)">
+        <div class="form-grid">
+          <div><input name="name" placeholder="Your Name" required /></div>
+          <div>
+            <select name="rating">
+              <option value="5">⭐⭐⭐⭐⭐ Excellent (5)</option>
+              <option value="4">⭐⭐⭐⭐ Very Good (4)</option>
+              <option value="3">⭐⭐⭐ Good (3)</option>
+              <option value="2">⭐⭐ Fair (2)</option>
+              <option value="1">⭐ Poor (1)</option>
+            </select>
           </div>
+          <div class="form-full"><textarea name="text" placeholder="Tell us about your stay..." required></textarea></div>
+          <div class="form-full"><button type="submit" class="form-btn">Submit Review ✉️</button></div>
+        </div>
+      </form>
+    </div>
+    <div id="reviews-grid">
+      <div class="loading-section"><div class="spinner"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-tag">📍 Get In Touch</div>
+      <h2 class="section-title" id="contact-title-el">Contact Us</h2>
+      <p class="section-subtitle">We'd love to hear from you!</p>
+    </div>
+    <div class="contact-grid">
+      <form id="contact-form" onsubmit="submitContact(event)" style="display:flex;flex-direction:column;gap:1rem;">
+        <input name="name" placeholder="Your Name" required class="light" />
+        <input name="email" placeholder="Email Address" type="email" required class="light" />
+        <input name="phone" placeholder="Phone Number (10 digits)" maxlength="10" pattern="[0-9]{10}" class="light" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)" />
+        <textarea name="message" placeholder="Your message..." class="light" style="min-height:120px;"></textarea>
+        <button type="submit" style="padding:0.85rem;background:var(--moss);color:#fff;border:none;border-radius:10px;font-weight:600;font-size:0.95rem;cursor:pointer;font-family:inherit;">Send Message 🚀</button>
+      </form>
+      <div class="contact-info" id="contact-info-section">
+        <!-- Loaded from Firebase -->
+        <div class="contact-item"><div class="cic"><i class="fas fa-phone"></i></div><div><strong>Phone</strong><p id="ci-phone">+91 98765 43210</p></div></div>
+        <div class="contact-item"><div class="cic"><i class="fas fa-envelope"></i></div><div><strong>Email</strong><p id="ci-email">info@stoneagehuts.com</p></div></div>
+        <div class="contact-item"><div class="cic"><i class="fas fa-map-marker-alt"></i></div><div><strong>Address</strong><p id="ci-address">Near Nainital, Uttarakhand</p></div></div>
+        <div class="contact-item"><div class="cic"><i class="fas fa-clock"></i></div><div><strong>Check-in / Check-out</strong><p id="ci-checkin">Check-in: 12:00 PM · Check-out: 11:00 AM</p></div></div>
+        <div class="socials" id="ci-socials">
+          <a href="#" id="soc-instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" id="soc-facebook" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="#" id="soc-twitter" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" id="soc-tripadvisor" aria-label="TripAdvisor"><i class="fab fa-tripadvisor"></i></a>
+          <a href="#" id="soc-youtube" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
         </div>
       </div>
-    </section>
-
-    <section id="newsletter">
-      <h3 class="section-title">Newsletter</h3>
-      <form id="newsletter-form">
-        <input name="email" placeholder="Email" required />
-        <button type="submit">Subscribe</button>
-      </form>
-    </section>
-
-  </main>
-
-  <div id="modal" class="modal" style="display:none;"><span id="modal-close">&times;</span><img id="modal-img" src="" /></div>
-
-  <footer class="site-footer">
-    <div class="wrap footer-inner">
-      <p>© 2024 StoneAgeHuts</p>
-      <p>Near Nainital, Kumaon Hills</p>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <script src="/script.js"></script>
+<!-- MAP -->
+<div class="map-strip">
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55998.35!2d79.4!3d29.38!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39a09efa91da5aff%3A0x1b5a1db6fc8b9cd3!2sNainital!5e0!3m2!1sen!2sin!4v1700000000000" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Location Map"></iframe>
+</div>
+
+<!-- NEWSLETTER -->
+<section id="newsletter" style="text-align:center;">
+  <div class="section-wrap">
+    <div class="section-header" style="margin-bottom:0;">
+      <div class="section-tag">📬 Stay Updated</div>
+      <h2 class="section-title">Join Our Newsletter</h2>
+      <p class="section-subtitle" style="margin:0.5rem auto 0;display:block;text-align:center;">Bird sightings, seasonal offers & nature stories — right to your inbox.</p>
+    </div>
+    <form id="newsletter-form" onsubmit="subscribeNewsletter(event)">
+      <input name="email" placeholder="Enter your email" required type="email" class="light" style="max-width:320px;" />
+      <button type="submit">Subscribe 🌿</button>
+    </form>
+  </div>
+</section>
+
+<!-- GALLERY MODAL -->
+<div class="modal-overlay" id="gallery-modal" onclick="closeGalleryModal(event)">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeGalleryModal()">×</button>
+    <img id="modal-img" src="" alt="" />
+  </div>
+</div>
+
+<!-- BOOKING MODAL -->
+<div class="bk-overlay" id="booking-modal">
+  <div class="bk-box">
+    <button class="bk-close" onclick="closeBooking()">✕</button>
+    <h3>Book Your Stay</h3>
+    <p class="bk-room" id="bk-room-name">Resort Cottages</p>
+    <form class="bk-form" onsubmit="submitBooking(event)">
+      <input name="name" placeholder="Full Name" required class="light" />
+      <input name="email" placeholder="Email Address" type="email" required class="light" />
+      <input name="phone" placeholder="Phone (10 digits)" maxlength="10" pattern="[0-9]{10}" class="light" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)" />
+      <div class="bk-2col">
+        <div><label class="field-label">Check-in</label><input name="checkin" type="date" required class="light" /></div>
+        <div><label class="field-label">Check-out</label><input name="checkout" type="date" required class="light" /></div>
+      </div>
+      <select name="guests" class="light">
+        <option value="1">1 Guest</option>
+        <option value="2" selected>2 Guests</option>
+        <option value="3">3 Guests</option>
+        <option value="4">4 Guests</option>
+        <option value="5+">5+ Guests</option>
+      </select>
+      <textarea name="special" placeholder="Special requests (optional)" class="light" style="min-height:80px;"></textarea>
+      <button type="submit" style="padding:0.9rem;background:var(--moss);color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:0.95rem;font-family:inherit;">Confirm Enquiry 🌿</button>
+    </form>
+  </div>
+</div>
+
+<!-- SCROLL TOP -->
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toast-msg">Done!</span></div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="ft">🏕️ StoneAgeHuts</span>
+      <p>A nature retreat nestled in the Kumaon Hills near Nainital. Experience authentic wilderness, bird watching, and mountain life.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="#stay">Accommodations</a></li>
+        <li><a href="#activities">Activities</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Info</h5>
+      <ul>
+        <li><a href="#">How to Reach</a></li>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="admin.html">Admin</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 StoneAgeHuts · Near Nainital, Kumaon Hills, Uttarakhand</p>
+    <p>Made with 🌿 for nature lovers</p>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════
+     FIREBASE SDK
+═══════════════════════════════════════════════════ -->
+<script type="module">
+import { initializeApp }               from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp, doc, onSnapshot }
+                                        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, getDownloadURL, listAll }
+                                        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { getAnalytics, logEvent }       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+
+// ── CONFIG (replace with yours) ──────────────────────
+const firebaseConfig = {
+  apiKey:            "YOUR_API_KEY",
+  authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId:         "YOUR_PROJECT_ID",
+  storageBucket:     "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId:             "YOUR_APP_ID",
+  measurementId:     "YOUR_MEASUREMENT_ID"
+};
+// ─────────────────────────────────────────────────────
+
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const stor = getStorage(app);
+let analytics;
+try { analytics = getAnalytics(app); } catch(e) {}
+
+// ── ANALYTICS HELPER ─────────────────────────────────
+function track(event, data = {}) {
+  try { if(analytics) logEvent(analytics, event, data); } catch(e) {}
+  // Also save to Firestore
+  addDoc(collection(db, 'analytics'), {
+    event, data,
+    page: window.location.pathname,
+    ts: serverTimestamp(),
+    ua: navigator.userAgent.slice(0,120),
+    ref: document.referrer || ''
+  }).catch(()=>{});
+}
+
+// Track page view
+track('page_view', { title: document.title });
+
+// Track all link/button clicks
+document.addEventListener('click', e => {
+  const el = e.target.closest('a,button');
+  if(!el) return;
+  const label = el.textContent.trim().slice(0,50) || el.getAttribute('aria-label') || el.id;
+  track('click', { label, tag: el.tagName, href: el.href || '' });
+});
+
+// Track section visibility
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => { if(en.isIntersecting) track('section_view', { section: en.target.id }); });
+}, { threshold: 0.3 });
+document.querySelectorAll('section[id]').forEach(s => io.observe(s));
+
+// ── HERO IMAGE ───────────────────────────────────────
+async function loadHeroImage() {
+  try {
+    const snap = await getDocs(query(collection(db,'settings'), where('key','==','hero_image')));
+    if(!snap.empty) {
+      const url = snap.docs[0].data().value;
+      if(url) { const img = document.getElementById('hero-bg-img'); img.src = url; img.style.display = 'block'; }
+    }
+  } catch(e) {}
+}
+loadHeroImage();
+
+// ── CONTACT INFO ─────────────────────────────────────
+async function loadContactInfo() {
+  try {
+    const snap = await getDocs(collection(db,'contact_info'));
+    if(snap.empty) return;
+    const d = snap.docs[0].data();
+    if(d.phone)    document.getElementById('ci-phone').textContent    = d.phone;
+    if(d.email)    document.getElementById('ci-email').textContent    = d.email;
+    if(d.address)  document.getElementById('ci-address').textContent  = d.address;
+    if(d.checkin)  document.getElementById('ci-checkin').textContent  = d.checkin;
+    if(d.instagram) document.getElementById('soc-instagram').href     = d.instagram;
+    if(d.facebook)  document.getElementById('soc-facebook').href      = d.facebook;
+    if(d.twitter)   document.getElementById('soc-twitter').href       = d.twitter;
+    if(d.tripadvisor) document.getElementById('soc-tripadvisor').href = d.tripadvisor;
+    if(d.youtube)   document.getElementById('soc-youtube').href       = d.youtube;
+  } catch(e) {}
+}
+loadContactInfo();
+
+// ── GALLERY ──────────────────────────────────────────
+let allGalleryItems = [];
+
+async function loadGallery() {
+  const grid = document.getElementById('gallery-grid');
+  try {
+    const snap = await getDocs(query(collection(db,'gallery'), orderBy('order','asc')));
+    allGalleryItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderGallery('all');
+  } catch(e) {
+    grid.innerHTML = '<div class="gallery-empty" style="grid-column:1/-1"><i class="fas fa-images" style="font-size:2rem;opacity:0.3;display:block;margin-bottom:0.5rem;"></i>Gallery images will appear here once added from the admin panel.</div>';
+  }
+}
+
+function renderGallery(cat) {
+  const grid = document.getElementById('gallery-grid');
+  const items = cat === 'all' ? allGalleryItems : allGalleryItems.filter(i => i.category === cat);
+  if(!items.length) {
+    grid.innerHTML = '<div class="gallery-empty" style="grid-column:1/-1">No images in this category yet.</div>';
+    return;
+  }
+  grid.innerHTML = items.map(item => `
+    <div class="gallery-item" data-cat="${item.category}" onclick="openGalleryModal('${item.url}','${(item.title||'').replace(/'/g,"\\'")}')">
+      <img src="${item.url}" alt="${item.title||''}" loading="lazy" />
+    </div>
+  `).join('');
+}
+
+window.filterGallery = function(cat, btn) {
+  document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderGallery(cat);
+  track('gallery_filter', { category: cat });
+};
+
+window.openGalleryModal = function(url, title) {
+  document.getElementById('modal-img').src = url;
+  document.getElementById('modal-img').alt = title;
+  document.getElementById('gallery-modal').classList.add('open');
+  track('gallery_image_view', { image: title });
+};
+window.closeGalleryModal = function(e) {
+  if(!e || e.target === document.getElementById('gallery-modal') || e.type === 'click')
+    document.getElementById('gallery-modal').classList.remove('open');
+};
+
+loadGallery();
+
+// ── BLOG POSTS ───────────────────────────────────────
+async function loadPosts() {
+  const grid = document.getElementById('posts-grid');
+  try {
+    const snap = await getDocs(query(collection(db,'posts'), where('published','==',true), orderBy('date','desc')));
+    if(snap.empty) { renderDefaultPosts(); return; }
+    const posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    grid.innerHTML = posts.map(p => `
+      <div class="post-card" onclick="track('blog_click',{title:'${(p.title||'').replace(/'/g,"\\'")}'})" style="cursor:pointer;">
+        <div class="post-thumb">
+          ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.title||''}" loading="lazy" />` : `<div class="post-emoji">${p.emoji||'📝'}</div>`}
+        </div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span>${p.date ? (p.date.toDate ? p.date.toDate().toLocaleDateString('en-IN',{month:'short',year:'numeric'}) : p.date) : ''}</span>
+            <span class="post-category">${p.category||'Blog'}</span>
+          </div>
+          <h4 class="post-title">${p.title||''}</h4>
+          <p class="post-excerpt">${p.excerpt||''}</p>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) { renderDefaultPosts(); }
+}
+
+function renderDefaultPosts() {
+  const defaults = [
+    { emoji:'🦜', title:'Top 10 Birds to Spot in Kumaon This Winter', date:'Nov 2024', category:'Bird Watching', excerpt:"Winter is prime time for birding in Kumaon. From the elusive Himalayan Monal to Siberian migrants — here's what to look for." },
+    { emoji:'🥾', title:"Beginner's Guide to Trekking Near Nainital", date:'Oct 2024', category:'Trekking', excerpt:'New to trekking? We break down the 5 best beginner routes with tips on gear, timing, and what to pack.' },
+    { emoji:'🌿', title:'Why Slow Travel in the Hills is the Best Travel', date:'Sep 2024', category:'Travel Tips', excerpt:"Stop rushing from one place to the next. Here's why spending a week in one mountain village will change how you travel forever." },
+  ];
+  document.getElementById('posts-grid').innerHTML = defaults.map(p => `
+    <div class="post-card">
+      <div class="post-thumb"><div class="post-emoji">${p.emoji}</div></div>
+      <div class="post-body">
+        <div class="post-meta"><span>${p.date}</span><span class="post-category">${p.category}</span></div>
+        <h4 class="post-title">${p.title}</h4>
+        <p class="post-excerpt">${p.excerpt}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+loadPosts();
+
+// ── REVIEWS ──────────────────────────────────────────
+function loadReviews() {
+  const grid = document.getElementById('reviews-grid');
+  try {
+    const q = query(collection(db,'reviews'), where('status','==','approved'), orderBy('createdAt','desc'));
+    onSnapshot(q, snap => {
+      if(snap.empty) { grid.innerHTML = '<div class="reviews-empty">No approved reviews yet. Be the first!</div>'; return; }
+      grid.innerHTML = snap.docs.map(d => {
+        const r = d.data();
+        const date = r.createdAt?.toDate?.()?.toLocaleDateString('en-IN',{month:'short',year:'numeric'}) || 'Recently';
+        return `<div class="review-card">
+          <div class="rv-header"><span class="rv-name">${r.name}</span><span class="rv-date">${date}</span></div>
+          <div class="rv-stars">${'⭐'.repeat(r.rating)}</div>
+          <p class="rv-text">"${r.text}"</p>
+        </div>`;
+      }).join('');
+    }, () => { grid.innerHTML = '<div class="reviews-empty">Reviews are loading...</div>'; });
+  } catch(e) { grid.innerHTML = '<div class="reviews-empty">Reviews could not be loaded.</div>'; }
+}
+loadReviews();
+
+window.submitReview = async function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const name = form.name.value.trim();
+  const rating = parseInt(form.rating.value);
+  const text = form.text.value.trim();
+  if(!name || !text) return;
+  try {
+    await addDoc(collection(db,'reviews'), { name, rating, text, status: 'pending', createdAt: serverTimestamp() });
+    form.reset();
+    showToast('🌟 Thank you! Your review is pending approval.');
+    track('review_submitted', { rating });
+  } catch(err) { showToast('❌ Could not submit. Please try again.'); }
+};
+
+// ── CONTACT FORM ─────────────────────────────────────
+window.submitContact = async function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const name    = form.name.value.trim();
+  const email   = form.email.value.trim();
+  const phone   = form.phone.value.trim();
+  const message = form.message.value.trim();
+  try {
+    await addDoc(collection(db,'enquiries'), { name, email, phone, message, status: 'new', createdAt: serverTimestamp() });
+    form.reset();
+    showToast('📩 Message sent! We\'ll get back to you soon.');
+    track('contact_submitted');
+  } catch(err) { showToast('❌ Could not send message. Please try again.'); }
+};
+
+// ── BOOKING ──────────────────────────────────────────
+window.openBooking = function(room) {
+  document.getElementById('bk-room-name').textContent = room;
+  document.getElementById('booking-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  track('booking_modal_open', { room });
+};
+window.closeBooking = function() {
+  document.getElementById('booking-modal').classList.remove('open');
+  document.body.style.overflow = '';
+};
+document.getElementById('booking-modal').addEventListener('click', e => {
+  if(e.target === document.getElementById('booking-modal')) window.closeBooking();
+});
+window.submitBooking = async function(e) {
+  e.preventDefault();
+  const form = e.target;
+  try {
+    await addDoc(collection(db,'bookings'), {
+      room:    document.getElementById('bk-room-name').textContent,
+      name:    form.name.value.trim(),
+      email:   form.email.value.trim(),
+      phone:   form.phone.value.trim(),
+      checkin: form.checkin.value,
+      checkout:form.checkout.value,
+      guests:  form.guests.value,
+      special: form.special.value.trim(),
+      status:  'pending',
+      createdAt: serverTimestamp()
+    });
+    window.closeBooking();
+    showToast('✅ Booking enquiry sent! We\'ll contact you within 24 hours.');
+    track('booking_submitted', { room: document.getElementById('bk-room-name').textContent });
+  } catch(err) { showToast('❌ Could not submit. Please try again.'); }
+};
+
+// ── NEWSLETTER ───────────────────────────────────────
+window.subscribeNewsletter = async function(e) {
+  e.preventDefault();
+  const email = e.target.email.value.trim();
+  try {
+    await addDoc(collection(db,'newsletter'), { email, createdAt: serverTimestamp() });
+    e.target.reset();
+    showToast('🌿 Subscribed! Nature stories coming your way.');
+    track('newsletter_subscribe');
+  } catch(err) { showToast('❌ Could not subscribe. Please try again.'); }
+};
+
+// Make track global for inline HTML
+window.track = track;
+</script>
+
+<!-- NON-MODULE JS -->
+<script>
+// ── TRANSLATIONS ──────────────────────────────────────
+const T = {
+  en: { heroTitle:"Experience<br><em>Nature's Embrace</em>", heroSub:"Resort • Hostel • Bird Watching Retreat" },
+  hi: { heroTitle:"प्रकृति की<br><em>गोद में आइए</em>",   heroSub:"रिसोर्ट • हॉस्टल • पक्षी दर्शन रिट्रीट" }
+};
+function setLang(lang) {
+  document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-'+lang).classList.add('active');
+  document.getElementById('hero-title').innerHTML = T[lang].heroTitle;
+  document.getElementById('hero-sub').textContent  = T[lang].heroSub;
+}
+
+// ── HEADER SCROLL ─────────────────────────────────────
+const HDR = document.getElementById('site-header');
+window.addEventListener('scroll', () => {
+  HDR.classList.toggle('scrolled', window.scrollY > 60);
+  document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 300);
+  const secs = document.querySelectorAll('section[id]');
+  let cur = '';
+  secs.forEach(s => { if(window.scrollY >= s.offsetTop - 120) cur = s.id; });
+  document.querySelectorAll('.nav-link').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+cur));
+});
+
+// ── MOBILE NAV ────────────────────────────────────────
+function toggleMobileNav() { document.getElementById('mobile-nav').classList.toggle('open'); }
+function closeMobileNav()  { document.getElementById('mobile-nav').classList.remove('open'); }
+
+// ── TOAST ─────────────────────────────────────────────
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  if(type==='error') t.style.background = '#8b2020'; else t.style.background = '';
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+// Set min dates for booking
+const today = new Date().toISOString().split('T')[0];
+document.querySelectorAll('input[type=date]').forEach(i => i.min = today);
+</script>
 </body>
 </html>
