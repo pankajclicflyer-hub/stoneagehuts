@@ -4,3 +4,6 @@ node_modules/
 /.DS_Store
 data/*.json
 coverage/
+stoneagehuts-fecda-firebase-adminsdk-fbsvc-17c2805b6b.json
+serviceAccount.json
+node_modules/
