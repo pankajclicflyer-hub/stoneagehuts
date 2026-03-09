@@ -9,27 +9,159 @@
 <body>
   <main class="wrap">
     <h2>Administrator Login</h2>
-    <form method="post" action="/admin/login">
-      <div>
-        <label for="username">Username:</label>
-        <input id="username" name="username" required />
-      </div>
-      <div>
-        <label for="password">Password:</label>
-        <input id="password" name="password" type="password" required />
-      </div>
-      <button type="submit">Sign in</button>
-    </form>
+    <div>
+      <label for="login-email">Email</label><br />
+      <input type="email" id="login-email" placeholder="admin@stoneagehuts.com" required />
+    </div>
+    <div>
+      <label for="login-password">Password</label><br />
+      <input type="password" id="login-password" placeholder="••••••••" required />
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <p class="login-error" id="login-error" style="display:none;color:red;margin-top:0.5rem;"></p>
     <p><a href="/">Back to site</a></p>
-    <script>
-      // optionally show a simple error message if query string has error
-      if (location.search.indexOf('error=1') !== -1) {
-        const msg = document.createElement('p');
-        msg.style.color = 'red';
-        msg.textContent = 'Invalid credentials, please try again.';
-        document.body.insertBefore(msg, document.body.firstChild);
-      }
+    <script type="module">
+      // Import Firebase
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+      import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+      // Your Firebase config (copy from admin.html)
+      const firebaseConfig = {
+        apiKey: "AIzaSyDbSoPFLN2XXEO4f1jlEF2bfoRG1TZsEkY",
+        authDomain: "stoneagehuts-fecda.firebaseapp.com",
+        projectId: "stoneagehuts-fecda",
+        storageBucket: "stoneagehuts-fecda.appspot.com",
+        messagingSenderId: "512951842420",
+        appId: "1:512951842420:web:16fd229d1b79fdc0880321",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // Make auth available globally
+      window.auth = auth;
+      window.db = db;
+
+      // LOGIN FUNCTION
+      window.doLogin = async function() {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const errorEl = document.getElementById('login-error');
+        const loginBtn = document.querySelector('.login-btn');
+        
+        // Clear previous error
+        errorEl.textContent = '';
+        errorEl.style.display = 'none';
+        
+        // Validate inputs
+        if (!email || !password) {
+          errorEl.textContent = 'Please enter both email and password';
+          errorEl.style.display = 'block';
+          return;
+        }
+        
+        try {
+          // Show loading state
+          loginBtn.textContent = 'Signing in...';
+          loginBtn.disabled = true;
+          
+          console.log('Attempting login for:', email);
+          
+          // Attempt login
+          const userCredential = await signInWithEmailAndPassword(auth, email, password);
+          console.log('Login successful:', userCredential.user.email);
+          
+          // Get token with claims
+          const token = await userCredential.user.getIdTokenResult();
+          console.log('Token claims:', token.claims);
+          
+          // Check if admin
+          if (token.claims.admin === true) {
+            console.log('Admin access granted');
+            errorEl.textContent = 'Login successful! Redirecting...';
+            errorEl.style.color = 'green';
+            errorEl.style.display = 'block';
+            
+            // Redirect to dashboard
+            setTimeout(() => {
+              window.location.href = 'admin/dashboard.html';
+            }, 1000);
+          } else {
+            // Not admin - sign out
+            console.log('Not an admin user');
+            await signOut(auth);
+            errorEl.textContent = 'This account does not have admin privileges';
+            errorEl.style.color = 'red';
+            errorEl.style.display = 'block';
+          }
+          
+        } catch (error) {
+          console.error('Login error:', error);
+          
+          // Show user-friendly error message
+          let message = 'Login failed. Please try again.';
+          switch (error.code) {
+            case 'auth/user-not-found':
+              message = 'User not found. Check your email.';
+              break;
+            case 'auth/wrong-password':
+              message = 'Incorrect password.';
+              break;
+            case 'auth/invalid-email':
+              message = 'Invalid email format.';
+              break;
+            case 'auth/too-many-requests':
+              message = 'Too many failed attempts. Try again later.';
+              break;
+            case 'auth/network-request-failed':
+              message = 'Network error. Check your connection.';
+              break;
+          }
+          
+          errorEl.textContent = message;
+          errorEl.style.color = 'red';
+          errorEl.style.display = 'block';
+          
+        } finally {
+          // Reset button
+          loginBtn.textContent = 'Sign In';
+          loginBtn.disabled = false;
+        }
+      };
+
+      // Check auth state on load
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          console.log('User is signed in:', user.email);
+          // Check if already on dashboard page
+          if (!window.location.pathname.includes('dashboard')) {
+            // Verify admin status
+            user.getIdTokenResult().then(token => {
+              if (token.claims.admin === true) {
+                window.location.href = 'admin/dashboard.html';
+              }
+            });
+          }
+        } else {
+          console.log('User is signed out');
+        }
+      });
+
+      // Add status check function
+      window.checkFirebaseStatus = async function() {
+        console.log('🔥 Firebase Status Check');
+        console.log('Auth:', auth);
+        console.log('Current user:', auth.currentUser?.email || 'No user');
+        
+        if (auth.currentUser) {
+          const token = await auth.currentUser.getIdTokenResult();
+          console.log('Token claims:', token.claims);
+          console.log('Is Admin:', token.claims.admin === true);
+        }
+      };
     </script>
-  </main>
 </body>
 </html>

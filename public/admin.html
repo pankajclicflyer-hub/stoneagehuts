@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏕️</text></svg>">
   <title>StoneAgeHuts — Admin Panel</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -224,6 +225,12 @@
     .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--moss); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 2rem auto; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* SKELETONS */
+    .skeleton { background: var(--border); border-radius: var(--radius); animation: pulse 1.2s infinite; }
+    .skeleton-text { height: 16px; margin-bottom: 0.5rem; }
+    .skeleton-row { height: 60px; margin-bottom: 1rem; }
+    @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 0.6; } 100% { opacity: 0.3; } }
+
     /* ACTIVITY FEED */
     .feed-item { display: flex; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
     .feed-item:last-child { border-bottom: none; }
@@ -436,6 +443,7 @@
       <button class="btn btn-outline btn-sm rv-filter" onclick="setRvFilter('rejected',this)">Rejected</button>
     </div>
     <div id="reviews-list-admin"><div class="spinner"></div></div>
+  <button class="btn btn-outline btn-sm" id="reviews-load-more" style="display:none;margin-top:1rem;">Load more</button>
   </div>
 
   <!-- ── ENQUIRIES ── -->
@@ -443,6 +451,7 @@
     <div class="panel-card">
       <div class="panel-card-header"><h3><i class="fas fa-inbox"></i> Contact Enquiries</h3></div>
       <div class="panel-card-body" id="enquiries-list"><div class="spinner"></div></div>
+      <button class="btn btn-outline btn-sm" id="enq-load-more" style="display:none;margin-top:1rem;">Load more</button>
     </div>
   </div>
 
@@ -510,12 +519,38 @@
     <div class="stats-grid" id="analytics-stats"></div>
     <div class="panel-card">
       <div class="panel-card-header"><h3><i class="fas fa-mouse-pointer"></i> Recent Clicks & Events</h3></div>
+      <div class="panel-card-body">
+        <div class="form-row cols-3" style="align-items:center;">
+          <div class="form-group"><label>Event Type</label>
+            <select id="analytics-event-filter">
+              <option value="all">All</option>
+              <option value="page_view">Page View</option>
+              <option value="click">Click</option>
+              <option value="booking_modal_open">Booking Open</option>
+              <option value="contact_submitted">Contact Submit</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Date Range</label>
+            <select id="analytics-range-filter">
+              <option value="all">All time</option>
+              <option value="today">Today</option>
+              <option value="week">Last 7 days</option>
+              <option value="month">Last 30 days</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:0.5rem;">
+            <button class="btn btn-primary btn-sm" id="analytics-apply-filter">Apply</button>
+            <button class="btn btn-outline btn-sm" id="analytics-export">Export</button>
+          </div>
+        </div>
+      </div>
       <div class="overflow-table">
         <table class="data-table">
           <thead><tr><th>Event</th><th>Details</th><th>Page</th><th>Time</th></tr></thead>
           <tbody id="analytics-tbody"><tr><td colspan="4"><div class="spinner"></div></td></tr></tbody>
         </table>
       </div>
+      <button class="btn btn-outline btn-sm" id="analytics-load-more" style="display:none;margin:1rem;">Load more</button>
     </div>
   </div>
 </div>
@@ -553,6 +588,10 @@
           <input type="file" id="blog-img-file" accept="image/*" style="display:none" onchange="previewBlogImage(this)" />
           <img id="blog-img-preview" src="" alt="" style="display:none;width:100%;border-radius:9px;margin-top:0.75rem;max-height:160px;object-fit:cover;" />
           <input type="hidden" id="blog-img-url" />
+          <input type="hidden" id="blog-img-path" />
+          <div id="blog-img-progress" style="display:none;margin-top:0.5rem;">
+            <div class="progress-bar"><div class="progress-fill" id="blog-img-prog-fill" style="width:0%"></div></div>
+          </div>
         </div>
       </div>
       <div class="form-row">
@@ -579,7 +618,7 @@ import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.0/fire
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
                             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, getDoc, doc,
-         updateDoc, deleteDoc, query, orderBy, where, limit,
+         updateDoc, deleteDoc, query, orderBy, where, limit, startAfter,
          serverTimestamp, onSnapshot, setDoc }
                             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject }
@@ -590,7 +629,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyDbSoPFLN2XXEO4f1jlEF2bfoRG1TZsEkY",
   authDomain: "stoneagehuts-fecda.firebaseapp.com",
   projectId: "stoneagehuts-fecda",
-  storageBucket: "stoneagehuts-fecda.firebasestorage.app",
+  storageBucket: "stoneagehuts-fecda.appspot.com",
   messagingSenderId: "512951842420",
   appId: "1:512951842420:web:16fd229d1b79fdc0880321",
 };
@@ -601,27 +640,199 @@ const auth = getAuth(app);
 const db   = getFirestore(app);
 const stor = getStorage(app);
 
+// keep track of blog image path for refresh/fallback
+let blogImagePath = '';
+
+// helper to upload files to storage with progress callback
+async function uploadToStorage(file, folder, onProgress) {
+  const filePath = `${folder}/${Date.now()}_${file.name}`;
+  const r = ref(stor, filePath);
+  const task = uploadBytesResumable(r, file);
+  return new Promise((resolve, reject) => {
+    task.on('state_changed',
+      snap => {
+        const pct = Math.round(snap.bytesTransferred/snap.totalBytes*100);
+        if(onProgress) onProgress(pct, snap);
+      },
+      err => reject(err),
+      async () => {
+        try {
+          const url = await getDownloadURL(task.snapshot.ref);
+          resolve({ url, path: task.snapshot.ref.fullPath });
+        } catch(e) {
+          reject(e);
+        }
+      }
+    );
+  });
+}
+
+// set image src with error/fallback handling (optionally refresh from storagePath)
+function safeImage(el, url, storagePath) {
+  el.src = url;
+  el.onerror = async () => {
+    if(storagePath) {
+      try {
+        const fresh = await getDownloadURL(ref(stor, storagePath));
+        el.src = fresh;
+        return;
+      } catch(e) {
+        console.error('refresh failed', e);
+      }
+    }
+    el.onerror = null;
+    el.src = 'https://via.placeholder.com/400x300?text=Image+Unavailable';
+  };
+}
+
+// expose for inline handlers
+window.refreshImg = async function(imgEl, path) {
+  try {
+    const url = await getDownloadURL(ref(stor, path));
+    imgEl.src = url;
+  } catch(e) {
+    imgEl.onerror = null;
+    imgEl.src = 'https://via.placeholder.com/400x300?text=Image+Unavailable';
+  }
+};
+
 // ── AUTH ─────────────────────────────────────────────
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
+  console.log('auth state changed', user);
   if(user) {
-    document.getElementById('login-screen').style.display = 'none';
-    initAdmin();
+    // verify the admin claim before booting the dashboard
+    try {
+      const token = await user.getIdTokenResult();
+      if(token.claims.admin) {
+        document.getElementById('login-screen').style.display = 'none';
+        initAdmin();
+      } else {
+        // not an admin – show message and sign out immediately
+        showError('This account does not have admin privileges.');
+        await signOut(auth);
+        document.getElementById('login-screen').style.display = 'flex';
+      }
+    } catch(e) {
+      console.error('error checking token claims', e);
+      await signOut(auth);
+      document.getElementById('login-screen').style.display = 'flex';
+    }
   } else {
     document.getElementById('login-screen').style.display = 'flex';
   }
 });
 
-window.doLogin = async function() {
-  const email = document.getElementById('login-email').value.trim();
-  const pass  = document.getElementById('login-password').value;
-  const err   = document.getElementById('login-error');
-  err.textContent = '';
+// helpers for login UI
+function showLoading(on) {
+  const btn = document.querySelector('.login-btn');
+  if(btn) {
+    btn.disabled = on;
+    btn.textContent = on ? 'Signing in...' : 'Sign In';
+  }
+}
+function showError(msg) { document.getElementById('login-error').textContent = msg; }
+function hideError() { showError(''); }
+function showSuccess(msg) { toast(msg, 'success'); }
+
+// improved login with timeout, diagnostics, claims check
+window.login = async function(email, password) {
   try {
-    await signInWithEmailAndPassword(auth, email, pass);
-  } catch(e) {
-    err.textContent = 'Invalid email or password.';
+    showLoading(true);
+    hideError();
+    console.log('1. Attempting login for:', email);
+
+    // with ES modules we don't have a global `firebase` object;
+    // just make sure our initialized app/auth objects exist
+    if (!app || !auth) {
+      throw new Error('Firebase not initialized');
+    }
+
+    const loginPromise = signInWithEmailAndPassword(auth, email, password);
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Login timeout')), 10000)
+    );
+
+    const result = await Promise.race([loginPromise, timeoutPromise]);
+    console.log('2. Login successful:', result.user.email);
+
+    const token = await result.user.getIdTokenResult();
+    console.log('3. Token claims:', token.claims);
+
+    if (token.claims.admin) {
+      console.log('4. Admin access granted');
+      showSuccess('Login successful! Redirecting...');
+      localStorage.setItem('lastLogin', new Date().toISOString());
+      localStorage.setItem('userEmail', result.user.email);
+      setTimeout(() => {
+        window.location.href = '/admin/dashboard.html';
+      }, 1000);
+    } else {
+      console.log('4. Not an admin user');
+      showError('This account does not have admin privileges. Please contact administrator.');
+      await signOut(auth);
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    let errorMessage = 'Login failed. Please try again.';
+    switch (error.code) {
+      case 'auth/user-not-found':
+        errorMessage = 'User not found. Please check your email.';
+        break;
+      case 'auth/wrong-password':
+        errorMessage = 'Incorrect password. Please try again.';
+        break;
+      case 'auth/invalid-email':
+        errorMessage = 'Invalid email format.';
+        break;
+      case 'auth/too-many-requests':
+        errorMessage = 'Too many failed attempts. Please try again later.';
+        break;
+      case 'auth/network-request-failed':
+        errorMessage = 'Network error. Please check your connection.';
+        break;
+      default:
+        errorMessage = error.message || errorMessage;
+    }
+    showError(errorMessage);
+  } finally {
+    showLoading(false);
   }
 };
+
+window.doLogin = function() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-password').value;
+  if (!email || !pass) {
+    document.getElementById('login-error').textContent = 'Please enter both email and password';
+    return;
+  }
+  window.login(email, pass);
+};
+
+// diagnostic helper
+async function checkFirebaseStatus() {
+  const status = {
+    initialized: false,
+    auth: false,
+    firestore: false,
+    user: null
+  };
+  try {
+    status.initialized = !!app;
+    status.auth = !!auth;
+    const currentUser = auth.currentUser;
+    status.user = currentUser ? currentUser.email : null;
+    if (db) {
+      const snap = await getDocs(query(collection(db,'test'), limit(1)));
+      status.firestore = true;
+    }
+    console.log('Firebase Status:', status);
+    return status;
+  } catch (error) {
+    console.error('Status check failed:', error);
+    return { ...status, error: error.message };
+  }
+}
 
 window.doLogout = async function() {
   await signOut(auth);
@@ -633,6 +844,18 @@ function initAdmin() {
   loadDashboard();
   loadContactSettingsForm();
   watchBadges();
+  watchStats();
+  // analytics filter buttons
+  document.getElementById('analytics-apply-filter')?.addEventListener('click', () => loadAnalytics(true));
+  document.getElementById('analytics-export')?.addEventListener('click', exportAnalytics);
+  document.getElementById('analytics-load-more')?.addEventListener('click', loadMoreAnalytics);
+  // kick off analytics list with defaults
+  loadAnalytics(true);
+  // pagination buttons
+  const rbtn = document.getElementById('reviews-load-more');
+  if(rbtn) rbtn.addEventListener('click', loadMoreReviews);
+  const ebtn = document.getElementById('enq-load-more');
+  if(ebtn) ebtn.addEventListener('click', loadMoreEnquiries);
 }
 
 // ── NAVIGATION ───────────────────────────────────────
@@ -645,7 +868,17 @@ window.showPage = function(id) {
   const titles = { dashboard:'Dashboard', hero:'Hero Image', gallery:'Gallery', blog:'Blog Posts', reviews:'Reviews', enquiries:'Enquiries', bookings:'Bookings', newsletter:'Newsletter', 'contact-settings':'Contact Info', analytics:'Analytics' };
   document.getElementById('page-title').textContent = titles[id] || id;
   // Lazy load
-  const loaders = { gallery:loadGalleryAdmin, blog:loadBlogAdmin, reviews:()=>loadReviewsAdmin('all'), enquiries:loadEnquiries, bookings:loadBookings, newsletter:loadNewsletter, 'contact-settings':loadContactSettingsForm, analytics:loadAnalytics, hero:loadCurrentHero };
+  const loaders = {
+    gallery: loadGalleryAdmin,
+    blog: loadBlogAdmin,
+    reviews: () => loadReviewsAdmin('all', true),
+    enquiries: () => loadEnquiries(true),
+    bookings: loadBookings,
+    newsletter: loadNewsletter,
+    'contact-settings': loadContactSettingsForm,
+    analytics: loadAnalytics,
+    hero: loadCurrentHero
+  };
   if(loaders[id]) loaders[id]();
 };
 
@@ -672,22 +905,51 @@ function watchBadges() {
   });
 }
 
+// watch dashboard statistics in real time
+function watchStats() {
+  const map = [
+    {col:'reviews',id:'st-reviews'},
+    {col:'enquiries',id:'st-enquiries'},
+    {col:'bookings',id:'st-bookings'},
+    {col:'gallery',id:'st-gallery'},
+    {col:'posts',id:'st-posts'},
+    {col:'newsletter',id:'st-subs'}
+  ];
+  map.forEach(m => {
+    onSnapshot(collection(db,m.col), snap => {
+      const el = document.getElementById(m.id);
+      if(el) el.textContent = snap.size;
+    }, err => console.error('stat watch error', err));
+  });
+}
+
 // ── DASHBOARD ────────────────────────────────────────
 async function loadDashboard() {
-  const counts = {
-    reviews:   (await getDocs(collection(db,'reviews'))).size,
-    enquiries: (await getDocs(collection(db,'enquiries'))).size,
-    bookings:  (await getDocs(collection(db,'bookings'))).size,
-    gallery:   (await getDocs(collection(db,'gallery'))).size,
-    posts:     (await getDocs(collection(db,'posts'))).size,
-    subs:      (await getDocs(collection(db,'newsletter'))).size,
-  };
-  document.getElementById('st-reviews').textContent   = counts.reviews;
-  document.getElementById('st-enquiries').textContent = counts.enquiries;
-  document.getElementById('st-bookings').textContent  = counts.bookings;
-  document.getElementById('st-gallery').textContent   = counts.gallery;
-  document.getElementById('st-posts').textContent     = counts.posts;
-  document.getElementById('st-subs').textContent      = counts.subs;
+  // initial counts (real‑time listeners will update these)
+  try {
+    const counts = {
+      reviews:   (await getDocs(collection(db,'reviews'))).size,
+      enquiries: (await getDocs(collection(db,'enquiries'))).size,
+      bookings:  (await getDocs(collection(db,'bookings'))).size,
+      gallery:   (await getDocs(collection(db,'gallery'))).size,
+      posts:     (await getDocs(collection(db,'posts'))).size,
+      subs:      (await getDocs(collection(db,'newsletter'))).size,
+    };
+    document.getElementById('st-reviews').textContent   = counts.reviews;
+    document.getElementById('st-enquiries').textContent = counts.enquiries;
+    document.getElementById('st-bookings').textContent  = counts.bookings;
+    document.getElementById('st-gallery').textContent   = counts.gallery;
+    document.getElementById('st-posts').textContent     = counts.posts;
+    document.getElementById('st-subs').textContent      = counts.subs;
+  } catch(e) {
+    console.error('dashboard count error',e);
+    toast('🔒 Unable to load dashboard. Please ensure you are signed in.', 'error');
+    // if permission error, log out to force re-login (optional)
+    if(e.code && e.code.includes('permission')) {
+      await signOut(auth);
+      document.getElementById('login-screen').style.display = 'flex';
+    }
+  }
 
   // Activity feed (analytics)
   const aSnap = await getDocs(query(collection(db,'analytics'), orderBy('ts','desc'), limit(8)));
@@ -740,8 +1002,13 @@ async function loadCurrentHero() {
   try {
     const snap = await getDocs(query(collection(db,'settings'), where('key','==','hero_image')));
     if(!snap.empty && snap.docs[0].data().value) {
-      const url = snap.docs[0].data().value;
-      wrap.innerHTML = `<div style="margin-bottom:1rem;"><p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem;">Current Hero Image:</p><img src="${url}" style="width:100%;max-height:280px;object-fit:cover;border-radius:12px;border:1px solid var(--border);" /></div>`;
+      const data = snap.docs[0].data();
+      const url = data.value;
+      const path = data.storagePath || '';
+      wrap.innerHTML = `<div style="margin-bottom:1rem;"><p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem;">Current Hero Image:</p><img id="current-hero-img" src="${url}" style="width:100%;max-height:280px;object-fit:cover;border-radius:12px;border:1px solid var(--border);" /></div>`;
+      // attach error handler
+      const imgEl = document.getElementById('current-hero-img');
+      safeImage(imgEl, url, path);
     } else {
       wrap.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">No hero image set yet.</p>';
     }
@@ -750,26 +1017,25 @@ async function loadCurrentHero() {
 
 window.uploadHeroImage = async function(file) {
   if(!file) return;
-  document.getElementById('hero-progress').style.display = 'block';
-  const r = ref(stor, `hero/${Date.now()}_${file.name}`);
-  const task = uploadBytesResumable(r, file);
-  task.on('state_changed',
-    snap => {
-      const pct = Math.round(snap.bytesTransferred/snap.totalBytes*100);
-      document.getElementById('hero-prog-fill').style.width = pct+'%';
-    },
-    err => { toast('Upload failed: '+err.message, 'error'); },
-    async () => {
-      const url = await getDownloadURL(task.snapshot.ref);
-      // Save to Firestore settings
-      const snap = await getDocs(query(collection(db,'settings'), where('key','==','hero_image')));
-      if(snap.empty) await addDoc(collection(db,'settings'), { key:'hero_image', value: url });
-      else await updateDoc(doc(db,'settings',snap.docs[0].id), { value: url });
-      toast('✅ Hero image updated! It will show on the website now.');
-      document.getElementById('hero-progress').style.display = 'none';
-      loadCurrentHero();
-    }
-  );
+  const progEl = document.getElementById('hero-progress');
+  const fillEl = document.getElementById('hero-prog-fill');
+  progEl.style.display = 'block';
+  try {
+    const {url, path} = await uploadToStorage(file, 'hero', pct => {
+      fillEl.style.width = pct + '%';
+    });
+    // Save to Firestore settings (store path too)
+    const snap = await getDocs(query(collection(db,'settings'), where('key','==','hero_image')));
+    if(snap.empty) await addDoc(collection(db,'settings'), { key:'hero_image', value: url, storagePath: path });
+    else await updateDoc(doc(db,'settings',snap.docs[0].id), { value: url, storagePath: path });
+    toast('✅ Hero image updated! It will show on the website now.');
+    loadCurrentHero();
+  } catch(e) {
+    toast('Upload failed: '+(e.message||e),'error');
+  } finally {
+    progEl.style.display = 'none';
+    fillEl.style.width = '0%';
+  }
 };
 
 // drag & drop hero
@@ -807,35 +1073,33 @@ window.uploadGalleryImages = async function() {
   const prog   = document.getElementById('gal-progress');
   const label  = document.getElementById('gal-prog-label');
   const fill   = document.getElementById('gal-prog-fill');
+  const uploadBtn = document.getElementById('gal-upload-btn');
+  uploadBtn.disabled = true;
   prog.style.display = 'block';
 
-  for(let i=0; i<pendingGalleryFiles.length; i++) {
-    const file = pendingGalleryFiles[i];
-    label.textContent = `Uploading ${i+1}/${pendingGalleryFiles.length}: ${file.name}`;
-    fill.style.width = '0%';
-    const r = ref(stor, `gallery/${cat}/${Date.now()}_${file.name}`);
-    const task = uploadBytesResumable(r, file);
-    await new Promise((res,rej) => {
-      task.on('state_changed',
-        s => fill.style.width = Math.round(s.bytesTransferred/s.totalBytes*100)+'%',
-        rej,
-        async () => {
-          const url = await getDownloadURL(task.snapshot.ref);
-          await addDoc(collection(db,'gallery'), {
-            url, category: cat, title: title || file.name.replace(/\.[^.]+$/,''), order,
-            storagePath: task.snapshot.ref.fullPath, createdAt: serverTimestamp()
-          });
-          res();
-        }
-      );
-    });
+  try {
+    for(let i=0; i<pendingGalleryFiles.length; i++) {
+      const file = pendingGalleryFiles[i];
+      label.textContent = `Uploading ${i+1}/${pendingGalleryFiles.length}: ${file.name}`;
+      fill.style.width = '0%';
+      const {url, path} = await uploadToStorage(file, `gallery/${cat}`, pct => {
+        fill.style.width = pct + '%';
+      });
+      await addDoc(collection(db,'gallery'), {
+        url, category: cat, title: title || file.name.replace(/\.[^.]+$/,''), order,
+        storagePath: path, createdAt: serverTimestamp()
+      });
+    }
+    toast(`✅ ${pendingGalleryFiles.length} image(s) uploaded successfully!`);
+  } catch(e) {
+    toast('Gallery upload failed: '+(e.message||e),'error');
+  } finally {
+    pendingGalleryFiles = [];
+    document.getElementById('gal-preview').innerHTML = '';
+    uploadBtn.disabled = true;
+    prog.style.display = 'none';
+    loadGalleryAdmin();
   }
-  toast(`✅ ${pendingGalleryFiles.length} image(s) uploaded successfully!`);
-  pendingGalleryFiles = [];
-  document.getElementById('gal-preview').innerHTML = '';
-  document.getElementById('gal-upload-btn').disabled = true;
-  prog.style.display = 'none';
-  loadGalleryAdmin();
 };
 
 // drag & drop gallery
@@ -859,7 +1123,7 @@ async function loadGalleryAdmin() {
   grid.innerHTML = snap.docs.map(d => {
     const item = d.data();
     return `<div class="admin-gallery-item">
-      <img src="${item.url}" alt="${item.title||''}" loading="lazy" />
+      <img src="${item.url}" alt="${item.title||''}" loading="lazy" onerror="refreshImg(this,'${item.storagePath||''}')" />
       <div class="item-overlay">
         <button class="btn btn-danger btn-sm" onclick="deleteGalleryItem('${d.id}','${item.storagePath||''}')"><i class="fas fa-trash"></i> Delete</button>
       </div>
@@ -903,6 +1167,7 @@ async function loadBlogAdmin() {
 }
 
 window.openBlogModal = function() {
+  blogImagePath = '';
   document.getElementById('blog-edit-id').value = '';
   document.getElementById('blog-modal-title').textContent = 'New Blog Post';
   document.getElementById('blog-title').value = '';
@@ -910,7 +1175,9 @@ window.openBlogModal = function() {
   document.getElementById('blog-emoji').value = '📝';
   document.getElementById('blog-status').value = 'true';
   document.getElementById('blog-img-url').value = '';
-  document.getElementById('blog-img-preview').style.display = 'none';
+  document.getElementById('blog-img-path').value = '';
+  const prev = document.getElementById('blog-img-preview');
+  prev.style.display = 'none';
   document.getElementById('blog-modal').classList.add('open');
 };
 
@@ -925,23 +1192,42 @@ window.editBlogPost = async function(id) {
   document.getElementById('blog-emoji').value    = p.emoji||'📝';
   document.getElementById('blog-status').value   = String(p.published);
   document.getElementById('blog-img-url').value  = p.imageUrl||'';
+  blogImagePath = p.storagePath || '';
+  document.getElementById('blog-img-path').value = blogImagePath;
   const prev = document.getElementById('blog-img-preview');
-  if(p.imageUrl) { prev.src = p.imageUrl; prev.style.display = 'block'; }
+  if(p.imageUrl) { safeImage(prev, p.imageUrl, blogImagePath); prev.style.display = 'block'; }
   document.getElementById('blog-modal').classList.add('open');
 };
 
-window.closeBlogModal = function() { document.getElementById('blog-modal').classList.remove('open'); };
+window.closeBlogModal = function() {
+  document.getElementById('blog-modal').classList.remove('open');
+  blogImagePath = '';
+  const progFill = document.getElementById('blog-img-prog-fill');
+  if(progFill) progFill.style.width = '0%';
+};
 
 window.previewBlogImage = async function(input) {
   const file = input.files[0]; if(!file) return;
   const prev = document.getElementById('blog-img-preview');
-  prev.src = URL.createObjectURL(file); prev.style.display = 'block';
-  const r = ref(stor, `blog/${Date.now()}_${file.name}`);
-  const task = uploadBytesResumable(r, file);
-  await new Promise((res,rej) => task.on('state_changed', null, rej, res));
-  const url = await getDownloadURL(task.snapshot.ref);
-  document.getElementById('blog-img-url').value = url;
-  toast('Image uploaded!');
+  const progContainer = document.getElementById('blog-img-progress');
+  const progFill = document.getElementById('blog-img-prog-fill');
+  prev.src = URL.createObjectURL(file);
+  prev.style.display = 'block';
+  progContainer.style.display = 'block';
+  try {
+    const {url, path} = await uploadToStorage(file, 'blog', pct => {
+      progFill.style.width = pct + '%';
+    });
+    document.getElementById('blog-img-url').value = url;
+    document.getElementById('blog-img-path').value = path;
+    blogImagePath = path;
+    toast('Image uploaded!');
+  } catch(e) {
+    toast('Image upload failed: '+(e.message||e),'error');
+  } finally {
+    progContainer.style.display = 'none';
+    progFill.style.width = '0%';
+  }
 };
 
 window.saveBlogPost = async function() {
@@ -954,8 +1240,13 @@ window.saveBlogPost = async function() {
   const imgUrl  = document.getElementById('blog-img-url').value;
   if(!title || !excerpt) { toast('Title and excerpt are required.','error'); return; }
   const data = { title, category: cat, excerpt, emoji: emoji||'📝', published: status, imageUrl: imgUrl, date: serverTimestamp() };
-  if(id) { await updateDoc(doc(db,'posts',id), data); toast('✅ Post updated!'); }
-  else   { await addDoc(collection(db,'posts'), data); toast('✅ Post published!'); }
+  if(blogImagePath) data.storagePath = blogImagePath;
+  try {
+    if(id) { await updateDoc(doc(db,'posts',id), data); toast('✅ Post updated!'); }
+    else   { await addDoc(collection(db,'posts'), data); toast('✅ Post published!'); }
+  } catch(e) {
+    toast('Error saving post: '+(e.message||e),'error');
+  }
   window.closeBlogModal(); loadBlogAdmin();
 };
 
@@ -972,18 +1263,88 @@ window.setRvFilter = function(f, btn) {
   rvFilter = f;
   document.querySelectorAll('.rv-filter').forEach(b => b.classList.remove('active','btn-primary'));
   btn.classList.add('active','btn-primary');
-  loadReviewsAdmin(f);
+  // reset pagination/cache when filter changes
+  loadReviewsAdmin(f, true);
 };
 
-async function loadReviewsAdmin(filter) {
+// simple in‑memory cache/pagination for reviews
+const reviewsCache = { filter:'all', docs: [], lastDoc: null, loading:false, finished:false };
+
+let reviewsUnsub = null;
+
+async function loadReviewsAdmin(filter, reset=false) {
   const list = document.getElementById('reviews-list-admin');
-  list.innerHTML = '<div class="spinner"></div>';
-  const q = filter==='all'
-    ? query(collection(db,'reviews'), orderBy('createdAt','desc'))
-    : query(collection(db,'reviews'), where('status','==',filter), orderBy('createdAt','desc'));
-  const snap = await getDocs(q);
-  if(snap.empty) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>No reviews found</p></div>'; return; }
-  list.innerHTML = snap.docs.map(d => {
+  const loadMoreBtn = document.getElementById('reviews-load-more');
+  try {
+    if(reset || reviewsCache.filter !== filter) {
+      // clear cache and UI
+      reviewsCache.filter = filter;
+      reviewsCache.docs = [];
+      reviewsCache.lastDoc = null;
+      reviewsCache.finished = false;
+
+      // detach existing realtime listener
+      if(reviewsUnsub) { reviewsUnsub(); reviewsUnsub = null; }
+      // subscribe to full filtered collection for real‑time updates
+      const base = collection(db,'reviews');
+      let baseQuery = filter==='all'
+        ? query(base, orderBy('createdAt','desc'))
+        : query(base, where('status','==',filter), orderBy('createdAt','desc'));
+      reviewsUnsub = onSnapshot(baseQuery, snap => {
+        reviewsCache.docs = snap.docs;
+        reviewsCache.lastDoc = snap.docs[snap.docs.length-1] || null;
+        reviewsCache.finished = true; // we've got the full set
+        renderReviews(reviewsCache.docs);
+        if(loadMoreBtn) loadMoreBtn.style.display = 'none';
+      }, err => console.error('reviews realtime error', err));
+    }
+    if(reviewsCache.loading) return; // already fetching
+
+    // if we already have some items (from cache or listener), just render them
+    if(reviewsCache.docs.length && !reset) {
+      renderReviews(reviewsCache.docs);
+      if(loadMoreBtn) loadMoreBtn.style.display = reviewsCache.finished ? 'none' : 'block';
+      return;
+    }
+
+    // show skeletons while fetching
+    list.innerHTML = '<div class="skeleton skeleton-row"></div>'.repeat(4);
+    reviewsCache.loading = true;
+
+    let q;
+    const base2 = collection(db,'reviews');
+    if(filter==='all') q = query(base2, orderBy('createdAt','desc'));
+    else q = query(base2, where('status','==',filter), orderBy('createdAt','desc'));
+    if(reviewsCache.lastDoc) q = query(q, startAfter(reviewsCache.lastDoc));
+    q = query(q, limit(20));
+
+    const snap = await getDocs(q);
+    if(snap.empty) {
+      if(!reviewsCache.docs.length) {
+        list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>No reviews found</p></div>';
+      }
+      reviewsCache.finished = true;
+    } else {
+      // append to cache
+      snap.docs.forEach(d => reviewsCache.docs.push(d));
+      reviewsCache.lastDoc = snap.docs[snap.docs.length-1];
+      renderReviews(reviewsCache.docs);
+      if(loadMoreBtn) loadMoreBtn.style.display = 'block';
+      if(snap.docs.length < 20) reviewsCache.finished = true;
+    }
+  } catch(e) {
+    console.error('Error loading reviews', e);
+    list.innerHTML = `<div class="empty-state" style="color:var(--red)"><i class="fas fa-exclamation-triangle"></i><p>Error loading reviews: ${e.message||e}</p></div>`;
+  } finally {
+    reviewsCache.loading = false;
+  }
+}
+
+function renderReviews(docs) {
+  const list = document.getElementById('reviews-list-admin');
+  // ensure correct order if some documents lack timestamps
+  docs.sort((a,b)=> (b.data().createdAt?.toMillis?.()||0) - (a.data().createdAt?.toMillis?.()||0));
+  list.innerHTML = docs.map(d => {
     const r = d.data();
     const date = r.createdAt?.toDate?.()?.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) || 'Unknown';
     return `<div class="review-detail" id="rv-${d.id}">
@@ -1007,6 +1368,12 @@ async function loadReviewsAdmin(filter) {
   }).join('');
 }
 
+window.loadMoreReviews = function() {
+  if(reviewsCache.finished) return;
+  loadReviewsAdmin(reviewsCache.filter);
+};
+
+
 window.saveReviewStatus = async function(id) {
   const status = document.getElementById(`rv-sel-${id}`).value;
   await updateDoc(doc(db,'reviews',id), { status });
@@ -1021,12 +1388,67 @@ window.deleteReview = async function(id) {
 };
 
 // ── ENQUIRIES ─────────────────────────────────────────
-async function loadEnquiries() {
+// caching + pagination for enquiries
+const enqCache = { docs: [], lastDoc: null, loading:false, finished:false };
+let enqUnsub = null;
+
+async function loadEnquiries(reset=false) {
   const wrap = document.getElementById('enquiries-list');
-  wrap.innerHTML = '<div class="spinner"></div>';
-  const snap = await getDocs(query(collection(db,'enquiries'), orderBy('createdAt','desc')));
-  if(snap.empty) { wrap.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No enquiries yet</p></div>'; return; }
-  wrap.innerHTML = snap.docs.map(d => {
+  const loadMoreBtn = document.getElementById('enq-load-more');
+  try {
+    if(reset) {
+      enqCache.docs = [];
+      enqCache.lastDoc = null;
+      enqCache.finished = false;
+      if(enqUnsub) { enqUnsub(); enqUnsub = null; }
+      // realtime listener on full collection
+      const base = collection(db,'enquiries');
+      const baseQ = query(base, orderBy('createdAt','desc'));
+      enqUnsub = onSnapshot(baseQ, snap => {
+        enqCache.docs = snap.docs;
+        enqCache.lastDoc = snap.docs[snap.docs.length-1] || null;
+        enqCache.finished = true;
+        renderEnquiries(enqCache.docs);
+        if(loadMoreBtn) loadMoreBtn.style.display = 'none';
+      }, err => console.error('enquiries realtime error', err));
+    }
+    if(enqCache.loading) return;
+    if(enqCache.docs.length && !reset) {
+      renderEnquiries(enqCache.docs);
+      loadMoreBtn.style.display = enqCache.finished ? 'none' : 'block';
+      return;
+    }
+    // skeletons
+    wrap.innerHTML = '<div class="skeleton skeleton-row"></div>'.repeat(3);
+    enqCache.loading = true;
+    let q = query(collection(db,'enquiries'), orderBy('createdAt','desc'));
+    if(enqCache.lastDoc) q = query(q, startAfter(enqCache.lastDoc));
+    q = query(q, limit(20));
+    const snap = await getDocs(q);
+    if(snap.empty) {
+      if(!enqCache.docs.length) {
+        wrap.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No enquiries yet</p></div>';
+      }
+      enqCache.finished = true;
+    } else {
+      snap.docs.forEach(d => enqCache.docs.push(d));
+      enqCache.lastDoc = snap.docs[snap.docs.length-1];
+      renderEnquiries(enqCache.docs);
+      loadMoreBtn.style.display = 'block';
+      if(snap.docs.length < 20) enqCache.finished = true;
+    }
+  } catch(e) {
+    console.error('Error loading enquiries', e);
+    wrap.innerHTML = `<div class="empty-state" style="color:var(--red)"><i class="fas fa-exclamation-triangle"></i><p>Error loading enquiries: ${e.message||e}</p></div>`;
+  } finally {
+    enqCache.loading = false;
+  }
+}
+
+function renderEnquiries(docs) {
+  const wrap = document.getElementById('enquiries-list');
+  docs.sort((a,b)=> (b.data().createdAt?.toMillis?.()||0) - (a.data().createdAt?.toMillis?.()||0));
+  wrap.innerHTML = docs.map(d => {
     const e = d.data();
     const date = e.createdAt?.toDate?.()?.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) || '';
     return `<div class="enq-row">
@@ -1049,6 +1471,11 @@ async function loadEnquiries() {
     </div>`;
   }).join('');
 }
+
+window.loadMoreEnquiries = function() {
+  if(enqCache.finished) return;
+  loadEnquiries();
+};
 
 window.markEnquiryRead = async function(id) {
   await updateDoc(doc(db,'enquiries',id), { status:'read' });
@@ -1128,14 +1555,81 @@ window.saveContactInfo = async function(e) {
 };
 
 // ── ANALYTICS ─────────────────────────────────────────
-async function loadAnalytics() {
-  const tbody = document.getElementById('analytics-tbody');
-  tbody.innerHTML = '<tr><td colspan="4"><div class="spinner"></div></td></tr>';
-  const snap = await getDocs(query(collection(db,'analytics'), orderBy('ts','desc'), limit(50)));
-  if(snap.empty) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No analytics data yet</td></tr>'; return; }
+// analytics caching/pagination/filtering
+const analyticsCache = { docs: [], lastDoc: null, loading:false, finished:false, event:'all', range:'all' };
 
-  // Quick stats
-  const allEvents = snap.docs.map(d => d.data());
+function getRangeStart(range) {
+  const now = new Date();
+  if(range==='today') return new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  if(range==='week') return new Date(now.getFullYear(),now.getMonth(),now.getDate()-6);
+  if(range==='month') return new Date(now.getFullYear(),now.getMonth(),now.getDate()-29);
+  return null;
+}
+
+async function loadAnalytics(reset=false) {
+  const tbody = document.getElementById('analytics-tbody');
+  const loadMoreBtn = document.getElementById('analytics-load-more');
+  const evtFilter = document.getElementById('analytics-event-filter').value;
+  const rangeFilter = document.getElementById('analytics-range-filter').value;
+  try {
+    if(reset || analyticsCache.event!==evtFilter || analyticsCache.range!==rangeFilter) {
+      analyticsCache.docs=[];
+      analyticsCache.lastDoc=null;
+      analyticsCache.finished=false;
+      analyticsCache.event=evtFilter;
+      analyticsCache.range=rangeFilter;
+    }
+    if(analyticsCache.loading) return;
+    if(analyticsCache.docs.length && !reset) {
+      renderAnalytics(analyticsCache.docs);
+      loadMoreBtn.style.display = analyticsCache.finished ? 'none' : 'block';
+      return;
+    }
+    tbody.innerHTML = '<tr><td colspan="4"><div class="spinner"></div></td></tr>';
+    analyticsCache.loading = true;
+
+    let q = collection(db,'analytics');
+    if(evtFilter!=='all') q = query(q, where('event','==',evtFilter));
+    if(rangeFilter!=='all') {
+      const start = getRangeStart(rangeFilter);
+      if(start) q = query(q, where('ts','>=', start));
+    }
+    q = query(q, orderBy('ts','desc'));
+    if(analyticsCache.lastDoc) q = query(q, startAfter(analyticsCache.lastDoc));
+    q = query(q, limit(50));
+
+    const snap = await getDocs(q);
+    if(snap.empty) {
+      if(!analyticsCache.docs.length) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No analytics data yet</td></tr>';
+      }
+      analyticsCache.finished = true;
+    } else {
+      snap.docs.forEach(d=>analyticsCache.docs.push(d));
+      analyticsCache.lastDoc = snap.docs[snap.docs.length-1];
+      renderAnalytics(analyticsCache.docs);
+      loadMoreBtn.style.display = 'block';
+      if(snap.docs.length<50) analyticsCache.finished=true;
+    }
+  } catch(e) {
+    console.error('Error loading analytics', e);
+    tbody.innerHTML = `<tr><td colspan="4" style="color:var(--red);text-align:center;padding:2rem;">Error loading analytics: ${e.message||e}</td></tr>`;
+  } finally { analyticsCache.loading=false; }
+}
+
+function renderAnalytics(docs) {
+  const tbody = document.getElementById('analytics-tbody');
+  tbody.innerHTML = docs.map(d=>{
+    const ev = d.data();
+    const ts = ev.ts?.toDate?.()?.toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})||'';
+    const detail = JSON.stringify(ev.data||{}).slice(0,60);
+    return `<tr><td><span class="badge badge-new">${ev.event}</span></td><td style="font-size:0.8rem;color:var(--muted);">${detail}</td><td style="font-size:0.8rem;color:var(--muted);">${ev.page||''}</td><td style="font-size:0.8rem;color:var(--muted);">${ts}</td></tr>`;
+  }).join('');
+  updateAnalyticsStats(docs);
+}
+
+function updateAnalyticsStats(docs) {
+  const allEvents = docs.map(d=>d.data());
   const pageViews   = allEvents.filter(e => e.event==='page_view').length;
   const clicks      = allEvents.filter(e => e.event==='click').length;
   const bookingClicks = allEvents.filter(e => e.event==='booking_modal_open').length;
@@ -1147,19 +1641,28 @@ async function loadAnalytics() {
     <div class="stat-card green"><div class="sc-label">Booking Opens</div><div class="sc-num">${bookingClicks}</div></div>
     <div class="stat-card clay"><div class="sc-label">Contact Submits</div><div class="sc-num">${contactSubmits}</div></div>
   `;
-
-  tbody.innerHTML = snap.docs.map(d => {
-    const ev = d.data();
-    const ts = ev.ts?.toDate?.()?.toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) || '';
-    const detail = JSON.stringify(ev.data||{}).slice(0,60);
-    return `<tr>
-      <td><span class="badge badge-new">${ev.event}</span></td>
-      <td style="font-size:0.8rem;color:var(--muted);">${detail}</td>
-      <td style="font-size:0.8rem;color:var(--muted);">${ev.page||''}</td>
-      <td style="font-size:0.8rem;color:var(--muted);">${ts}</td>
-    </tr>`;
-  }).join('');
 }
+
+window.loadMoreAnalytics = function() {
+  if(analyticsCache.finished) return;
+  loadAnalytics();
+};
+
+function exportAnalytics() {
+  const rows = ['Event,Details,Page,Time'];
+  analyticsCache.docs.forEach(d=>{
+    const ev=d.data();
+    const detail=JSON.stringify(ev.data||{}).replace(/"/g,'""');
+    const ts=ev.ts?.toDate?.()?.toLocaleString()||'';
+    rows.push(`${ev.event},"${detail}",${ev.page||''},${ts}`);
+  });
+  const blob=new Blob([rows.join('\n')],{type:'text/csv'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='analytics.csv';
+  a.click();
+}
+
 </script>
 </body>
 </html>

@@ -36,3 +36,18 @@ curl -o public/images/activities/campfire.jpg https://images.unsplash.com/photo-
 curl -o public/images/nature/landscape.jpg https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800
 curl -o public/images/nature/sunset.jpg https://images.unsplash.com/photo-1483721310020-03333e577cce?w=800
 ```
+
+## SEO & Sitemap
+
+A `sitemap.xml` file lives in `public/` and will be served at `/sitemap.xml` when deployed. Add that URL to **Google Search Console → Sitemaps** to help crawlers index your site.
+
+Recent SEO updates include:
+
+* Meta title/description targeting the keyword **stone age huts**.
+* Canonical link, preconnect/preload hints, and improved Core Web Vitals.
+* Alt text for every `<img>` and lazy loading for offscreen visuals.
+* Clear heading hierarchy (one H1, section H2s) and schema.org JSON‑LD markup.
+* Mobile‑friendly responsive layout and faster load times.
+* Admin dashboard now supports analytics filtering by event type and date range, as well as CSV export for review.
+
+For further improvements, optimize image assets and use a CDN or build pipeline.

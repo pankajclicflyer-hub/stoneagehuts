@@ -54,7 +54,7 @@ const firebaseConfig = {
   apiKey:            "YOUR_API_KEY",           // ← Replace
   authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
   projectId:         "YOUR_PROJECT_ID",        // ← Replace
-  storageBucket:     "YOUR_PROJECT_ID.appspot.com",
+  storageBucket:     "YOUR_PROJECT_ID.appspot.com"  # make sure it uses the .appspot.com domain (not .firebasestorage.app)
   messagingSenderId: "YOUR_SENDER_ID",         // ← Replace
   appId:             "YOUR_APP_ID"             // ← Replace
 };
@@ -64,43 +64,85 @@ const firebaseConfig = {
 
 ## Step 5: Firestore Security Rules
 
-In Firebase Console → Firestore → **Rules**, paste:
-
-```
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    
-    // Public can read approved reviews, gallery, posts, contact_info, settings
-    match /reviews/{id} {
-      allow read: if resource.data.status == 'approved';
-      allow create: if true;
-      allow update, delete: if request.auth != null;
-    }
-    match /gallery/{id} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-    match /posts/{id} {
-      allow read: if resource.data.published == true;
-      allow write: if request.auth != null;
-    }
-    match /contact_info/{id} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-    match /settings/{id} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-    // Public can submit
-    match /enquiries/{id}   { allow create: if true; allow read, update, delete: if request.auth != null; }
-    match /bookings/{id}    { allow create: if true; allow read, update, delete: if request.auth != null; }
-    match /newsletter/{id}  { allow create: if true; allow read, delete: if request.auth != null; }
-    match /analytics/{id}   { allow create: if true; allow read: if request.auth != null; }
-  }
-}
-```
+> **Warning:** security rules are the gatekeeper for your database. The following policy allows *any authenticated admin-panel user* to read the data needed by the interface while still restricting write operations to true administrators (identified via a custom `admin` claim).  Public visitors can submit forms/bookings/newsletter entries but cannot view backend collections.
+>
+> In Firebase Console → Firestore → **Rules**, paste this full policy:
+>
+> ```
+> rules_version = '2';
+> service cloud.firestore {
+>   match /databases/{database}/documents {
+>
+>     // helper to identify admin users (use custom claims)
+>     function isAdmin() {
+>       return request.auth != null && request.auth.token.admin == true;
+>     }
+>
+>     // reviews: logged‑in user may read all reviews (dashboard counts, list);
+>     // only admins may update status or delete.
+>     match /reviews/{reviewId} {
+>       allow read: if request.auth != null;
+>       allow create: if true;
+>       allow update, delete: if isAdmin();
+>     }
+>
+>     // enquiries: read for any signed‑in user, create open, manage by admins.
+>     match /enquiries/{enqId} {
+>       allow read: if request.auth != null;
+>       allow create: if true;
+>       allow update, delete: if isAdmin();
+>     }
+>
+>     // bookings
+>     match /bookings/{id} {
+>       allow read: if request.auth != null;
+>       allow create: if true;
+>       allow update, delete: if isAdmin();
+>     }
+>
+>     // newsletter subscriptions
+>     match /newsletter/{id} {
+>       allow read: if request.auth != null;
+>       allow create: if true;
+>       allow delete: if isAdmin();
+>     }
+>
+>     // gallery, posts, contact/settings
+>     match /gallery/{id} {
+>       allow read: if true;
+>       allow write: if isAdmin();
+>     }
+>     match /posts/{id} {
+>       allow read: if resource.data.published == true || isAdmin();
+>       allow write: if isAdmin();
+>     }
+>     match /contact_info/{id} {
+>       allow read: if true;
+>       allow write: if isAdmin();
+>     }
+>     match /settings/{id} {
+>       allow read: if true;
+>       allow write: if isAdmin();
+>     }
+>
+>     // analytics: clients may log, any signed‑in panel user may read stats
+>     match /analytics/{docId} {
+>       allow write: if true;
+>       allow read: if request.auth != null;
+>     }
+>
+>     // fallback: deny everything else
+>     match /{document=**} {
+>       allow read, write: if false;
+>     }
+>   }
+> }
+> ```
+>
+> These rules allow any logged‑in user to see the admin dashboard contents, while
+> still requiring a custom `admin` claim for any destructive or write actions.
+>
+> You can test the rules using the Firebase emulator or the built‑in rules simulator before deploying.
 
 ---
 
