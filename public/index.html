@@ -7,7 +7,16 @@
   <title>Stone Age Huts · Nature Retreat in Kumaon Hills</title>
   <meta name="description" content="Stone Age Huts is an eco resort in the Kumaon hills near Nainital. Experience rustic cabins, bird watching and serene nature." />
   <meta name="keywords" content="stone age huts, eco resort, Kumaon, Nainital, bird watching" />
-  <link rel="canonical" href="https://yourusername.github.io/stoneagehuts/" />
+
+  <!-- Open Graph (helps Google + social media) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Stone Age Huts" />
+  <meta property="og:title" content="Stone Age Huts · Nature Retreat in Kumaon Hills" />
+  <meta property="og:description" content="Eco resort in the Kumaon hills near Nainital. Rustic cabins, bird watching and serene nature." />
+  <meta property="og:url" content="https://www.stoneagehuts.com/" />
+  <meta property="og:image" content="https://www.stoneagehuts.com/images/hero-bg.jpg" />
+
+  <link rel="canonical" href="https://www.stoneagehuts.com/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://www.gstatic.com" />
@@ -19,9 +28,9 @@
     "@context": "https://schema.org",
     "@type": "LodgingBusiness",
     "name": "Stone Age Huts",
-    "url": "https://yourusername.github.io/stoneagehuts/",
-    "logo": "https://yourusername.github.io/stoneagehuts/images/logo.png",
-    "image": "https://yourusername.github.io/stoneagehuts/images/hero-bg.jpg",
+    "url": "https://www.stoneagehuts.com/",
+    "logo": "https://www.stoneagehuts.com/images/logo.png",
+    "image": "https://www.stoneagehuts.com/images/hero-bg.jpg",
     "description": "Eco resort and bird‑watching retreat nestled in the Kumaon hills near Nainital.",
     "address": {
       "@type": "PostalAddress",
@@ -30,7 +39,7 @@
       "addressRegion": "Uttarakhand",
       "addressCountry": "IN"
     },
-    "telephone": "+91 98765 43210",
+    "telephone": "+91 863 059 0613",
     "sameAs": [
       "https://www.facebook.com/stoneagehuts",
       "https://www.instagram.com/stoneagehuts"
@@ -54,8 +63,7 @@
     ::-webkit-scrollbar-thumb { background: var(--bark); border-radius: 3px; }
 
     /* HEADER */
-    .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0 2rem; transition: all 0.4s; background: transparent; }
-    .site-header.scrolled { background: rgba(250,246,238,0.96); backdrop-filter: blur(12px); box-shadow: 0 2px 20px rgba(61,53,48,0.12); }
+    .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0 2rem; transition: all 0.4s; background: rgba(52, 77, 46, 0.75); backdrop-filter: blur(10px); }    .site-header.scrolled { background: rgba(250,246,238,0.96); backdrop-filter: blur(12px); box-shadow: 0 2px 20px rgba(61,53,48,0.12); }
     .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; min-height: 72px; flex-wrap: wrap; padding: 0 1rem; }
     .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
     .logo-icon { width: 44px; height: 44px; background: var(--moss); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; overflow: hidden; }
@@ -295,18 +303,18 @@
 <!-- HEADER -->
 <header class="site-header" id="site-header">
   <div class="header-inner">
-    <a class="brand" href="#home">
+    <a class="brand" href="/">
       <div class="logo-icon" id="header-logo">🏕️</div>
       <span class="site-title" id="site-title-text">StoneAgeHuts</span>
     </a>
     <nav class="main-nav">
-      <a href="#home" class="nav-link active">Home</a>
-      <a href="#stay" class="nav-link">Stay</a>
-      <a href="#activities" class="nav-link">Activities</a>
-      <a href="#gallery" class="nav-link">Gallery</a>
-      <a href="#blog" class="nav-link">Blog</a>
-      <a href="#reviews" class="nav-link">Reviews</a>
-      <a href="#contact" class="nav-link">Contact</a>
+      <a href="/" class="nav-link active">Home</a>
+      <a href="/#stay" class="nav-link">Stay</a>
+      <a href="/#activities" class="nav-link">Activities</a>
+      <a href="/#gallery" class="nav-link">Gallery</a>
+      <a href="/#blog" class="nav-link">Blog</a>
+      <a href="/#reviews" class="nav-link">Reviews</a>
+      <a href="/#contact" class="nav-link">Contact</a>
     </nav>
     <div class="controls">
       <div class="lang-toggle">
@@ -321,13 +329,13 @@
 </header>
 
 <nav class="mobile-nav" id="mobile-nav">
-  <a href="#home" class="nav-link" onclick="closeMobileNav()">Home</a>
-  <a href="#stay" class="nav-link" onclick="closeMobileNav()">Stay</a>
-  <a href="#activities" class="nav-link" onclick="closeMobileNav()">Activities</a>
-  <a href="#gallery" class="nav-link" onclick="closeMobileNav()">Gallery</a>
-  <a href="#blog" class="nav-link" onclick="closeMobileNav()">Blog</a>
-  <a href="#reviews" class="nav-link" onclick="closeMobileNav()">Reviews</a>
-  <a href="#contact" class="nav-link" onclick="closeMobileNav()">Contact</a>
+  <a href="/" class="nav-link" onclick="closeMobileNav()">Home</a>
+  <a href="/#stay" class="nav-link" onclick="closeMobileNav()">Stay</a>
+  <a href="/#activities" class="nav-link" onclick="closeMobileNav()">Activities</a>
+  <a href="/#gallery" class="nav-link" onclick="closeMobileNav()">Gallery</a>
+  <a href="/#blog" class="nav-link" onclick="closeMobileNav()">Blog</a>
+  <a href="/#reviews" class="nav-link" onclick="closeMobileNav()">Reviews</a>
+  <a href="/#contact" class="nav-link" onclick="closeMobileNav()">Contact</a>
 </nav>
 
 <!-- HERO -->
@@ -445,7 +453,7 @@
 </section>
 
 <!-- REVIEWS -->
-<section id="reviews" style="background:var(--stone);padding:5rem 0;">
+<section id="reviews" style="background:var(--stone);padding:3rem 0;">
   <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
     <div class="section-header">
       <div class="section-tag" style="color:var(--clay);">⭐ Guest Stories</div>
@@ -607,9 +615,9 @@
     <div class="footer-col">
       <h5>Info</h5>
       <ul>
-        <li><a href="#">How to Reach</a></li>
-        <li><a href="#">FAQs</a></li>
-        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="/how-to-reach.html">How to Reach</a></li>
+        <li><a href="/faqs.html">FAQs</a></li>
+        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
         <li><a href="admin.html">Admin</a></li>
       </ul>
     </div>
@@ -848,20 +856,34 @@ loadPosts();
 function loadReviews() {
   const grid = document.getElementById('reviews-grid');
   try {
-    const q = query(collection(db,'reviews'), where('status','==','approved'), orderBy('createdAt','desc'));
+    const q = query(collection(db, 'reviews'),
+                    where('status', '==', 'approved'),
+                    orderBy('createdAt', 'desc'));
     onSnapshot(q, snap => {
-      if(snap.empty) { grid.innerHTML = '<div class="reviews-empty">No approved reviews yet. Be the first!</div>'; return; }
+      if (snap.empty) {
+        grid.innerHTML = '<div class="reviews-empty">🌿 No reviews yet. Be the first to share!</div>';
+        return;
+      }
       grid.innerHTML = snap.docs.map(d => {
         const r = d.data();
-        const date = r.createdAt?.toDate?.()?.toLocaleDateString('en-IN',{month:'short',year:'numeric'}) || 'Recently';
+        const date = r.createdAt?.toDate?.()
+                      ?.toLocaleDateString('en-IN',
+                        {month: 'short', year: 'numeric'}) || 'Recently';
         return `<div class="review-card">
-          <div class="rv-header"><span class="rv-name">${r.name}</span><span class="rv-date">${date}</span></div>
+          <div class="rv-header"><span class="rv-name">${r.name}</span>
+            <span class="rv-date">${date}</span></div>
           <div class="rv-stars">${'⭐'.repeat(r.rating)}</div>
           <p class="rv-text">"${r.text}"</p>
         </div>`;
       }).join('');
-    }, () => { grid.innerHTML = '<div class="reviews-empty">Reviews are loading...</div>'; });
-  } catch(e) { grid.innerHTML = '<div class="reviews-empty">Reviews could not be loaded.</div>'; }
+    }, err => {
+      console.error('reviews snapshot error', err);
+      grid.innerHTML = '<div class="reviews-empty">Could not load reviews. Please refresh.</div>';
+    });
+  } catch (e) {
+    console.error('loadReviews caught', e);
+    grid.innerHTML = '<div class="reviews-empty">Could not load reviews. Please refresh.</div>';
+  }
 }
 loadReviews();
 

@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Privacy Policy · Stone Age Huts</title>
+  <meta name="description" content="Privacy policy for Stone Age Huts eco resort in Kumaon Hills near Nainital."/>
+  <link rel="canonical" href="https://www.stoneagehuts.com/privacy-policy.html"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --stone: #3d3530;
+      --bark: #6b4f3a;
+      --moss: #4a6741;
+      --moss-light: #6a8f60;
+      --moss-dark: #344d2e;
+      --clay: #c4855a;
+      --sand: #e8d5b7;
+      --cream: #faf6ee;
+      --fog: #f0ebe0;
+      --white: #ffffff;
+      --text: #2a2420;
+      --text-muted: #7a6a5a;
+      --shadow-sm: 0 2px 12px rgba(61,53,48,0.08);
+      --shadow: 0 8px 40px rgba(61,53,48,0.14);
+      --shadow-lg: 0 20px 60px rgba(61,53,48,0.18);
+      --radius: 18px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--fog); }
+    ::-webkit-scrollbar-thumb { background: var(--bark); border-radius: 3px; }
+
+    /* HEADER */
+    .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0 2rem; transition: all 0.4s; }
+    .site-header.scrolled { background: rgba(250,246,238,0.97); backdrop-filter: blur(14px); box-shadow: 0 2px 24px rgba(61,53,48,0.12); }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; min-height: 72px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 44px; height: 44px; background: var(--moss); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+    .site-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; }
+    .site-header:not(.scrolled) .site-title { color: #fff; }
+    .site-header.scrolled .site-title { color: var(--stone); }
+    .main-nav { display: flex; gap: 0.2rem; }
+    .nav-link { padding: 0.5rem 0.9rem; text-decoration: none; font-size: 0.88rem; font-weight: 500; border-radius: 8px; transition: all 0.2s; }
+    .site-header:not(.scrolled) .nav-link { color: rgba(255,255,255,0.85); }
+    .site-header.scrolled .nav-link { color: var(--text-muted); }
+    .site-header:not(.scrolled) .nav-link:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .site-header.scrolled .nav-link:hover { background: var(--fog); color: var(--moss); }
+    .controls { display: flex; align-items: center; gap: 1rem; }
+    .lang-toggle { display: flex; background: rgba(255,255,255,0.15); border-radius: 8px; overflow: hidden; }
+    .site-header.scrolled .lang-toggle { background: var(--fog); }
+    .lang-toggle button { border: none; background: transparent; cursor: pointer; padding: 0.4rem 0.75rem; font-size: 0.8rem; font-weight: 600; transition: all 0.2s; color: rgba(255,255,255,0.7); }
+    .site-header.scrolled .lang-toggle button { color: var(--text-muted); }
+    .lang-toggle button.active { background: var(--moss); color: #fff; border-radius: 6px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+    .hamburger span { width: 24px; height: 2px; border-radius: 2px; transition: all 0.3s; display: block; }
+    .site-header:not(.scrolled) .hamburger span { background: #fff; }
+    .site-header.scrolled .hamburger span { background: var(--stone); }
+    .mobile-nav { display: none; position: fixed; top: 72px; left: 0; right: 0; background: rgba(250,246,238,0.98); backdrop-filter: blur(12px); padding: 1rem 2rem 2rem; z-index: 999; flex-direction: column; gap: 0.5rem; box-shadow: 0 8px 24px rgba(61,53,48,0.15); }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav .nav-link { color: var(--text-muted); font-size: 1rem; padding: 0.75rem 1rem; border-radius: 10px; }
+    .mobile-nav .nav-link:hover { background: var(--fog); color: var(--moss); }
+    @media(max-width:900px) { .main-nav { display: none; } .hamburger { display: flex; } }
+
+    /* HERO */
+    .page-hero {
+      min-height: 60vh;
+      background: linear-gradient(160deg, var(--moss-dark) 0%, var(--moss) 50%, var(--moss-light) 100%);
+      position: relative; display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 130px 2rem 100px; overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .page-hero::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 100px;
+      background: linear-gradient(to bottom, transparent, var(--cream));
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 700px; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.92); padding: 6px 18px; border-radius: 30px;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+      margin-bottom: 20px; animation: fadeUp 0.6s ease both;
+    }
+    .hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      color: #fff; line-height: 1.15; margin-bottom: 16px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero-content h1 em { font-style: italic; color: var(--sand); }
+    .hero-content p {
+      color: rgba(255,255,255,0.78); font-size: 1rem; font-weight: 300; line-height: 1.7;
+      max-width: 480px; margin: 0 auto 32px; animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.85rem; font-weight: 500;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22);
+      padding: 9px 20px; border-radius: 30px; transition: all 0.25s;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.22); color: #fff; }
+
+    /* LAST UPDATED BADGE */
+    .meta-strip {
+      max-width: 860px; margin: -28px auto 0; position: relative; z-index: 2;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      background: var(--white); border-radius: var(--radius); padding: 18px 32px;
+      box-shadow: var(--shadow);
+    }
+    .meta-item { display: flex; align-items: center; gap: 10px; }
+    .meta-item i { color: var(--moss); font-size: 1rem; }
+    .meta-item span { font-size: 0.85rem; color: var(--text-muted); }
+    .meta-item strong { color: var(--stone); font-weight: 600; }
+
+    /* TOC */
+    .layout { max-width: 1100px; margin: 0 auto; padding: 70px 2rem 60px; display: grid; grid-template-columns: 260px 1fr; gap: 48px; align-items: start; }
+    .toc-sidebar { position: sticky; top: 92px; background: var(--white); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-sm); }
+    .toc-sidebar h3 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--stone); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--fog); }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .toc-list a {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--text-muted); font-size: 0.83rem; font-weight: 500;
+      padding: 8px 12px; border-radius: 8px; transition: all 0.2s;
+    }
+    .toc-list a:hover { background: var(--fog); color: var(--moss); }
+    .toc-list a.active { background: var(--fog); color: var(--moss); font-weight: 600; }
+    .toc-list a i { font-size: 0.75rem; width: 16px; text-align: center; flex-shrink: 0; }
+    .toc-contact-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 20px; background: var(--moss); color: #fff; text-decoration: none;
+      padding: 10px; border-radius: 10px; font-size: 0.83rem; font-weight: 600;
+      transition: background 0.2s;
+    }
+    .toc-contact-btn:hover { background: var(--moss-dark); }
+
+    /* POLICY CONTENT */
+    .policy-content { display: flex; flex-direction: column; gap: 32px; }
+    .policy-section {
+      background: var(--white); border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow-sm); transition: box-shadow 0.3s;
+    }
+    .policy-section:hover { box-shadow: var(--shadow); }
+    .section-header {
+      display: flex; align-items: center; gap: 16px;
+      padding: 24px 32px; border-bottom: 1px solid var(--fog);
+      background: linear-gradient(to right, var(--fog), transparent);
+    }
+    .section-icon {
+      width: 44px; height: 44px; border-radius: 12px; background: var(--moss);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 1rem; flex-shrink: 0;
+    }
+    .section-header h2 { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--stone); }
+    .section-body { padding: 24px 32px; }
+    .section-body p { color: var(--text-muted); font-size: 0.93rem; line-height: 1.78; margin-bottom: 14px; }
+    .section-body p:last-child { margin-bottom: 0; }
+    .section-body ul { list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+    .section-body ul li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.93rem; color: var(--text-muted); line-height: 1.65;
+    }
+    .section-body ul li::before { content: '✓'; color: var(--moss); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .highlight-box {
+      background: var(--fog); border-left: 3px solid var(--moss);
+      border-radius: 0 10px 10px 0; padding: 14px 18px; margin: 14px 0;
+      font-size: 0.88rem; color: var(--moss-dark); font-weight: 500; line-height: 1.6;
+    }
+    .highlight-box i { margin-right: 6px; }
+    .contact-card {
+      background: linear-gradient(135deg, var(--moss-dark), var(--moss));
+      border-radius: 12px; padding: 24px; color: #fff; margin-top: 8px;
+    }
+    .contact-card h4 { font-family: 'Playfair Display', serif; font-size: 1.05rem; margin-bottom: 16px; }
+    .contact-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .contact-row:last-child { margin-bottom: 0; }
+    .contact-row i { width: 32px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+    .contact-row span { font-size: 0.88rem; opacity: 0.88; }
+    .contact-row a { color: var(--sand); text-decoration: none; font-weight: 600; }
+    .contact-row a:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    .site-footer { background: var(--stone); color: rgba(255,255,255,0.75); padding: 64px 2rem 0; }
+    .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; padding-bottom: 48px; }
+    .footer-brand .ft { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #fff; display: block; margin-bottom: 12px; }
+    .footer-brand p { font-size: 0.88rem; line-height: 1.7; max-width: 300px; }
+    .footer-col h5 { color: #fff; font-size: 0.78rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .footer-col ul a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    .footer-col ul a:hover { color: #fff; }
+    .footer-bottom { max-width: 1200px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.1); padding: 20px 0; display: flex; justify-content: space-between; font-size: 0.82rem; flex-wrap: wrap; gap: 8px; }
+
+    /* RESPONSIVE */
+    @media(max-width:900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc-sidebar { position: static; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .meta-strip { margin: -20px 1rem 0; padding: 16px 20px; }
+      .section-header { padding: 20px 24px; }
+      .section-body { padding: 20px 24px; }
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/">
+      <div class="logo-icon">🏕️</div>
+      <span class="site-title">StoneAgeHuts</span>
+    </a>
+    <nav class="main-nav">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/#stay" class="nav-link">Stay</a>
+      <a href="/#activities" class="nav-link">Activities</a>
+      <a href="/#gallery" class="nav-link">Gallery</a>
+      <a href="/#blog" class="nav-link">Blog</a>
+      <a href="/#reviews" class="nav-link">Reviews</a>
+      <a href="/#contact" class="nav-link">Contact</a>
+    </nav>
+    <div class="controls">
+      <div class="lang-toggle">
+        <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+        <button id="btn-hi" onclick="setLang('hi')">HI</button>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="/" class="nav-link" onclick="closeMobileNav()">Home</a>
+  <a href="/#stay" class="nav-link" onclick="closeMobileNav()">Stay</a>
+  <a href="/#activities" class="nav-link" onclick="closeMobileNav()">Activities</a>
+  <a href="/#gallery" class="nav-link" onclick="closeMobileNav()">Gallery</a>
+  <a href="/#blog" class="nav-link" onclick="closeMobileNav()">Blog</a>
+  <a href="/#reviews" class="nav-link" onclick="closeMobileNav()">Reviews</a>
+  <a href="/#contact" class="nav-link" onclick="closeMobileNav()">Contact</a>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">🔒 Legal</div>
+    <h1>Privacy<br><em>Policy</em></h1>
+    <p>Your privacy matters to us. Here's how we collect, use and protect your information.</p>
+    <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+  </div>
+</section>
+
+<!-- META STRIP -->
+<div class="meta-strip">
+  <div class="meta-item">
+    <i class="fas fa-calendar-alt"></i>
+    <span>Last updated: <strong>January 2025</strong></span>
+  </div>
+  <div class="meta-item">
+    <i class="fas fa-map-marker-alt"></i>
+    <span>Applicable to: <strong>www.stoneagehuts.com</strong></span>
+  </div>
+  <div class="meta-item">
+    <i class="fas fa-envelope"></i>
+    <span>Questions? <strong><a href="mailto:info@stoneagehuts.com" style="color:var(--moss);text-decoration:none;">info@stoneagehuts.com</a></strong></span>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- TOC SIDEBAR -->
+  <aside class="toc-sidebar reveal">
+    <h3>📋 Contents</h3>
+    <ul class="toc-list">
+      <li><a href="#info-collect"><i class="fas fa-database"></i> Information We Collect</a></li>
+      <li><a href="#how-use"><i class="fas fa-cog"></i> How We Use It</a></li>
+      <li><a href="#data-security"><i class="fas fa-shield-alt"></i> Data Security</a></li>
+      <li><a href="#cookies"><i class="fas fa-cookie-bite"></i> Cookies</a></li>
+      <li><a href="#third-party"><i class="fas fa-external-link-alt"></i> Third Party Links</a></li>
+      <li><a href="#your-rights"><i class="fas fa-user-check"></i> Your Rights</a></li>
+      <li><a href="#children"><i class="fas fa-child"></i> Children's Privacy</a></li>
+      <li><a href="#changes"><i class="fas fa-edit"></i> Policy Changes</a></li>
+      <li><a href="#contact-us"><i class="fas fa-envelope"></i> Contact Us</a></li>
+    </ul>
+    <a href="mailto:info@stoneagehuts.com" class="toc-contact-btn">
+      <i class="fas fa-envelope"></i> Email Us
+    </a>
+  </aside>
+
+  <!-- POLICY SECTIONS -->
+  <main class="policy-content">
+
+    <div class="policy-section reveal" id="info-collect">
+      <div class="section-header">
+        <div class="section-icon"><i class="fas fa-database"></i></div>
+        <h2>Information We Collect</h2>
+      </div>
+      <div class="section-body">
+        <p>We collect only the minimum information needed to provide you with our services and respond to your enquiries. This includes:</p>
+        <ul>
+          <li>Full name — to address you personally and for booking records</li>
+          <li>Email address — to send booking confirmations and updates</li>
+          <li>Phone number — to confirm bookings and for emergency contact</li>
+          <li>Number of guests and stay dates — to process your reservation</li>
+          <li>Message content — when you write to us via our contact form</li>
+        </ul>
+        <div class="highlight-box">
+          <i class="fas fa-info-circle"></i>
+          We do not collect sensitive personal data such as payment card details directly. Any payments are processed through secure third-party gateways.
+        </div>
+      </div>
+    </div>
+
+    <div class="policy-section reveal" id="how-use">
+      <div class="section-header">
+        <div class="section-icon"><i class="fas fa-cog"></i></div>
+        <h2>How We Use Your Information</h2>
+      </div>
+      <div class="section-body">
+        <p>Your information is used solely to deliver our services and communicate with you. Specifically, we use it to:</p>
+        <ul>
+          <li>Confirm and manage your booking at Stone Age Huts</li>
+          <li>Send you check-in instructions and pre-arrival information</li>
+          <li>Respond to your questions, requests or feedback</li>
+          <li>Send occasional newsletters about nature retreats and seasonal offers — only if you opt in</li>
+          <li>Improve our website and services based on aggregate usage data</li>
+        </ul>
+        <div class="highlight-box">
+          <i class="fas fa-ban"></i>
+          We never sell, rent or share your personal information with advertisers or unrelated third parties.
+        </div>
+      </div>
+    </div>
+
+    <div class="policy-section reveal" id="data-security">
+      <div class="section-header">
+        <div class="section-icon"><i class="fas fa-shield-alt"></i></div>
+        <h2>Data Security</h2>
+      </div>
+      <div class="section-body">
+        <p>We take the security of your personal data seriously. Our website is hosted on Firebase (Google Cloud), which provides enterprise-grade infrastructure with strong security standards.</p>
+        <ul>
+          <li>All data is transmitted over HTTPS encrypted connections</li>
+          <li>Access to personal data is restricted to authorised staff only</li>
+          <li>Our hosting platform applies regular security updates and patches</li>
+          <li>We do not store payment card information on our servers</li>
+        </ul>
+        <p>While we take all reasonable precautions, no method of transmission over the internet is 100% secure. We encourage you to contact us promptly if you suspect any unauthorised use of your data.</p>
+      </div>
+    </div>
+
+    <div class="policy-section reveal" id="cookies">
+      <div class="section-header">
+        <div class="section-icon"><i class="fas fa-cookie-bite"></i></div>
+        <h2>Cookies</h2>
+      </div>
+      <div class="section-body">
+        <p>Our website uses cookies — small text files stored on your device — to improve your experience and help us understand how visitors use our site.</p>
+        <ul>
+          <li><strong>Essential cookies</strong> — required for the site to function (language preference, session data)</li>
+          <li><strong>Analytics cookies</strong> — help us understand visitor behaviour via Google Analytics (anonymised data only)</li>
+          <li><strong>Functional cookies</strong> — remember your preferences such as language selection</li>
+        </ul>
+        <div class="highlight-box">
+          <i class="fas fa-sliders-h"></i>
+          You can disable cookies at any time through your browser settings. Disabling cookies may affect some features of the website.
+        </div>
+      </div>
+    </div>
+
+    <div class="policy-section reveal" id="third-party">
+      <div class="section-header">
+        <div class="section-icon"><i class="fas fa-external-link-alt"></i></div>
+        <h2>Third Party Links</h2>
+      </div>
+      <div class="section-body">
+        <p>Our website may contain links to external websites such as Google Maps, booking platforms, social media pages, and travel guides. These are provided for your convenience.</p>
+        <p>We have no control over the content or privacy practices of external websites. Once you leave our site, we encourage you to read the privacy policy of any site you visit.</p>
+        <ul>
+          <li>Google Maps — used for directions and location display</li>
+          <li>Social media platforms — Instagram, Facebook pages for Stone Age Huts</li>
+          <li>Travel review platforms — TripAdvisor, Google Reviews</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="policy-section reveal" id="your-rights">
+      <div class="section-header">
+        <div class="section-icon"><i class="fas fa-user-check"></i></div>
+        <h2>Your Rights</h2>
+      </div>
+      <div class="section-body">
+        <p>You have full control over your personal data. At any time, you may:</p>
+        <ul>
+          <li>Request a copy of the personal information we hold about you</li>
+          <li>Ask us to correct any inaccurate or incomplete information</li>
+          <li>Request deletion of your personal data from our records</li>
+          <li>Withdraw consent to receive marketing emails at any time</li>
+          <li>Object to processing of your data in certain circumstances</li>
+        </ul>
+        <div class="highlight-box">
+          <i class="fas fa-clock"></i>
+          We will respond to all data requests within 30 days. To exercise your rights, email us at info@stoneagehuts.com.
+        </div>
+      </div>
+    </div>
+
+    <div class="policy-section reveal" id="children">
+      <div class="section-header">
+        <div class="section-icon"><i class="fas fa-child"></i></div>
+        <h2>Children's Privacy</h2>
+      </div>
+      <div class="section-body">
+        <p>Stone Age Huts welcomes families with children as guests. However, our website and its contact forms are not directed at children under the age of 13.</p>
+        <p>We do not knowingly collect personal information from children under 13 without verifiable parental consent. If you believe we have inadvertently collected such information, please contact us immediately and we will delete it promptly.</p>
+      </div>
+    </div>
+
+    <div class="policy-section reveal" id="changes">
+      <div class="section-header">
+        <div class="section-icon"><i class="fas fa-edit"></i></div>
+        <h2>Changes to This Policy</h2>
+      </div>
+      <div class="section-body">
+        <p>We may update this Privacy Policy from time to time to reflect changes in our practices, technology, or legal requirements. When we do, we will update the "Last updated" date at the top of this page.</p>
+        <p>We encourage you to review this page periodically. Continued use of our website after changes are posted constitutes your acceptance of the updated policy.</p>
+        <div class="highlight-box">
+          <i class="fas fa-bell"></i>
+          For significant changes, we may also notify guests via email if we hold your contact information.
+        </div>
+      </div>
+    </div>
+
+    <div class="policy-section reveal" id="contact-us">
+      <div class="section-header">
+        <div class="section-icon"><i class="fas fa-envelope"></i></div>
+        <h2>Contact Us</h2>
+      </div>
+      <div class="section-body">
+        <p>If you have any questions, concerns, or requests regarding this Privacy Policy or how we handle your personal data, please get in touch with us:</p>
+        <div class="contact-card">
+          <h4>🏕️ Stone Age Huts — Privacy Contact</h4>
+          <div class="contact-row">
+            <i class="fas fa-envelope"></i>
+            <span>Email: <a href="mailto:info@stoneagehuts.com">info@stoneagehuts.com</a></span>
+          </div>
+          <div class="contact-row">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Tushrpani, Bagar Malla, near Pangot, Nainital, Uttarakhand 263159, India</span>
+          </div>
+          <div class="contact-row">
+            <i class="fas fa-clock"></i>
+            <span>We aim to respond to all enquiries within 2–3 business days</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="ft">🏕️ StoneAgeHuts</span>
+      <p>A nature retreat nestled in the Kumaon Hills near Nainital. Experience authentic wilderness, bird watching, and mountain life.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="/#stay">Accommodations</a></li>
+        <li><a href="/#activities">Activities</a></li>
+        <li><a href="/#gallery">Gallery</a></li>
+        <li><a href="/#blog">Blog</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Info</h5>
+      <ul>
+        <li><a href="/how-to-reach.html">How to Reach</a></li>
+        <li><a href="/faqs.html">FAQs</a></li>
+        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="/admin.html">Admin</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 StoneAgeHuts · Near Nainital, Kumaon Hills, Uttarakhand</p>
+    <p>Made with 🌿 for nature lovers</p>
+  </div>
+</footer>
+
+<script>
+  const HDR = document.getElementById('site-header');
+  window.addEventListener('scroll', () => { HDR.classList.toggle('scrolled', window.scrollY > 60); });
+  function toggleMobileNav() { document.getElementById('mobile-nav').classList.toggle('open'); }
+  function closeMobileNav() { document.getElementById('mobile-nav').classList.remove('open'); }
+  function setLang(lang) {
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-hi').classList.toggle('active', lang === 'hi');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Highlight active TOC link on scroll
+  const sections = document.querySelectorAll('.policy-section');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+    });
+    tocLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>

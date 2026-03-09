@@ -8,10 +8,10 @@ service cloud.firestore {
       return request.auth != null && request.auth.token.admin == true;
     }
 
-    // reviews: any logged‑in user can read the full set (dashboard counts, review list);
-    // only admins may change status or delete.
+    // reviews: clients should only read approved reviews; admins may read all
     match /reviews/{reviewId} {
-      allow read: if request.auth != null;
+      // only allow reads if the document is published or the caller is an admin
+      allow read: if resource.data.status == 'approved' || isAdmin();
       allow create: if true;
       allow update, delete: if isAdmin();
     }
