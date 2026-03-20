@@ -3,324 +3,409 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <!-- primary SEO tags -->
   <title>Stone Age Huts · Nature Retreat in Kumaon Hills</title>
   <meta name="description" content="Stone Age Huts is an eco resort in the Kumaon hills near Nainital. Experience rustic cabins, bird watching and serene nature." />
   <meta name="keywords" content="stone age huts, eco resort, Kumaon, Nainital, bird watching" />
-
-  <!-- Open Graph (helps Google + social media) -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Stone Age Huts" />
   <meta property="og:title" content="Stone Age Huts · Nature Retreat in Kumaon Hills" />
   <meta property="og:description" content="Eco resort in the Kumaon hills near Nainital. Rustic cabins, bird watching and serene nature." />
   <meta property="og:url" content="https://www.stoneagehuts.com/" />
   <meta property="og:image" content="https://www.stoneagehuts.com/images/hero-bg.jpg" />
-
   <link rel="canonical" href="https://www.stoneagehuts.com/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://www.gstatic.com" />
-  <link rel="preload" href="/styles.css" as="style" />
-  <!-- hero image preload (replace with actual filename if different) -->
-  <link rel="preload" href="/images/hero-bg.jpg" as="image" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "LodgingBusiness",
     "name": "Stone Age Huts",
     "url": "https://www.stoneagehuts.com/",
-    "logo": "https://www.stoneagehuts.com/images/logo.png",
-    "image": "https://www.stoneagehuts.com/images/hero-bg.jpg",
-    "description": "Eco resort and bird‑watching retreat nestled in the Kumaon hills near Nainital.",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Near Nainital",
-      "addressLocality": "Kumaon Hills",
-      "addressRegion": "Uttarakhand",
-      "addressCountry": "IN"
-    },
+    "description": "Eco resort and bird-watching retreat nestled in the Kumaon hills near Nainital.",
+    "address": { "@type": "PostalAddress", "streetAddress": "Near Nainital", "addressLocality": "Kumaon Hills", "addressRegion": "Uttarakhand", "addressCountry": "IN" },
     "telephone": "+91 863 059 0613",
-    "sameAs": [
-      "https://www.facebook.com/stoneagehuts",
-      "https://www.instagram.com/stoneagehuts"
-    ]
+    "sameAs": ["https://www.facebook.com/stoneagehuts","https://www.instagram.com/stoneagehuts"]
   }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     :root {
-      --stone: #3d3530; --bark: #6b4f3a; --moss: #4a6741; --moss-light: #6a8f60;
-      --clay: #c4855a; --sand: #e8d5b7; --cream: #faf6ee; --fog: #f0ebe0;
-      --white: #ffffff; --text: #2a2420; --text-muted: #7a6a5a;
-      --shadow: 0 8px 40px rgba(61,53,48,0.15); --radius: 16px;
+      --stone:#3d3530;--bark:#6b4f3a;--moss:#4a6741;--moss-light:#6a8f60;
+      --clay:#c4855a;--sand:#e8d5b7;--cream:#faf6ee;--fog:#f0ebe0;
+      --white:#ffffff;--text:#2a2420;--text-muted:#7a6a5a;
+      --shadow:0 8px 40px rgba(61,53,48,0.15);--radius:16px;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--fog); }
-    ::-webkit-scrollbar-thumb { background: var(--bark); border-radius: 3px; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+    ::-webkit-scrollbar{width:6px;}
+    ::-webkit-scrollbar-track{background:var(--fog);}
+    ::-webkit-scrollbar-thumb{background:var(--bark);border-radius:3px;}
 
     /* HEADER */
-    .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0 2rem; transition: all 0.4s; background: rgba(52, 77, 46, 0.75); backdrop-filter: blur(10px); }    .site-header.scrolled { background: rgba(250,246,238,0.96); backdrop-filter: blur(12px); box-shadow: 0 2px 20px rgba(61,53,48,0.12); }
-    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; min-height: 72px; flex-wrap: wrap; padding: 0 1rem; }
-    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .logo-icon { width: 44px; height: 44px; background: var(--moss); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; overflow: hidden; }
-    .logo-icon img { width: 100%; height: 100%; object-fit: cover; }
-    .site-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
-    .site-header:not(.scrolled) .site-title { color: #fff; }
-    .site-header.scrolled .site-title { color: var(--stone); }
-    .main-nav { display: flex; gap: 0.2rem; flex-wrap: wrap; }
-    .nav-link { padding: 0.5rem 0.9rem; text-decoration: none; font-size: 0.88rem; font-weight: 500; border-radius: 8px; transition: all 0.2s; }
-    .site-header:not(.scrolled) .nav-link { color: rgba(255,255,255,0.85); }
-    .site-header.scrolled .nav-link { color: var(--text-muted); }
-    .site-header:not(.scrolled) .nav-link:hover, .site-header:not(.scrolled) .nav-link.active { background: rgba(255,255,255,0.15); color: #fff; }
-    .site-header.scrolled .nav-link:hover, .site-header.scrolled .nav-link.active { background: var(--fog); color: var(--moss); }
-    .controls { display: flex; align-items: center; gap: 1rem; }
-    .lang-toggle { display: flex; background: rgba(255,255,255,0.15); border-radius: 8px; overflow: hidden; }
-    .site-header.scrolled .lang-toggle { background: var(--fog); }
-    .lang-toggle button { border: none; background: transparent; cursor: pointer; padding: 0.4rem 0.7rem; font-size: 0.8rem; font-weight: 600; transition: all 0.2s; }
-    .site-header:not(.scrolled) .lang-toggle button { color: rgba(255,255,255,0.7); }
-    .site-header.scrolled .lang-toggle button { color: var(--text-muted); }
-    .lang-toggle button.active { background: var(--moss); color: #fff; border-radius: 6px; }
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
-    .hamburger span { width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s; display: block; }
-    .site-header.scrolled .hamburger span { background: var(--stone); }
-    .mobile-nav { display: none; position: fixed; top: 72px; left: 0; right: 0; background: rgba(250,246,238,0.98); backdrop-filter: blur(12px); padding: 1rem 2rem 2rem; z-index: 999; flex-direction: column; gap: 0.5rem; box-shadow: 0 8px 24px rgba(61,53,48,0.15); }
-    .mobile-nav.open { display: flex; }
-    .mobile-nav .nav-link { color: var(--text-muted); font-size: 1rem; padding: 0.75rem 1rem; }
+    .site-header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 2rem;transition:all 0.4s;background:rgba(52,77,46,0.75);backdrop-filter:blur(10px);}
+    .site-header.scrolled{background:rgba(250,246,238,0.96);backdrop-filter:blur(12px);box-shadow:0 2px 20px rgba(61,53,48,0.12);}
+    .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;min-height:72px;flex-wrap:wrap;padding:0 1rem;}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .logo-icon{width:44px;height:44px;background:var(--moss);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;overflow:hidden;}
+    .logo-icon img{width:100%;height:100%;object-fit:cover;}
+    .site-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;}
+    .site-header:not(.scrolled) .site-title{color:#fff;}
+    .site-header.scrolled .site-title{color:var(--stone);}
+    .main-nav{display:flex;gap:0.2rem;flex-wrap:wrap;}
+    .nav-link{padding:0.5rem 0.9rem;text-decoration:none;font-size:0.88rem;font-weight:500;border-radius:8px;transition:all 0.2s;}
+    .site-header:not(.scrolled) .nav-link{color:rgba(255,255,255,0.85);}
+    .site-header.scrolled .nav-link{color:var(--text-muted);}
+    .site-header:not(.scrolled) .nav-link:hover,.site-header:not(.scrolled) .nav-link.active{background:rgba(255,255,255,0.15);color:#fff;}
+    .site-header.scrolled .nav-link:hover,.site-header.scrolled .nav-link.active{background:var(--fog);color:var(--moss);}
+    /* No lang-toggle — removed per requirement 6 */
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+    .hamburger span{width:24px;height:2px;background:#fff;border-radius:2px;transition:all 0.3s;display:block;}
+    .site-header.scrolled .hamburger span{background:var(--stone);}
+    .mobile-nav{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(250,246,238,0.98);backdrop-filter:blur(12px);padding:1rem 2rem 2rem;z-index:999;flex-direction:column;gap:0.5rem;box-shadow:0 8px 24px rgba(61,53,48,0.15);}
+    .mobile-nav.open{display:flex;}
+    .mobile-nav .nav-link{color:var(--text-muted);font-size:1rem;padding:0.75rem 1rem;}
 
     /* HERO */
-    #home { min-height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-top: 72px; }
-    .hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg,#1a1208 0%,#2d2010 30%,#3a4a2a 70%,#1e2a18 100%); }
-    .hero-bg-img { position: absolute; inset: 0; object-fit: cover; width: 100%; height: 100%; opacity: 0.45; transition: opacity 0.5s; }
-    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,8,4,0.4) 0%, rgba(20,30,15,0.6) 100%); }
-    .hero-bg-pattern { position: absolute; inset: 0; opacity: 0.06; background-image: radial-gradient(circle at 2px 2px,#fff 1px,transparent 0); background-size: 40px 40px; }
-    .hero-content { text-align: center; position: relative; z-index: 2; padding: 2rem; animation: fadeUp 1s ease both; }
-    @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
-    .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(106,143,96,0.25); border: 1px solid rgba(106,143,96,0.5); color: #a8c89e; padding: 0.4rem 1rem; border-radius: 99px; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.5rem; }
-    .hero-title { font-family: 'Playfair Display',serif; font-size: clamp(2.8rem,8vw,6rem); font-weight: 700; color: #fff; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1rem; }
-    .hero-title em { color: var(--clay); font-style: italic; }
-    .hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.6); margin-bottom: 2.5rem; font-weight: 300; }
-    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-    .btn { padding: 0.85rem 2rem; border-radius: 12px; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.25s; font-family: inherit; }
-    .btn.primary { background: var(--moss); color: #fff; box-shadow: 0 4px 20px rgba(74,103,65,0.4); }
-    .btn.primary:hover { background: var(--moss-light); transform: translateY(-2px); }
-    .btn.outline { background: transparent; color: rgba(255,255,255,0.85); border: 1.5px solid rgba(255,255,255,0.3); }
-    .btn.outline:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
-    .hero-stats { display: flex; justify-content: center; gap: 3rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap; }
-    .stat { text-align: center; }
-    .stat-num { font-family: 'Playfair Display',serif; font-size: 2rem; font-weight: 700; color: var(--clay); }
-    .stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; }
+    #home{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-top:72px;}
+    .hero-carousel{position:absolute;inset:0;display:flex;transition:transform 0.75s cubic-bezier(0.77,0,0.18,1);will-change:transform;cursor:grab;}
+    .hero-carousel:active{cursor:grabbing;}
+    .hero-slide{flex:0 0 100%;min-width:100%;height:100%;position:relative;overflow:hidden;}
+    .hero-slide-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 8s ease;transform:scale(1.06);}
+    .hero-slide.active .hero-slide-img{transform:scale(1);}
+    .hero-slide-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:6rem;}
+    .hero-slide-fallback.s0{background:linear-gradient(160deg,#1a1208 0%,#2d2010 30%,#3a4a2a 70%,#1e2a18 100%);}
+    .hero-slide-fallback.s1{background:linear-gradient(135deg,#0d1a0b 0%,#2a3d25 60%,#1e2d18 100%);}
+    .hero-slide-fallback.s2{background:linear-gradient(160deg,#1c1208 0%,#3a2a14 40%,#2a3818 100%);}
+    .hero-slide-fallback.s3{background:linear-gradient(135deg,#0a1510 0%,#1e3028 50%,#152018 100%);}
+    .hero-slide-fallback.s4{background:linear-gradient(155deg,#180e04 0%,#2e1c0c 35%,#3a4020 100%);}
+    .hero-slide::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,8,4,0.35) 0%,rgba(10,18,8,0.65) 100%);pointer-events:none;}
+    .hero-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10;width:46px;height:46px;background:rgba(255,255,255,0.15);backdrop-filter:blur(6px);border:1.5px solid rgba(255,255,255,0.25);color:#fff;border-radius:50%;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s;}
+    .hero-arrow:hover{background:rgba(255,255,255,0.28);transform:translateY(-50%) scale(1.08);}
+    .hero-arrow.prev{left:1.25rem;}
+    .hero-arrow.next{right:1.25rem;}
+    .hero-dots{position:absolute;bottom:1.4rem;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10;}
+    .hero-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);border:none;cursor:pointer;transition:all 0.3s;padding:0;}
+    .hero-dot.active{background:var(--clay);transform:scale(1.4);}
+    .hero-thumbs{position:absolute;bottom:3.2rem;right:1.4rem;display:flex;flex-direction:column;gap:6px;z-index:10;}
+    .hero-thumb{width:52px;height:38px;border-radius:6px;overflow:hidden;border:2px solid rgba(255,255,255,0.25);cursor:pointer;transition:all 0.25s;flex-shrink:0;}
+    .hero-thumb img{width:100%;height:100%;object-fit:cover;}
+    .hero-thumb-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+    .hero-thumb.active{border-color:var(--clay);transform:scale(1.1);}
+    .hero-thumb:hover:not(.active){border-color:rgba(255,255,255,0.6);}
+    .hero-content{text-align:center;position:relative;z-index:5;padding:2rem;animation:fadeUp 1s ease both;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(106,143,96,0.25);border:1px solid rgba(106,143,96,0.5);color:#a8c89e;padding:0.4rem 1rem;border-radius:99px;font-size:0.8rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.5rem;}
+    .hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,8vw,6rem);font-weight:700;color:#fff;line-height:1.1;letter-spacing:-0.02em;margin-bottom:1rem;}
+    .hero-title em{color:var(--clay);font-style:italic;}
+    .hero-sub{font-size:1.05rem;color:rgba(255,255,255,0.6);margin-bottom:2.5rem;font-weight:300;}
+    .hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+    .btn{padding:0.85rem 2rem;border-radius:12px;font-weight:600;font-size:0.95rem;cursor:pointer;border:none;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;font-family:inherit;}
+    .btn.primary{background:var(--moss);color:#fff;box-shadow:0 4px 20px rgba(74,103,65,0.4);}
+    .btn.primary:hover{background:var(--moss-light);transform:translateY(-2px);}
+    .btn.outline{background:transparent;color:rgba(255,255,255,0.85);border:1.5px solid rgba(255,255,255,0.3);}
+    .btn.outline:hover{background:rgba(255,255,255,0.1);transform:translateY(-2px);}
+    /* hero-stats REMOVED from hero — relocated below as standalone section */
 
     /* SECTIONS */
-    .section-wrap { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
-    .full-section { padding: 5rem 2rem; }
-    .full-section .inner { max-width: 1200px; margin: 0 auto; }
-    .section-header { margin-bottom: 3rem; }
-    .section-tag { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--moss); margin-bottom: 0.5rem; }
-    .section-title { font-family: 'Playfair Display',serif; font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 700; color: var(--stone); line-height: 1.2; }
-    .section-subtitle { font-size: 1rem; color: var(--text-muted); margin-top: 0.5rem; max-width: 500px; }
+    .section-wrap{padding:5rem 2rem;max-width:1200px;margin:0 auto;}
+    .full-section{padding:5rem 2rem;}
+    .full-section .inner{max-width:1200px;margin:0 auto;}
+    .section-header{margin-bottom:3rem;}
+    .section-tag{font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--moss);margin-bottom:0.5rem;}
+    .section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:var(--stone);line-height:1.2;}
+    .section-subtitle{font-size:1rem;color:var(--text-muted);margin-top:0.5rem;max-width:500px;}
 
-    /* STAY — pricing hidden */
-    .cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.5rem; }
-    .card { background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); border: 1px solid rgba(232,213,183,0.5); transition: all 0.3s; position: relative; overflow: hidden; }
-    .card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background: linear-gradient(90deg,var(--moss),var(--clay)); }
-    .card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(61,53,48,0.2); }
-    .card-icon { font-size: 2rem; margin-bottom: 1rem; }
-    .card-title { font-family: 'Playfair Display',serif; font-size: 1.3rem; font-weight: 700; color: var(--stone); margin-bottom: 0.5rem; }
-    .card-desc { color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.5rem; }
-    .card-features { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
-    .chip { background: var(--fog); color: var(--bark); padding: 0.3rem 0.7rem; border-radius: 99px; font-size: 0.75rem; font-weight: 500; }
-    .inquire { width: 100%; padding: 0.8rem; background: var(--stone); color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; font-family: inherit; }
-    .inquire:hover { background: var(--bark); }
+    /* ══ STATS STRIP (relocated from hero) ══ */
+    .stats-strip{background:var(--stone);padding:3rem 2rem;}
+    .stats-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;}
+    .stat-item{text-align:center;}
+    .stat-num{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--clay);}
+    .stat-label{font-size:0.78rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.25rem;}
 
-    /* ACTIVITIES */
-    .activities-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 1.2rem; margin-top: 2.5rem; }
-    .activity { background: var(--white); border-radius: var(--radius); padding: 1.8rem 1.5rem; text-align: center; border: 1px solid rgba(232,213,183,0.6); transition: all 0.3s; }
-    .activity:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--moss-light); }
-    .activity.featured { background: var(--moss); color: #fff; border-color: var(--moss); }
-    .activity.featured h4, .activity.featured p { color: #fff !important; }
-    .activity.featured p { opacity: 0.85; }
-    .activity-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-    .activity h4 { font-family: 'Playfair Display',serif; font-size: 1.05rem; font-weight: 700; color: var(--stone); margin-bottom: 0.4rem; }
-    .activity p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+    /* ══ STAY / ACCOMMODATIONS ══ */
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;}
+    .card{background:var(--white);border-radius:var(--radius);padding:2rem;box-shadow:var(--shadow);border:1px solid rgba(232,213,183,0.5);transition:all 0.3s;position:relative;overflow:hidden;}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--moss),var(--clay));}
+    .card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(61,53,48,0.2);}
+    .card-icon{font-size:2rem;margin-bottom:1rem;}
+    .card-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--stone);margin-bottom:0.5rem;}
+    .card-desc{color:var(--text-muted);font-size:0.92rem;line-height:1.6;margin-bottom:1.5rem;}
+    .card-features{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.5rem;}
+    .chip{background:var(--fog);color:var(--bark);padding:0.3rem 0.7rem;border-radius:99px;font-size:0.75rem;font-weight:500;}
+    /* Two-button row on each card */
+    .card-btns{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;}
+    .btn-inquire{padding:0.75rem;background:var(--stone);color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:0.88rem;transition:all 0.2s;font-family:inherit;}
+    .btn-inquire:hover{background:var(--bark);}
+    .btn-details{padding:0.75rem;background:transparent;color:var(--moss);border:1.5px solid var(--moss);border-radius:10px;font-weight:600;cursor:pointer;font-size:0.88rem;transition:all 0.2s;font-family:inherit;}
+    .btn-details:hover{background:var(--moss);color:#fff;}
 
-    /* GALLERY */
-    .gallery-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
-    .filter { padding: 0.5rem 1.1rem; border-radius: 99px; border: 1.5px solid var(--sand); background: transparent; color: var(--text-muted); cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; font-family: inherit; }
-    .filter.active, .filter:hover { background: var(--moss); color: #fff; border-color: var(--moss); }
-    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 0.8rem; }
-    .gallery-item { width: 100%; aspect-ratio: 4/3; border-radius: 12px; cursor: pointer; transition: all 0.3s; overflow: hidden; position: relative; background: var(--fog); display: flex; align-items: center; justify-content: center; }
-    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-    .gallery-item:hover img { transform: scale(1.05); }
-    .gallery-item .placeholder-inner { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.8rem; }
-    .gallery-item .placeholder-inner i { font-size: 2rem; opacity: 0.5; }
-    .gallery-item:hover { transform: scale(1.02); box-shadow: var(--shadow); }
-    .gallery-empty { grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted); }
+    /* ══ ACCOMMODATION DETAILS MODAL ══ */
+    .acc-modal-overlay{display:none;position:fixed;inset:0;z-index:2100;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;}
+    .acc-modal-overlay.open{display:flex;}
+    .acc-modal-box{background:var(--cream);border-radius:20px;width:100%;max-width:680px;position:relative;margin:auto;overflow:hidden;}
+    .acc-modal-header{padding:2rem 2rem 0;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;}
+    .acc-modal-icon{font-size:2.5rem;}
+    .acc-modal-title{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--stone);margin-bottom:0.25rem;}
+    .acc-modal-type{font-size:0.8rem;color:var(--moss);text-transform:uppercase;letter-spacing:0.1em;font-weight:600;}
+    .acc-modal-close{background:var(--fog);border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1rem;color:var(--text-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;}
+    .acc-modal-close:hover{background:var(--clay);color:#fff;}
+    .acc-modal-body{padding:1.5rem 2rem 2rem;}
+    .acc-modal-desc{color:var(--text-muted);font-size:0.95rem;line-height:1.7;margin-bottom:1.5rem;}
+    .acc-detail-section{margin-bottom:1.5rem;}
+    .acc-detail-section h5{font-family:'Playfair Display',serif;font-size:1rem;color:var(--stone);margin-bottom:0.75rem;font-weight:700;}
+    .acc-detail-list{display:flex;flex-wrap:wrap;gap:0.4rem;}
+    .acc-detail-list .chip{background:var(--fog);}
+    .acc-detail-table{width:100%;border-collapse:collapse;font-size:0.88rem;}
+    .acc-detail-table td{padding:0.5rem 0.75rem;border-bottom:1px solid var(--sand);color:var(--text-muted);}
+    .acc-detail-table td:first-child{font-weight:600;color:var(--stone);white-space:nowrap;}
+    .acc-modal-footer{padding:1.5rem 2rem;border-top:1px solid var(--sand);background:var(--fog);}
 
-    /* BLOG */
-    #posts-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 1.5rem; }
-    .post-card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid rgba(232,213,183,0.5); transition: all 0.3s; text-decoration: none; color: inherit; display: block; }
-    .post-card:hover { transform: translateY(-4px); }
-    .post-thumb { height: 180px; overflow: hidden; background: linear-gradient(135deg,var(--moss),var(--bark)); display: flex; align-items: center; justify-content: center; }
-    .post-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .post-thumb .post-emoji { font-size: 3.5rem; }
-    .post-body { padding: 1.5rem; }
-    .post-meta { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem; display: flex; gap: 0.75rem; align-items: center; }
-    .post-category { background: var(--fog); color: var(--moss); padding: 0.15rem 0.5rem; border-radius: 99px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
-    .post-title { font-family: 'Playfair Display',serif; font-size: 1.1rem; font-weight: 700; color: var(--stone); margin-bottom: 0.5rem; line-height: 1.4; }
-    .post-excerpt { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
-    .posts-empty { text-align: center; padding: 3rem; color: var(--text-muted); }
+    /* ══ ACTIVITIES ══ */
+    .activities-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-top:2.5rem;}
+    .activity{background:var(--white);border-radius:var(--radius);padding:1.8rem 1.5rem;text-align:center;border:1px solid rgba(232,213,183,0.6);transition:all 0.3s;}
+    .activity:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--moss-light);}
+    .activity.featured{background:var(--moss);color:#fff;border-color:var(--moss);}
+    .activity.featured h4,.activity.featured p{color:#fff!important;}
+    .activity.featured p{opacity:0.85;}
+    .activity-icon{font-size:2rem;margin-bottom:0.75rem;}
+    .activity h4{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--stone);margin-bottom:0.4rem;}
+    .activity p{font-size:0.85rem;color:var(--text-muted);line-height:1.5;}
 
-    /* REVIEWS */
-    /* utility helpers */
-    .visually-hidden { position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+    /* ══ GALLERY ══ */
+    .gallery-filters{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;}
+    .filter{padding:0.5rem 1.1rem;border-radius:99px;border:1.5px solid var(--sand);background:transparent;color:var(--text-muted);cursor:pointer;font-size:0.85rem;font-weight:500;transition:all 0.2s;font-family:inherit;}
+    .filter.active,.filter:hover{background:var(--moss);color:#fff;border-color:var(--moss);}
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.8rem;}
+    .gallery-item{width:100%;aspect-ratio:4/3;border-radius:12px;cursor:pointer;transition:all 0.3s;overflow:hidden;position:relative;background:var(--fog);}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.3s;}
+    .gallery-item:hover img{transform:scale(1.05);}
+    .gallery-item:hover{transform:scale(1.02);box-shadow:var(--shadow);}
+    .gallery-empty{grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted);}
 
-    .reviews-bg { background: var(--stone); }
-    #review-form-wrap { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius); padding: 2rem; margin-bottom: 2.5rem; }
-    #review-form-wrap h4 { font-family: 'Playfair Display',serif; font-size: 1.2rem; color: var(--sand); margin-bottom: 1.5rem; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .form-full { grid-column: 1/-1; }
-    input, select, textarea { width: 100%; padding: 0.85rem 1rem; border: 1.5px solid rgba(255,255,255,0.15); border-radius: 10px; font-family: inherit; font-size: 0.92rem; transition: border-color 0.2s; background: rgba(255,255,255,0.08); color: #fff; }
-    input.light, select.light, textarea.light { background: var(--white); border-color: var(--sand); color: var(--text); }
-    input.light::placeholder, textarea.light::placeholder { color: var(--text-muted); }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--moss-light); }
-    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.4); }
-    select option { background: #2a2420; color: #fff; }
-    /* ensure dropdown text is always legible regardless of platform */
-    select, select option { color: var(--text) !important; }
-    select.light option { background: #fff; color: var(--text); }
-    textarea { resize: vertical; min-height: 100px; }
-    .form-btn { padding: 0.85rem 2rem; background: var(--moss); color: #fff; border: none; border-radius: 10px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; font-family: inherit; }
-    .form-btn:hover { background: var(--moss-light); }
-    #reviews-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 1rem; }
-    .review-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius); padding: 1.5rem; transition: all 0.2s; }
-    .review-card:hover { background: rgba(255,255,255,0.09); }
-    .rv-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
-    .rv-name { font-weight: 600; color: var(--sand); }
-    .rv-date { font-size: 0.75rem; color: rgba(255,255,255,0.35); }
-    .rv-stars { color: var(--clay); font-size: 0.9rem; margin-bottom: 0.5rem; }
-    .rv-text { font-size: 0.88rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
-    .reviews-empty { text-align: center; padding: 2rem; color: rgba(255,255,255,0.4); }
+    /* ══ GALLERY MODAL ══ */
+    .modal-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
+    .modal-overlay.open{display:flex;}
+    .modal-box{position:relative;max-width:90vw;max-height:85vh;}
+    .modal-box img{max-width:85vw;max-height:80vh;border-radius:12px;object-fit:contain;display:block;}
+    .modal-close-btn{position:absolute;top:-16px;right:-16px;width:36px;height:36px;background:var(--clay);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;border:none;font-weight:700;}
 
-    /* CONTACT */
-    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 1rem; }
-    #contact-form { display: flex; flex-direction: column; gap: 1rem; }
-    .contact-info { display: flex; flex-direction: column; gap: 1rem; }
-    .contact-item { display: flex; align-items: flex-start; gap: 1rem; background: var(--white); padding: 1rem 1.25rem; border-radius: 12px; box-shadow: 0 2px 12px rgba(61,53,48,0.08); }
-    .cic { width: 40px; height: 40px; background: var(--fog); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--moss); font-size: 1rem; flex-shrink: 0; }
-    .contact-item p { font-size: 0.88rem; color: var(--text-muted); margin: 0; }
-    .contact-item strong { display: block; color: var(--stone); font-size: 0.93rem; margin-bottom: 0.2rem; }
-    .socials { display: flex; gap: 0.75rem; }
-    .socials a { width: 44px; height: 44px; background: var(--fog); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--bark); text-decoration: none; font-size: 1.1rem; transition: all 0.2s; }
-    .socials a:hover { background: var(--moss); color: #fff; transform: translateY(-2px); }
+    /* ══ BLOG ══ */
+    #posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+    .post-card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(232,213,183,0.5);transition:all 0.3s;cursor:pointer;}
+    .post-card:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(61,53,48,0.2);}
+    .post-thumb{height:180px;overflow:hidden;background:linear-gradient(135deg,var(--moss),var(--bark));display:flex;align-items:center;justify-content:center;position:relative;}
+    .post-thumb img{width:100%;height:100%;object-fit:cover;}
+    .post-thumb .post-emoji{font-size:3.5rem;}
+    .post-body{padding:1.5rem;}
+    .post-meta{font-size:0.75rem;color:var(--text-muted);margin-bottom:0.5rem;display:flex;gap:0.75rem;align-items:center;}
+    .post-category{background:var(--fog);color:var(--moss);padding:0.15rem 0.5rem;border-radius:99px;font-size:0.7rem;font-weight:600;text-transform:uppercase;}
+    .post-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--stone);margin-bottom:0.5rem;line-height:1.4;}
+    .post-excerpt{font-size:0.88rem;color:var(--text-muted);line-height:1.6;}
+    .post-read-more{display:inline-flex;align-items:center;gap:5px;margin-top:0.75rem;font-size:0.82rem;font-weight:600;color:var(--moss);}
 
-    /* MAP */
-    .map-strip { background: var(--fog); border-top: 1px solid var(--sand); border-bottom: 1px solid var(--sand); }
-    .map-strip iframe { width: 100%; height: 280px; border: none; display: block; }
+    /* ══ BLOG POST MODAL ══ */
+    .blog-modal-overlay{display:none;position:fixed;inset:0;z-index:2200;background:rgba(0,0,0,0.82);backdrop-filter:blur(6px);align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;}
+    .blog-modal-overlay.open{display:flex;}
+    .blog-modal-box{background:var(--cream);border-radius:20px;width:100%;max-width:740px;position:relative;margin:auto;overflow:hidden;}
+    .blog-modal-img{width:100%;height:260px;object-fit:cover;display:block;}
+    .blog-modal-img-fallback{width:100%;height:260px;background:linear-gradient(135deg,var(--moss),var(--bark));display:flex;align-items:center;justify-content:center;font-size:5rem;}
+    .blog-modal-body{padding:2rem;}
+    .blog-modal-meta{display:flex;gap:0.75rem;align-items:center;margin-bottom:0.75rem;}
+    .blog-modal-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--stone);line-height:1.25;margin-bottom:1rem;}
+    .blog-modal-content{font-size:0.97rem;color:var(--text-muted);line-height:1.8;}
+    .blog-modal-content p{margin-bottom:1rem;}
+    .blog-modal-close{position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,0.4);border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;color:#fff;display:flex;align-items:center;justify-content:center;transition:all 0.2s;z-index:1;}
+    .blog-modal-close:hover{background:var(--clay);}
 
-    /* NEWSLETTER */
-    #newsletter-form { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
-    #newsletter-form input { max-width: 340px; background: var(--white); border-color: var(--sand); color: var(--text); }
-    #newsletter-form input::placeholder { color: var(--text-muted); }
-    #newsletter-form button { padding: 0.85rem 2rem; background: var(--moss); color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
-    #newsletter-form button:hover { background: var(--bark); }
+    /* ══ REVIEWS (horizontal scroll) ══ */
+    #review-form-wrap{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius);padding:2rem;margin-bottom:2.5rem;display:none;}
+    #review-form-wrap.visible{display:block;}
+    #review-form-wrap h4{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--sand);margin-bottom:1.5rem;}
+    /* Button to toggle the form */
+    .write-review-btn{display:inline-flex;align-items:center;gap:8px;padding:0.75rem 1.6rem;background:rgba(196,133,90,0.2);border:1.5px solid rgba(196,133,90,0.5);color:var(--clay);border-radius:12px;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit;margin-bottom:2rem;}
+    .write-review-btn:hover{background:var(--clay);color:#fff;}
+    .write-review-btn .wrbtn-icon{transition:transform 0.2s;}
+    .write-review-btn.open .wrbtn-icon{transform:rotate(45deg);}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    .form-full{grid-column:1/-1;}
+    input,select,textarea{width:100%;padding:0.85rem 1rem;border:1.5px solid rgba(255,255,255,0.15);border-radius:10px;font-family:inherit;font-size:0.92rem;transition:border-color 0.2s;background:rgba(255,255,255,0.08);color:#fff;}
+    input.light,select.light,textarea.light{background:var(--white);border-color:var(--sand);color:var(--text);}
+    input.light::placeholder,textarea.light::placeholder{color:var(--text-muted);}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--moss-light);}
+    input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.4);}
+    select option{background:#2a2420;color:#fff;}
+    select,select option{color:var(--text)!important;}
+    select.light option{background:#fff;color:var(--text);}
+    textarea{resize:vertical;min-height:100px;}
+    .form-btn{padding:0.85rem 2rem;background:var(--moss);color:#fff;border:none;border-radius:10px;font-weight:600;font-size:0.95rem;cursor:pointer;transition:all 0.2s;font-family:inherit;}
+    .form-btn:hover{background:var(--moss-light);}
 
-    /* MODAL */
-    .modal-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
-    .modal-overlay.open { display: flex; }
-    .modal-box { position: relative; max-width: 90vw; max-height: 85vh; }
-    .modal-box img { max-width: 85vw; max-height: 80vh; border-radius: 12px; object-fit: contain; display: block; }
-    .modal-close-btn { position: absolute; top: -16px; right: -16px; width: 36px; height: 36px; background: var(--clay); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; border: none; font-weight: 700; }
+    /* Star rating input */
+    .star-rating{display:flex;gap:4px;margin-bottom:0.5rem;}
+    .star-rating input{display:none;}
+    .star-rating label{font-size:1.6rem;cursor:pointer;color:rgba(255,255,255,0.25);transition:color 0.15s;}
+    .star-rating label:hover,.star-rating label.selected{color:var(--clay);}
 
-    /* BOOKING MODAL */
-    .bk-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); align-items: center; justify-content: center; padding: 1rem; }
-    .bk-overlay.open { display: flex; }
-    .bk-box { background: var(--cream); border-radius: 20px; padding: 2.5rem; max-width: 480px; width: 100%; position: relative; max-height: 90vh; overflow-y: auto; }
-    .bk-box h3 { font-family: 'Playfair Display',serif; font-size: 1.6rem; margin-bottom: 0.25rem; color: var(--stone); }
-    .bk-room { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
-    .bk-close { position: absolute; top: 1.5rem; right: 1.5rem; background: var(--fog); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
-    .bk-form { display: flex; flex-direction: column; gap: 1rem; }
-    .bk-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .field-label { font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem; }
+    .reviews-row-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;flex-wrap:wrap;gap:0.75rem;}
+    .reviews-row-header span{font-size:0.88rem;color:rgba(255,255,255,0.45);}
+    .reviews-btns{display:flex;align-items:center;gap:0.6rem;}
+    .rv-nav-btn{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.82rem;transition:all 0.2s;}
+    .rv-nav-btn:hover{background:var(--clay);border-color:var(--clay);color:#fff;}
+    .view-all-btn{display:inline-flex;align-items:center;gap:6px;padding:0.45rem 1.1rem;background:rgba(196,133,90,0.18);border:1.5px solid rgba(196,133,90,0.45);color:var(--clay);border-radius:99px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit;}
+    .view-all-btn:hover{background:var(--clay);color:#fff;}
+    .reviews-track-wrap{position:relative;overflow:hidden;}
+    .reviews-track-wrap::before,.reviews-track-wrap::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:2;pointer-events:none;}
+    .reviews-track-wrap::before{left:0;background:linear-gradient(to right,var(--stone),transparent);}
+    .reviews-track-wrap::after{right:0;background:linear-gradient(to left,var(--stone),transparent);}
+    #reviews-grid{display:flex;gap:1rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--bark) transparent;padding:0.4rem 0 0.9rem;cursor:grab;}
+    #reviews-grid:active{cursor:grabbing;}
+    #reviews-grid::-webkit-scrollbar{height:4px;}
+    #reviews-grid::-webkit-scrollbar-track{background:rgba(255,255,255,0.05);}
+    #reviews-grid::-webkit-scrollbar-thumb{background:var(--bark);border-radius:2px;}
+    .review-card{flex:0 0 280px;min-width:280px;scroll-snap-align:start;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:1.5rem;transition:background 0.2s;}
+    .review-card:hover{background:rgba(255,255,255,0.09);}
+    .rv-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;}
+    .rv-name{font-weight:600;color:var(--sand);}
+    .rv-date{font-size:0.75rem;color:rgba(255,255,255,0.35);}
+    .rv-stars{color:var(--clay);font-size:0.9rem;margin-bottom:0.5rem;}
+    .rv-text{font-size:0.88rem;color:rgba(255,255,255,0.6);line-height:1.6;}
+    .reviews-empty{color:rgba(255,255,255,0.4);padding:2rem;flex:1;text-align:center;}
 
-    /* TOAST */
-    .toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 3000; background: var(--stone); color: var(--sand); padding: 1rem 1.5rem; border-radius: 12px; font-size: 0.9rem; font-weight: 500; box-shadow: 0 8px 24px rgba(0,0,0,0.3); transform: translateY(100px); opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem; max-width: 320px; }
-    .toast.show { transform: translateY(0); opacity: 1; }
+    /* ══ VIEW ALL REVIEWS MODAL ══ */
+    .rv-all-overlay{display:none;position:fixed;inset:0;z-index:2500;background:rgba(0,0,0,0.82);backdrop-filter:blur(6px);align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;}
+    .rv-all-overlay.open{display:flex;}
+    .rv-all-box{background:#2d2822;border-radius:20px;width:100%;max-width:920px;padding:2.5rem;position:relative;margin:auto;}
+    .rv-all-box h3{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--sand);margin-bottom:0.35rem;}
+    .rv-all-sub{color:rgba(255,255,255,0.4);font-size:0.88rem;margin-bottom:2rem;}
+    .rv-all-close{position:absolute;top:1.5rem;right:1.5rem;background:rgba(255,255,255,0.1);border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;color:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+    .rv-all-close:hover{background:var(--clay);color:#fff;}
+    .rv-all-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;}
+    .rv-all-grid .review-card{flex:none;min-width:unset;}
+
+    /* ══ CONTACT ══ */
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:1rem;}
+    .contact-info{display:flex;flex-direction:column;gap:1rem;}
+    .contact-item{display:flex;align-items:flex-start;gap:1rem;background:var(--white);padding:1rem 1.25rem;border-radius:12px;box-shadow:0 2px 12px rgba(61,53,48,0.08);}
+    .cic{width:40px;height:40px;background:var(--fog);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--moss);font-size:1rem;flex-shrink:0;}
+    .contact-item p{font-size:0.88rem;color:var(--text-muted);margin:0;}
+    .contact-item strong{display:block;color:var(--stone);font-size:0.93rem;margin-bottom:0.2rem;}
+    .socials{display:flex;gap:0.75rem;}
+    .socials a{width:44px;height:44px;background:var(--fog);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--bark);text-decoration:none;font-size:1.1rem;transition:all 0.2s;}
+    .socials a:hover{background:var(--moss);color:#fff;transform:translateY(-2px);}
+
+    /* ══ MAP+INFO ══ */
+    .map-footer-strip{background:var(--fog);border-top:1px solid var(--sand);border-bottom:1px solid var(--sand);overflow:hidden;}
+    .map-footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 380px;}
+    .map-info-panel{padding:2.5rem 2.2rem;background:var(--white);display:flex;flex-direction:column;gap:1.2rem;justify-content:center;}
+    .map-info-panel h4{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--stone);margin-bottom:0.1rem;}
+    .map-info-row{display:flex;align-items:flex-start;gap:0.75rem;font-size:0.88rem;color:var(--text-muted);}
+    .map-info-row i{color:var(--moss);width:18px;margin-top:2px;flex-shrink:0;}
+    .map-quick-links{display:flex;flex-wrap:wrap;gap:0.45rem;margin-top:0.2rem;}
+    .map-quick-links a{padding:0.28rem 0.75rem;background:var(--fog);border-radius:99px;font-size:0.78rem;color:var(--bark);text-decoration:none;font-weight:500;transition:all 0.2s;}
+    .map-quick-links a:hover{background:var(--moss);color:#fff;}
+    .map-iframe-wrap iframe{width:100%;height:100%;min-height:260px;border:none;display:block;filter:grayscale(15%) contrast(0.95);}
+
+    /* ══ NEWSLETTER ══ */
+    #newsletter-form{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;}
+    #newsletter-form input{max-width:340px;background:var(--white);border-color:var(--sand);color:var(--text);}
+    #newsletter-form input::placeholder{color:var(--text-muted);}
+    #newsletter-form button{padding:0.85rem 2rem;background:var(--moss);color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+    #newsletter-form button:hover{background:var(--bark);}
+
+    /* ══ BOOKING MODAL ══ */
+    .bk-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1rem;}
+    .bk-overlay.open{display:flex;}
+    .bk-box{background:var(--cream);border-radius:20px;padding:2.5rem;max-width:480px;width:100%;position:relative;max-height:90vh;overflow-y:auto;}
+    .bk-box h3{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:0.25rem;color:var(--stone);}
+    .bk-room{color:var(--text-muted);margin-bottom:1.5rem;font-size:0.9rem;}
+    .bk-close{position:absolute;top:1.5rem;right:1.5rem;background:var(--fog);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--text-muted);}
+    .bk-form{display:flex;flex-direction:column;gap:1rem;}
+    .bk-2col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    .field-label{font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:0.3rem;}
+
+    /* ══ TOAST ══ */
+    .toast{position:fixed;bottom:2rem;right:2rem;z-index:3000;background:var(--stone);color:var(--sand);padding:1rem 1.5rem;border-radius:12px;font-size:0.9rem;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,0.3);transform:translateY(100px);opacity:0;transition:all 0.3s;display:flex;align-items:center;gap:0.5rem;max-width:320px;}
+    .toast.show{transform:translateY(0);opacity:1;}
 
     /* SCROLL TOP */
-    #scroll-top { position: fixed; bottom: 2rem; left: 2rem; z-index: 999; width: 44px; height: 44px; background: var(--moss); color: #fff; border-radius: 50%; border: none; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); transition: all 0.3s; opacity: 0; pointer-events: none; }
-    #scroll-top.visible { opacity: 1; pointer-events: auto; }
-    #scroll-top:hover { background: var(--bark); transform: translateY(-2px); }
+    #scroll-top{position:fixed;bottom:2rem;left:2rem;z-index:999;width:44px;height:44px;background:var(--moss);color:#fff;border-radius:50%;border:none;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);transition:all 0.3s;opacity:0;pointer-events:none;}
+    #scroll-top.visible{opacity:1;pointer-events:auto;}
+    #scroll-top:hover{background:var(--bark);transform:translateY(-2px);}
 
     /* FOOTER */
-    .site-footer { background: #1a1510; color: rgba(255,255,255,0.5); padding: 3rem 2rem 2rem; }
-    .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .footer-brand .ft { color: var(--sand); font-family: 'Playfair Display',serif; font-size: 1.3rem; display: block; margin-bottom: 0.75rem; }
-    .footer-brand p { font-size: 0.88rem; line-height: 1.7; max-width: 280px; }
-    .footer-col h5 { color: rgba(255,255,255,0.8); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
-    .footer-col ul a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
-    .footer-col ul a:hover { color: var(--clay); }
-    .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-    .footer-bottom p { font-size: 0.82rem; }
+    .site-footer{background:#1a1510;color:rgba(255,255,255,0.5);padding:3rem 2rem 2rem;}
+    .footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);}
+    .footer-brand .ft{color:var(--sand);font-family:'Playfair Display',serif;font-size:1.3rem;display:block;margin-bottom:0.75rem;}
+    .footer-brand p{font-size:0.88rem;line-height:1.7;max-width:280px;}
+    .footer-col h5{color:rgba(255,255,255,0.8);font-size:0.85rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;}
+    .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:0.5rem;}
+    .footer-col ul a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.88rem;transition:color 0.2s;}
+    .footer-col ul a:hover{color:var(--clay);}
+    .footer-bottom{max-width:1200px;margin:0 auto;padding-top:1.5rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.35rem;}
+    .footer-bottom p{font-size:0.82rem;}
+    .footer-bottom .footer-sub{font-size:0.76rem;color:rgba(255,255,255,0.28);}
 
-    /* LOADING SPINNER */
-    .spinner { width: 32px; height: 32px; border: 3px solid var(--fog); border-top-color: var(--moss); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 2rem auto; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-section { text-align: center; padding: 3rem; }
+    /* LOADING */
+    .spinner{width:32px;height:32px;border:3px solid var(--fog);border-top-color:var(--moss);border-radius:50%;animation:spin 0.8s linear infinite;margin:2rem auto;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .loading-section{text-align:center;padding:3rem;}
+    .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
 
-    /* ANALYTICS BADGE (hidden, just tracks) */
-    .analytics-pixel { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
-
-    /* unify breakpoint with external stylesheet (800px) */
-    @media (max-width: 800px) {
-      .main-nav, .lang-toggle { display: none; }
-      .hamburger { display: flex; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .form-grid { grid-template-columns: 1fr; }
-      .bk-2col { grid-template-columns: 1fr; }
-      /* header may wrap to two lines; push hero further */
-      #home { margin-top: 100px; }
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .map-footer-inner{grid-template-columns:1fr;}
+      .map-iframe-wrap{order:-1;}
+      .map-iframe-wrap iframe{min-height:220px;}
     }
-    @media (max-width: 480px) {
-      .hero-title { font-size: 2.2rem; }
-      .section-wrap, .full-section { padding: 3rem 1.25rem; }
+    @media(max-width:800px){
+      .main-nav{display:none;}
+      .hamburger{display:flex;}
+      .contact-grid{grid-template-columns:1fr;}
+      .footer-grid{grid-template-columns:1fr;gap:2rem;}
+      .form-grid{grid-template-columns:1fr;}
+      .bk-2col{grid-template-columns:1fr;}
+      #home{margin-top:100px;}
+      .hero-thumbs{flex-direction:row;bottom:3rem;right:50%;transform:translateX(50%);gap:5px;}
+      .hero-thumb{width:42px;height:30px;}
     }
-
-    /* extra-small phones: collapse controls even further */
-    @media (max-width: 360px) {
-      .controls { gap: 0.25rem; }
-      .lang-toggle { display: none; }
+    @media(max-width:480px){
+      .hero-title{font-size:2.2rem;}
+      .section-wrap,.full-section{padding:3rem 1.25rem;}
+      .hero-arrow{width:36px;height:36px;font-size:0.9rem;}
+      .hero-arrow.prev{left:0.5rem;}
+      .hero-arrow.next{right:0.5rem;}
+      .review-card{flex:0 0 260px;min-width:260px;}
+      .rv-all-box,.blog-modal-body,.acc-modal-body,.acc-modal-header{padding:1.25rem;}
+      .stats-inner{gap:1.5rem;}
+      .card-btns{grid-template-columns:1fr;}
+    }
+    @media(max-width:360px){
+      .hero-thumbs{display:none;}
     }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- HEADER (lang toggle removed) -->
 <header class="site-header" id="site-header">
   <div class="header-inner">
     <a class="brand" href="/">
       <div class="logo-icon" id="header-logo">🏕️</div>
-      <span class="site-title" id="site-title-text">StoneAgeHuts</span>
+      <span class="site-title">StoneAgeHuts</span>
     </a>
     <nav class="main-nav">
-      <a href="/" class="nav-link active">Home</a>
-      <a href="/#stay" class="nav-link">Stay</a>
+      <a href="/"            class="nav-link active">Home</a>
+      <a href="/#stay"       class="nav-link">Stay</a>
       <a href="/#activities" class="nav-link">Activities</a>
-      <a href="/#gallery" class="nav-link">Gallery</a>
-      <a href="/#blog" class="nav-link">Blog</a>
-      <a href="/#reviews" class="nav-link">Reviews</a>
-      <a href="/#contact" class="nav-link">Contact</a>
+      <a href="/#gallery"    class="nav-link">Gallery</a>
+      <a href="/#blog"       class="nav-link">Blog</a>
+      <a href="/#reviews"    class="nav-link">Reviews</a>
+      <a href="/#contact"    class="nav-link">Contact</a>
     </nav>
     <div class="controls">
-      <div class="lang-toggle">
-        <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
-        <button id="btn-hi" onclick="setLang('hi')">HI</button>
-      </div>
       <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -329,39 +414,51 @@
 </header>
 
 <nav class="mobile-nav" id="mobile-nav">
-  <a href="/" class="nav-link" onclick="closeMobileNav()">Home</a>
-  <a href="/#stay" class="nav-link" onclick="closeMobileNav()">Stay</a>
+  <a href="/"            class="nav-link" onclick="closeMobileNav()">Home</a>
+  <a href="/#stay"       class="nav-link" onclick="closeMobileNav()">Stay</a>
   <a href="/#activities" class="nav-link" onclick="closeMobileNav()">Activities</a>
-  <a href="/#gallery" class="nav-link" onclick="closeMobileNav()">Gallery</a>
-  <a href="/#blog" class="nav-link" onclick="closeMobileNav()">Blog</a>
-  <a href="/#reviews" class="nav-link" onclick="closeMobileNav()">Reviews</a>
-  <a href="/#contact" class="nav-link" onclick="closeMobileNav()">Contact</a>
+  <a href="/#gallery"    class="nav-link" onclick="closeMobileNav()">Gallery</a>
+  <a href="/#blog"       class="nav-link" onclick="closeMobileNav()">Blog</a>
+  <a href="/#reviews"    class="nav-link" onclick="closeMobileNav()">Reviews</a>
+  <a href="/#contact"    class="nav-link" onclick="closeMobileNav()">Contact</a>
 </nav>
 
-<!-- HERO -->
+<!-- HERO (stats removed from here) -->
 <section id="home">
-  <div class="hero-bg"></div>
-  <img id="hero-bg-img" class="hero-bg-img" src="" alt="Hero background showing scenic hills" style="display:none;" loading="lazy" />
-  <div class="hero-overlay"></div>
-  <div class="hero-bg-pattern"></div>
+  <div class="hero-carousel" id="hero-carousel">
+    <div class="hero-slide active"><div class="hero-slide-fallback s0">🌿</div></div>
+    <div class="hero-slide"><div class="hero-slide-fallback s1">🦜</div></div>
+    <div class="hero-slide"><div class="hero-slide-fallback s2">🏕️</div></div>
+    <div class="hero-slide"><div class="hero-slide-fallback s3">🌄</div></div>
+    <div class="hero-slide"><div class="hero-slide-fallback s4">🔥</div></div>
+  </div>
+  <button class="hero-arrow prev" onclick="heroSlide(-1)" aria-label="Previous image"><i class="fas fa-chevron-left"></i></button>
+  <button class="hero-arrow next" onclick="heroSlide(1)"  aria-label="Next image"><i class="fas fa-chevron-right"></i></button>
+  <div class="hero-thumbs" id="hero-thumbs"></div>
+  <div class="hero-dots"   id="hero-dots"></div>
   <div class="hero-content">
     <div class="hero-badge">🌿 Kumaon Hills, Uttarakhand</div>
-    <h1 class="hero-title" id="hero-title">Experience<br><em>Nature's Embrace</em></h1>
-    <p class="hero-sub" id="hero-sub">Resort • Hostel • Bird Watching Retreat</p>
+    <h1 class="hero-title">Experience<br><em>Nature's Embrace</em></h1>
+    <p class="hero-sub">Resort • Hostel • Bird Watching Retreat</p>
     <div class="hero-actions">
       <a class="btn primary" href="#stay">🏡 Explore Stays</a>
       <a class="btn outline" href="#contact">📞 Contact Us</a>
     </div>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-num">200+</div><div class="stat-label">Bird Species</div></div>
-      <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label">Guest Rating</div></div>
-      <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Happy Guests</div></div>
-      <div class="stat"><div class="stat-num">5 Yrs</div><div class="stat-label">Experience</div></div>
-    </div>
   </div>
 </section>
 
-<!-- STAY -->
+<!-- ══ STATS STRIP (relocated from hero, admin-controlled) ══ -->
+<div class="stats-strip" id="stats-section">
+  <div class="stats-inner" id="stats-grid">
+    <!-- defaults shown while Firebase loads -->
+    <div class="stat-item"><div class="stat-num">200+</div><div class="stat-label">Bird Species</div></div>
+    <div class="stat-item"><div class="stat-num">4.9★</div><div class="stat-label">Guest Rating</div></div>
+    <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">Happy Guests</div></div>
+    <div class="stat-item"><div class="stat-num">5 Yrs</div><div class="stat-label">Experience</div></div>
+  </div>
+</div>
+
+<!-- ══ STAY — Book Inquiry + View Details ══ -->
 <section id="stay">
   <div class="section-wrap">
     <div class="section-header">
@@ -370,27 +467,36 @@
       <p class="section-subtitle">From cozy dorms to private cottages — find your perfect nest in the hills.</p>
     </div>
     <div class="cards" id="rooms-grid">
-      <!-- Loaded from Firebase or defaults -->
+      <!-- Default cards; Firebase may replace these -->
       <div class="card">
         <div class="card-icon">🏡</div>
         <h4 class="card-title">Resort Cottages</h4>
         <p class="card-desc">Private luxury cottages with mountain views, attached bathrooms, and a cozy fireplace for cool nights.</p>
         <div class="card-features"><span class="chip">🏔️ Mountain View</span><span class="chip">🛁 Attached Bath</span><span class="chip">🔥 Fireplace</span><span class="chip">🍳 Breakfast</span></div>
-        <button class="inquire" onclick="openBooking('Resort Cottages')">Book / Enquire</button>
+        <div class="card-btns">
+          <button class="btn-inquire" onclick="openBooking('Resort Cottages')">📋 Book Inquiry</button>
+          <button class="btn-details" onclick="openAccDetails('resort','Resort Cottages','🏡')">🔍 View Details</button>
+        </div>
       </div>
       <div class="card">
         <div class="card-icon">🛏️</div>
         <h4 class="card-title">Hostel Dormitories</h4>
         <p class="card-desc">Budget-friendly shared rooms perfect for backpackers & solo travellers. Meet friends from around the world.</p>
         <div class="card-features"><span class="chip">🎒 Backpacker</span><span class="chip">🔒 Lockers</span><span class="chip">☕ Common Room</span></div>
-        <button class="inquire" onclick="openBooking('Hostel Dormitories')">Book / Enquire</button>
+        <div class="card-btns">
+          <button class="btn-inquire" onclick="openBooking('Hostel Dormitories')">📋 Book Inquiry</button>
+          <button class="btn-details" onclick="openAccDetails('hotel','Hostel Dormitories','🛏️')">🔍 View Details</button>
+        </div>
       </div>
       <div class="card">
         <div class="card-icon">🦜</div>
         <h4 class="card-title">Bird Watching Cabins</h4>
         <p class="card-desc">Special cabins right next to the bird sanctuary. Wake up to birdsong and guided morning tours included.</p>
         <div class="card-features"><span class="chip">🦅 Near Sanctuary</span><span class="chip">🔭 Guided Tour</span><span class="chip">🌅 Sunrise View</span></div>
-        <button class="inquire" onclick="openBooking('Bird Watching Cabins')">Book / Enquire</button>
+        <div class="card-btns">
+          <button class="btn-inquire" onclick="openBooking('Bird Watching Cabins')">📋 Book Inquiry</button>
+          <button class="btn-details" onclick="openAccDetails('birdwatching','Bird Watching Cabins','🦜')">🔍 View Details</button>
+        </div>
       </div>
     </div>
   </div>
@@ -416,7 +522,7 @@
   </div>
 </section>
 
-<!-- GALLERY -->
+<!-- GALLERY (isActive filter applied in JS) -->
 <section id="gallery">
   <div class="section-wrap">
     <div class="section-header">
@@ -425,12 +531,12 @@
       <p class="section-subtitle">A glimpse into life at StoneAgeHuts.</p>
     </div>
     <div class="gallery-filters" id="gallery-filters">
-      <button data-cat="all" class="filter active" onclick="filterGallery('all',this)">All</button>
-      <button data-cat="property" class="filter" onclick="filterGallery('property',this)">Property</button>
-      <button data-cat="rooms" class="filter" onclick="filterGallery('rooms',this)">Rooms</button>
+      <button data-cat="all"        class="filter active" onclick="filterGallery('all',this)">All</button>
+      <button data-cat="resort"     class="filter" onclick="filterGallery('resort',this)">Resort</button>
+      <button data-cat="hotel"      class="filter" onclick="filterGallery('hotel',this)">Hotel</button>
       <button data-cat="activities" class="filter" onclick="filterGallery('activities',this)">Activities</button>
-      <button data-cat="nature" class="filter" onclick="filterGallery('nature',this)">Nature</button>
-      <button data-cat="bird" class="filter" onclick="filterGallery('bird',this)">Bird Watching</button>
+      <button data-cat="nature"     class="filter" onclick="filterGallery('nature',this)">Nature</button>
+      <button data-cat="bird"       class="filter" onclick="filterGallery('bird',this)">Bird Watching</button>
     </div>
     <div class="gallery-grid" id="gallery-grid">
       <div class="loading-section"><div class="spinner"></div><p style="color:var(--text-muted);font-size:0.9rem;">Loading gallery...</p></div>
@@ -438,7 +544,7 @@
   </div>
 </section>
 
-<!-- BLOG -->
+<!-- BLOG (clickable, opens full post modal) -->
 <section id="blog">
   <div class="section-wrap">
     <div class="section-header">
@@ -452,13 +558,20 @@
   </div>
 </section>
 
-<!-- REVIEWS -->
+<!-- REVIEWS (form hidden, toggled by button) -->
 <section id="reviews" style="background:var(--stone);padding:3rem 0;">
   <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
     <div class="section-header">
       <div class="section-tag" style="color:var(--clay);">⭐ Guest Stories</div>
       <h2 class="section-title" style="color:var(--sand);">What Guests Say</h2>
     </div>
+
+    <!-- Toggle button to reveal form -->
+    <button class="write-review-btn" id="write-review-toggle" onclick="toggleReviewForm()">
+      <i class="fas fa-pen wrbtn-icon"></i> Write a Review
+    </button>
+
+    <!-- Hidden review form (revealed on button click) -->
     <div id="review-form-wrap">
       <h4>Share Your Experience</h4>
       <form id="review-form" onsubmit="submitReview(event)">
@@ -467,26 +580,41 @@
             <label class="visually-hidden" for="rev-name">Your Name</label>
             <input id="rev-name" name="name" placeholder="Your Name" required />
           </div>
-          <div>
-            <label class="visually-hidden" for="rev-rating">Rating</label>
-            <select id="rev-rating" name="rating">
-              <option value="5">⭐⭐⭐⭐⭐ Excellent (5)</option>
-              <option value="4">⭐⭐⭐⭐ Very Good (4)</option>
-              <option value="3">⭐⭐⭐ Good (3)</option>
-              <option value="2">⭐⭐ Fair (2)</option>
-              <option value="1">⭐ Poor (1)</option>
-            </select>
+          <div style="display:flex;flex-direction:column;justify-content:flex-start;">
+            <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:0.4rem;">Your Rating</div>
+            <div class="star-rating" id="star-rating-input">
+              <input type="radio" id="s5" name="rating" value="5"><label for="s5" title="5 stars">★</label>
+              <input type="radio" id="s4" name="rating" value="4"><label for="s4" title="4 stars">★</label>
+              <input type="radio" id="s3" name="rating" value="3"><label for="s3" title="3 stars">★</label>
+              <input type="radio" id="s2" name="rating" value="2"><label for="s2" title="2 stars">★</label>
+              <input type="radio" id="s1" name="rating" value="1" checked><label for="s1" title="1 star">★</label>
+            </div>
           </div>
           <div class="form-full">
             <label class="visually-hidden" for="rev-text">Review Text</label>
             <textarea id="rev-text" name="text" placeholder="Tell us about your stay..." required></textarea>
           </div>
-          <div class="form-full"><button type="submit" class="form-btn">Submit Review ✉️</button></div>
+          <div class="form-full" style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+            <button type="submit" class="form-btn">Submit Review ✉️</button>
+            <button type="button" class="form-btn" style="background:rgba(255,255,255,0.1);" onclick="toggleReviewForm()">Cancel</button>
+          </div>
         </div>
       </form>
     </div>
-    <div id="reviews-grid">
-      <div class="loading-section"><div class="spinner"></div></div>
+
+    <!-- Horizontal reviews strip -->
+    <div class="reviews-row-header">
+      <span id="review-count-label">Recent Reviews</span>
+      <div class="reviews-btns">
+        <button class="rv-nav-btn" onclick="scrollReviews(-1)" aria-label="Scroll reviews left"><i class="fas fa-chevron-left"></i></button>
+        <button class="rv-nav-btn" onclick="scrollReviews(1)"  aria-label="Scroll reviews right"><i class="fas fa-chevron-right"></i></button>
+        <button class="view-all-btn" onclick="openAllReviews()">View All <i class="fas fa-arrow-right" style="font-size:0.72rem;"></i></button>
+      </div>
+    </div>
+    <div class="reviews-track-wrap">
+      <div id="reviews-grid">
+        <div class="loading-section"><div class="spinner"></div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -496,7 +624,7 @@
   <div class="section-wrap">
     <div class="section-header">
       <div class="section-tag">📍 Get In Touch</div>
-      <h2 class="section-title" id="contact-title-el">Contact Us</h2>
+      <h2 class="section-title">Contact Us</h2>
       <p class="section-subtitle">We'd love to hear from you!</p>
     </div>
     <div class="contact-grid">
@@ -511,27 +639,45 @@
         <textarea id="contact-message" name="message" placeholder="Your message..." class="light" style="min-height:120px;"></textarea>
         <button type="submit" style="padding:0.85rem;background:var(--moss);color:#fff;border:none;border-radius:10px;font-weight:600;font-size:0.95rem;cursor:pointer;font-family:inherit;">Send Message 🚀</button>
       </form>
-      <div class="contact-info" id="contact-info-section">
-        <!-- Loaded from Firebase -->
-        <div class="contact-item"><div class="cic"><i class="fas fa-phone"></i></div><div><strong>Phone</strong><p id="ci-phone">+91 98765 43210</p></div></div>
+      <div class="contact-info">
+        <div class="contact-item"><div class="cic"><i class="fas fa-phone"></i></div><div><strong>Phone</strong><p id="ci-phone">+91 863 059 0613</p></div></div>
         <div class="contact-item"><div class="cic"><i class="fas fa-envelope"></i></div><div><strong>Email</strong><p id="ci-email">info@stoneagehuts.com</p></div></div>
         <div class="contact-item"><div class="cic"><i class="fas fa-map-marker-alt"></i></div><div><strong>Address</strong><p id="ci-address">Near Nainital, Uttarakhand</p></div></div>
         <div class="contact-item"><div class="cic"><i class="fas fa-clock"></i></div><div><strong>Check-in / Check-out</strong><p id="ci-checkin">Check-in: 12:00 PM · Check-out: 11:00 AM</p></div></div>
         <div class="socials" id="ci-socials">
-          <a href="#" id="soc-instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="#" id="soc-facebook" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-          <a href="#" id="soc-twitter" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" id="soc-instagram"   aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" id="soc-facebook"    aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="#" id="soc-twitter"     aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
           <a href="#" id="soc-tripadvisor" aria-label="TripAdvisor"><i class="fab fa-tripadvisor"></i></a>
-          <a href="#" id="soc-youtube" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" id="soc-youtube"     aria-label="YouTube"><i class="fab fa-youtube"></i></a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- MAP -->
-<div class="map-strip">
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55998.35!2d79.4!3d29.38!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39a09efa91da5aff%3A0x1b5a1db6fc8b9cd3!2sNainital!5e0!3m2!1sen!2sin!4v1700000000000" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Location Map"></iframe>
+<!-- MAP + INFO -->
+<div class="map-footer-strip">
+  <div class="map-footer-inner">
+    <div class="map-info-panel">
+      <div>
+        <h4>🏕️ StoneAgeHuts</h4>
+        <p style="font-size:0.87rem;color:var(--text-muted);margin-top:0.2rem;line-height:1.6;">A nature retreat nestled in the Kumaon Hills near Nainital, Uttarakhand.</p>
+      </div>
+      <div class="map-info-row"><i class="fas fa-map-marker-alt"></i><span>Near Nainital, Kumaon Hills, Uttarakhand</span></div>
+      <div class="map-info-row"><i class="fas fa-phone"></i><span id="map-phone">+91 863 059 0613</span></div>
+      <div class="map-info-row"><i class="fas fa-envelope"></i><span id="map-email">info@stoneagehuts.com</span></div>
+      <div class="map-info-row"><i class="fas fa-clock"></i><span>Check-in 12 PM · Check-out 11 AM</span></div>
+      <div class="map-quick-links">
+        <a href="#stay">Stay</a><a href="#activities">Activities</a>
+        <a href="#gallery">Gallery</a><a href="/how-to-reach.html">How to Reach</a>
+        <a href="/faqs.html">FAQs</a>
+      </div>
+    </div>
+    <div class="map-iframe-wrap">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55998.35!2d79.4!3d29.38!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39a09efa91da5aff%3A0x1b5a1db6fc8b9cd3!2sNainital!5e0!3m2!1sen!2sin!4v1700000000000" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Location Map"></iframe>
+    </div>
+  </div>
 </div>
 
 <!-- NEWSLETTER -->
@@ -553,7 +699,7 @@
 <div class="modal-overlay" id="gallery-modal" onclick="closeGalleryModal(event)">
   <div class="modal-box">
     <button class="modal-close-btn" onclick="closeGalleryModal()">×</button>
-    <img id="modal-img" src="" alt="Enlarged gallery image" loading="lazy" />
+    <img id="modal-img" src="" alt="Gallery" loading="lazy" />
   </div>
 </div>
 
@@ -564,22 +710,16 @@
     <h3>Book Your Stay</h3>
     <p class="bk-room" id="bk-room-name">Resort Cottages</p>
     <form class="bk-form" onsubmit="submitBooking(event)">
-      <label class="visually-hidden" for="bk-name">Full Name</label>
-      <input id="bk-name" name="name" placeholder="Full Name" required class="light" />
-      <label class="visually-hidden" for="bk-email">Email Address</label>
+      <input id="bk-name"  name="name"  placeholder="Full Name"        required class="light" />
       <input id="bk-email" name="email" placeholder="Email Address" type="email" required class="light" />
-      <label class="visually-hidden" for="bk-phone">Phone (10 digits)</label>
       <input id="bk-phone" name="phone" placeholder="Phone (10 digits)" maxlength="10" pattern="[0-9]{10}" class="light" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)" />
       <div class="bk-2col">
         <div><label class="field-label" for="bk-checkin">Check-in</label><input id="bk-checkin" name="checkin" type="date" required class="light" /></div>
         <div><label class="field-label" for="bk-checkout">Check-out</label><input id="bk-checkout" name="checkout" type="date" required class="light" /></div>
       </div>
       <select name="guests" class="light">
-        <option value="1">1 Guest</option>
-        <option value="2" selected>2 Guests</option>
-        <option value="3">3 Guests</option>
-        <option value="4">4 Guests</option>
-        <option value="5+">5+ Guests</option>
+        <option value="1">1 Guest</option><option value="2" selected>2 Guests</option>
+        <option value="3">3 Guests</option><option value="4">4 Guests</option><option value="5+">5+ Guests</option>
       </select>
       <textarea name="special" placeholder="Special requests (optional)" class="light" style="min-height:80px;"></textarea>
       <button type="submit" style="padding:0.9rem;background:var(--moss);color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:0.95rem;font-family:inherit;">Confirm Enquiry 🌿</button>
@@ -587,10 +727,49 @@
   </div>
 </div>
 
+<!-- ACCOMMODATION DETAILS MODAL -->
+<div class="acc-modal-overlay" id="acc-modal-overlay" onclick="closeAccDetails(event)">
+  <div class="acc-modal-box">
+    <div class="acc-modal-header">
+      <div>
+        <div class="acc-modal-icon" id="acc-modal-icon">🏡</div>
+        <div class="acc-modal-title" id="acc-modal-title">Resort Cottages</div>
+        <div class="acc-modal-type"  id="acc-modal-type">Resort</div>
+      </div>
+      <button class="acc-modal-close" onclick="closeAccDetails(null)" aria-label="Close"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="acc-modal-body" id="acc-modal-body"><!-- filled by JS --></div>
+    <div class="acc-modal-footer">
+      <button style="width:100%;padding:0.9rem;background:var(--moss);color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:0.95rem;font-family:inherit;" id="acc-modal-book-btn">📋 Book Inquiry</button>
+    </div>
+  </div>
+</div>
+
+<!-- BLOG POST MODAL -->
+<div class="blog-modal-overlay" id="blog-modal-overlay" onclick="closeBlogModal(event)">
+  <div class="blog-modal-box">
+    <button class="blog-modal-close" onclick="closeBlogModal(null)" aria-label="Close"><i class="fas fa-times"></i></button>
+    <div id="blog-modal-img-wrap"></div>
+    <div class="blog-modal-body">
+      <div class="blog-modal-meta" id="blog-modal-meta"></div>
+      <h2 class="blog-modal-title" id="blog-modal-title"></h2>
+      <div class="blog-modal-content" id="blog-modal-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW ALL REVIEWS MODAL -->
+<div class="rv-all-overlay" id="rv-all-overlay" onclick="closeAllReviews(event)">
+  <div class="rv-all-box">
+    <button class="rv-all-close" onclick="closeAllReviews(null)" aria-label="Close"><i class="fas fa-times"></i></button>
+    <h3>All Guest Reviews</h3>
+    <p class="rv-all-sub" id="rv-all-count">Loading…</p>
+    <div class="rv-all-grid" id="rv-all-grid"></div>
+  </div>
+</div>
+
 <!-- SCROLL TOP -->
-<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">
-  <i class="fas fa-chevron-up"></i>
-</button>
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top"><i class="fas fa-chevron-up"></i></button>
 
 <!-- TOAST -->
 <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toast-msg">Done!</span></div>
@@ -624,394 +803,600 @@
   </div>
   <div class="footer-bottom">
     <p>© 2024 StoneAgeHuts · Near Nainital, Kumaon Hills, Uttarakhand</p>
-    <p>Made with 🌿 for nature lovers</p>
+    <p class="footer-sub">Made with 🌿 for nature lovers</p>
   </div>
 </footer>
 
 <!-- ═══════════════════════════════════════════════════
-     FIREBASE SDK
+     FIREBASE MODULE
 ═══════════════════════════════════════════════════ -->
 <script type="module">
-import { initializeApp }               from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp, doc, onSnapshot }
-                                        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref, getDownloadURL, listAll }
-                                        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-import { getAnalytics, logEvent }       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+import { initializeApp }          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp, onSnapshot }
+                                   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, getDownloadURL }
+                                   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { getAnalytics, logEvent }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
 
-// ── CONFIG (replace with yours) ──────────────────────
 const firebaseConfig = {
-  apiKey: "AIzaSyDbSoPFLN2XXEO4f1jlEF2bfoRG1TZsEkY",
-  authDomain: "stoneagehuts-fecda.firebaseapp.com",
-  projectId: "stoneagehuts-fecda",
-  storageBucket: "stoneagehuts-fecda.appspot.com",
-  messagingSenderId: "512951842420",
-  appId: "1:512951842420:web:16fd229d1b79fdc0880321",
-  measurementId:     "G-RFSQE27S7B"
+  apiKey:"AIzaSyDbSoPFLN2XXEO4f1jlEF2bfoRG1TZsEkY",
+  authDomain:"stoneagehuts-fecda.firebaseapp.com",
+  projectId:"stoneagehuts-fecda",
+  storageBucket:"stoneagehuts-fecda.appspot.com",
+  messagingSenderId:"512951842420",
+  appId:"1:512951842420:web:16fd229d1b79fdc0880321",
+  measurementId:"G-RFSQE27S7B"
 };
-// ─────────────────────────────────────────────────────
-
-const app  = initializeApp(firebaseConfig);
-const db   = getFirestore(app);
-const stor = getStorage(app);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const stor=getStorage(app);
 let analytics;
-try { analytics = getAnalytics(app); } catch(e) {}
+try{analytics=getAnalytics(app);}catch(e){}
 
-// helper to safely set image src and refresh if needed
-function safeImage(el, url, storagePath) {
-  el.src = url;
-  el.onerror = async () => {
-    if(storagePath) {
-      try {
-        const fresh = await getDownloadURL(ref(stor, storagePath));
-        el.src = fresh;
-        return;
-      } catch(e) {
-        console.error('refresh failed', e);
-      }
-    }
-    el.onerror = null;
-    el.src = 'https://via.placeholder.com/400x300?text=Image+Unavailable';
+/* ─── helpers ─── */
+function safeImage(el,url,path){
+  el.src=url;
+  el.onerror=async()=>{
+    if(path){try{el.src=await getDownloadURL(ref(stor,path));return;}catch(e){}}
+    el.onerror=null;el.src='https://via.placeholder.com/400x300?text=Unavailable';
   };
 }
-
-// expose simplifed refresh function for inline event handlers
-window.refreshImg = async function(imgEl, path) {
-  if(!path) {
-    imgEl.onerror = null;
-    imgEl.src = 'https://via.placeholder.com/400x300?text=Image+Unavailable';
-    return;
-  }
-  try {
-    const newUrl = await getDownloadURL(ref(stor, path));
-    imgEl.src = newUrl;
-  } catch(e) {
-    imgEl.onerror = null;
-    imgEl.src = 'https://via.placeholder.com/400x300?text=Image+Unavailable';
-  }
+window.refreshImg=async function(imgEl,path){
+  if(!path){imgEl.onerror=null;imgEl.src='https://via.placeholder.com/400x300?text=Unavailable';return;}
+  try{imgEl.src=await getDownloadURL(ref(stor,path));}
+  catch(e){imgEl.onerror=null;imgEl.src='https://via.placeholder.com/400x300?text=Unavailable';}
 };
-
-// ── ANALYTICS HELPER ─────────────────────────────────
-function track(event, data = {}) {
-  try { if(analytics) logEvent(analytics, event, data); } catch(e) {}
-  // Also save to Firestore
-  addDoc(collection(db, 'analytics'), {
-    event, data,
-    page: window.location.pathname,
-    ts: serverTimestamp(),
-    ua: navigator.userAgent.slice(0,120),
-    ref: document.referrer || ''
-  }).catch(()=>{});
+function fmtDate(ts){
+  if(!ts)return'';
+  const d=ts.toDate?ts.toDate():new Date(ts);
+  return d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 }
 
-// Track page view
-track('page_view', { title: document.title });
-
-// Track all link/button clicks
-document.addEventListener('click', e => {
-  const el = e.target.closest('a,button');
-  if(!el) return;
-  const label = el.textContent.trim().slice(0,50) || el.getAttribute('aria-label') || el.id;
-  track('click', { label, tag: el.tagName, href: el.href || '' });
+/* ─── analytics ─── */
+function track(event,data={}){
+  try{if(analytics)logEvent(analytics,event,data);}catch(e){}
+  addDoc(collection(db,'analytics'),{event,data,page:location.pathname,ts:serverTimestamp(),ua:navigator.userAgent.slice(0,120),ref:document.referrer||''}).catch(()=>{});
+}
+window.track=track;
+track('page_view',{title:document.title});
+document.addEventListener('click',e=>{
+  const el=e.target.closest('a,button');
+  if(!el)return;
+  const label=el.textContent.trim().slice(0,50)||el.getAttribute('aria-label')||el.id;
+  track('click',{label,tag:el.tagName,href:el.href||''});
 });
+const ioObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)track('section_view',{section:e.target.id});}),{threshold:0.3});
+document.querySelectorAll('section[id]').forEach(s=>ioObs.observe(s));
 
-// Track section visibility
-const io = new IntersectionObserver(entries => {
-  entries.forEach(en => { if(en.isIntersecting) track('section_view', { section: en.target.id }); });
-}, { threshold: 0.3 });
-document.querySelectorAll('section[id]').forEach(s => io.observe(s));
+/* ══════════════════════════════════════════════════════
+   HERO CAROUSEL
+══════════════════════════════════════════════════════ */
+const FALLBACKS=[{emoji:'🌿',bg:'s0'},{emoji:'🦜',bg:'s1'},{emoji:'🏕️',bg:'s2'},{emoji:'🌄',bg:'s3'},{emoji:'🔥',bg:'s4'}];
 
-// ── HERO IMAGE ───────────────────────────────────────
-async function loadHeroImage() {
-  try {
-    const snap = await getDocs(query(collection(db,'settings'), where('key','==','hero_image')));
-    if(!snap.empty) {
-      const data = snap.docs[0].data();
-      const url = data.value;
-      const path = data.storagePath || '';
-      if(url) {
-        const img = document.getElementById('hero-bg-img');
-        img.style.display = 'block';
-        safeImage(img, url, path);
-      }
+async function loadHeroImages(){
+  let images=[];
+  try{
+    const snap=await getDocs(query(collection(db,'hero_images'),orderBy('order','asc')));
+    if(!snap.empty)images=snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!images.length){
+      const snap2=await getDocs(query(collection(db,'settings'),where('key','==','hero_image')));
+      if(!snap2.empty){const d=snap2.docs[0].data();if(d.value)images=[{url:d.value,storagePath:d.storagePath||'',title:'Hero',order:0}];}
     }
-  } catch(e) {}
+  }catch(e){}
+  buildCarousel(images.length?images:null);
 }
-loadHeroImage();
+function buildCarousel(images){
+  const track=document.getElementById('hero-carousel');
+  const dotsEl=document.getElementById('hero-dots');
+  const thumbsEl=document.getElementById('hero-thumbs');
+  const n=images?images.length:FALLBACKS.length;
+  track.innerHTML='';
+  for(let i=0;i<n;i++){
+    const slide=document.createElement('div');
+    slide.className='hero-slide'+(i===0?' active':'');
+    if(images){
+      const img=document.createElement('img');
+      img.className='hero-slide-img';img.alt=images[i].title||'Hero';img.loading=i===0?'eager':'lazy';
+      safeImage(img,images[i].url,images[i].storagePath||'');slide.appendChild(img);
+    }else{
+      const fb=document.createElement('div');
+      fb.className=`hero-slide-fallback ${FALLBACKS[i].bg}`;fb.textContent=FALLBACKS[i].emoji;slide.appendChild(fb);
+    }
+    track.appendChild(slide);
+  }
+  dotsEl.innerHTML='';
+  for(let i=0;i<n;i++){
+    const d=document.createElement('button');d.className='hero-dot'+(i===0?' active':'');
+    d.setAttribute('aria-label',`Slide ${i+1}`);d.addEventListener('click',()=>goToSlide(i));dotsEl.appendChild(d);
+  }
+  thumbsEl.innerHTML='';
+  for(let i=0;i<n;i++){
+    const th=document.createElement('div');th.className='hero-thumb'+(i===0?' active':'');
+    th.setAttribute('role','button');th.setAttribute('aria-label',`View slide ${i+1}`);
+    if(images){const img=document.createElement('img');img.alt='';img.loading='lazy';safeImage(img,images[i].url,images[i].storagePath||'');th.appendChild(img);}
+    else{const fb=document.createElement('div');fb.className='hero-thumb-fallback';fb.style.background=['#1a1208','#0d1a0b','#1c1208','#0a1510','#180e04'][i];fb.textContent=FALLBACKS[i].emoji;th.appendChild(fb);}
+    th.addEventListener('click',()=>goToSlide(i));thumbsEl.appendChild(th);
+  }
+  window._heroCount=n;window._heroIdx=0;syncCarousel();startAutoplay();initHeroDrag();
+}
+function goToSlide(idx){const n=window._heroCount||1;window._heroIdx=((idx%n)+n)%n;syncCarousel();resetAutoplay();}
+function syncCarousel(){
+  const track=document.getElementById('hero-carousel');
+  const slides=track.querySelectorAll('.hero-slide');
+  const dots=document.querySelectorAll('.hero-dot');
+  const thumbs=document.querySelectorAll('.hero-thumb');
+  const i=window._heroIdx||0;
+  track.style.transform=`translateX(-${i*100}%)`;
+  slides.forEach((s,j)=>s.classList.toggle('active',j===i));
+  dots.forEach((d,j)=>d.classList.toggle('active',j===i));
+  thumbs.forEach((t,j)=>t.classList.toggle('active',j===i));
+}
+window.heroSlide=function(dir){goToSlide((window._heroIdx||0)+dir);};
+let _ait;
+function startAutoplay(){_ait=setInterval(()=>{if(!document.hidden)goToSlide((window._heroIdx||0)+1);},5000);}
+function resetAutoplay(){clearInterval(_ait);startAutoplay();}
+function initHeroDrag(){
+  const track=document.getElementById('hero-carousel');
+  let sx=0,drag=false,mv=0;
+  track.addEventListener('mousedown',e=>{sx=e.clientX;drag=true;mv=0;});
+  track.addEventListener('mousemove',e=>{if(drag)mv=e.clientX-sx;});
+  track.addEventListener('mouseup',()=>{if(drag&&Math.abs(mv)>50)heroSlide(mv<0?1:-1);drag=false;});
+  track.addEventListener('mouseleave',()=>{drag=false;});
+  track.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;mv=0;},{passive:true});
+  track.addEventListener('touchmove',e=>{mv=e.touches[0].clientX-sx;},{passive:true});
+  track.addEventListener('touchend',()=>{if(Math.abs(mv)>50)heroSlide(mv<0?1:-1);});
+}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')heroSlide(-1);if(e.key==='ArrowRight')heroSlide(1);});
+loadHeroImages();
 
-// ── CONTACT INFO ─────────────────────────────────────
-async function loadContactInfo() {
-  try {
-    const snap = await getDocs(collection(db,'contact_info'));
-    if(snap.empty) return;
-    const d = snap.docs[0].data();
-    if(d.phone)    document.getElementById('ci-phone').textContent    = d.phone;
-    if(d.email)    document.getElementById('ci-email').textContent    = d.email;
-    if(d.address)  document.getElementById('ci-address').textContent  = d.address;
-    if(d.checkin)  document.getElementById('ci-checkin').textContent  = d.checkin;
-    if(d.instagram) document.getElementById('soc-instagram').href     = d.instagram;
-    if(d.facebook)  document.getElementById('soc-facebook').href      = d.facebook;
-    if(d.twitter)   document.getElementById('soc-twitter').href       = d.twitter;
-    if(d.tripadvisor) document.getElementById('soc-tripadvisor').href = d.tripadvisor;
-    if(d.youtube)   document.getElementById('soc-youtube').href       = d.youtube;
-  } catch(e) {}
+/* ══════════════════════════════════════════════════════
+   STATS — admin-controlled via 'stats' collection
+   Each doc: { label, value, icon, isActive, order }
+══════════════════════════════════════════════════════ */
+async function loadStats(){
+  try{
+    const snap=await getDocs(query(collection(db,'stats'),orderBy('order','asc')));
+    if(snap.empty)return; // keep defaults
+    const active=snap.docs.map(d=>d.data()).filter(d=>d.isActive!==false);
+    if(!active.length)return;
+    document.getElementById('stats-grid').innerHTML=active.map(s=>`
+      <div class="stat-item">
+        <div class="stat-num">${s.value||''}</div>
+        <div class="stat-label">${s.icon||''}${s.label||''}</div>
+      </div>`).join('');
+  }catch(e){}
+}
+loadStats();
+
+/* ══════════════════════════════════════════════════════
+   CONTACT INFO
+══════════════════════════════════════════════════════ */
+async function loadContactInfo(){
+  try{
+    const snap=await getDocs(collection(db,'contact_info'));
+    if(snap.empty)return;
+    const d=snap.docs[0].data();
+    if(d.phone){document.getElementById('ci-phone').textContent=d.phone;const m=document.getElementById('map-phone');if(m)m.textContent=d.phone;}
+    if(d.email){document.getElementById('ci-email').textContent=d.email;const m=document.getElementById('map-email');if(m)m.textContent=d.email;}
+    if(d.address)document.getElementById('ci-address').textContent=d.address;
+    if(d.checkin) document.getElementById('ci-checkin').textContent=d.checkin;
+    if(d.instagram)document.getElementById('soc-instagram').href=d.instagram;
+    if(d.facebook) document.getElementById('soc-facebook').href=d.facebook;
+    if(d.twitter)  document.getElementById('soc-twitter').href=d.twitter;
+    if(d.tripadvisor)document.getElementById('soc-tripadvisor').href=d.tripadvisor;
+    if(d.youtube)  document.getElementById('soc-youtube').href=d.youtube;
+  }catch(e){}
 }
 loadContactInfo();
 
-// ── GALLERY ──────────────────────────────────────────
-let allGalleryItems = [];
+/* ══════════════════════════════════════════════════════
+   ACCOMMODATIONS — Firebase-driven with View Details
+   Collection 'accommodations':
+   { title, type(resort|hotel|birdwatching), icon, desc,
+     features[], details{}, isActive, order }
+══════════════════════════════════════════════════════ */
 
-async function loadGallery() {
-  const grid = document.getElementById('gallery-grid');
-  try {
-    const snap = await getDocs(query(collection(db,'gallery'), orderBy('order','asc')));
-    allGalleryItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+// Static detail templates per type (used as fallback if no Firebase data)
+const ACC_TEMPLATES={
+  resort:{
+    typeLabel:'Resort',
+    sections:[
+      {title:'Room Types',chips:['Deluxe Cottage','Premium Suite','Garden Room','Honeymoon Cabin']},
+      {title:'Amenities',chips:['🏊 Swimming Pool','🧖 Spa & Wellness','🍽️ Multi-cuisine Dining','🔥 Fireplace','📶 WiFi','🅿️ Free Parking']},
+      {title:'Dining',chips:['Buffet Breakfast','Candlelit Dinners','BBQ Nights','In-room Service']},
+      {title:'Highlights',table:[['Check-in','12:00 PM'],['Check-out','11:00 AM'],['Max Guests','4 per cottage'],['Pet Policy','Not allowed']]}
+    ]
+  },
+  hotel:{
+    typeLabel:'Hostel / Hotel',
+    sections:[
+      {title:'Room Categories',chips:['Mixed Dorm (6-bed)','Female Dorm (4-bed)','Private Twin','Private Double']},
+      {title:'Services',chips:['🔒 Secure Lockers','☕ Common Room','🍳 Shared Kitchen','🛁 Shared Baths','📶 Free WiFi','🧺 Laundry']},
+      {title:'Highlights',table:[['Check-in','2:00 PM'],['Check-out','11:00 AM'],['Curfew','None'],['Kitchen Access','24/7']]}
+    ]
+  },
+  birdwatching:{
+    typeLabel:'Bird Watching Retreat',
+    sections:[
+      {title:'Best Seasons',chips:['🌸 Feb–Apr (Spring)','❄️ Oct–Dec (Winter)','🌧️ Jul–Sep (Monsoon)']},
+      {title:'Notable Species',chips:['Himalayan Monal','Kalij Pheasant','Rufous Sibia','White-capped Water Redstart','Oriental Turtle Dove','Bar-tailed Treecreeper','Great Barbet','Verditer Flycatcher']},
+      {title:'Equipment Needed',chips:['Binoculars','Field Guide','Silent footwear','Warm layers','Camera with zoom']},
+      {title:'Guided Tours',table:[['Morning Tour','5:30 AM – 8:00 AM'],['Evening Tour','4:30 PM – 6:30 PM'],['Full Day','By arrangement'],['Group Size','Max 6 persons'],['Tour Cost','Included in stay']]}
+    ]
+  }
+};
+
+function buildAccDetailsHTML(template,data){
+  let html='';
+  const sections=data?.sections||template.sections;
+  for(const sec of sections){
+    html+=`<div class="acc-detail-section"><h5>${sec.title}</h5>`;
+    if(sec.chips){html+=`<div class="acc-detail-list">${sec.chips.map(c=>`<span class="chip">${c}</span>`).join('')}</div>`;}
+    if(sec.table){html+=`<table class="acc-detail-table">${sec.table.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table>`;}
+    html+='</div>';
+  }
+  return html;
+}
+
+// Cache Firebase accommodation data
+let _accCache={};
+async function fetchAccData(type){
+  if(_accCache[type])return _accCache[type];
+  try{
+    const snap=await getDocs(query(collection(db,'accommodations'),where('type','==',type)));
+    if(!snap.empty){_accCache[type]=snap.docs[0].data();return _accCache[type];}
+  }catch(e){}
+  return null;
+}
+
+window.openAccDetails=async function(type,title,icon){
+  document.getElementById('acc-modal-icon').textContent=icon;
+  document.getElementById('acc-modal-title').textContent=title;
+  const template=ACC_TEMPLATES[type]||ACC_TEMPLATES.resort;
+  document.getElementById('acc-modal-type').textContent=template.typeLabel;
+  document.getElementById('acc-modal-body').innerHTML='<div class="loading-section"><div class="spinner"></div></div>';
+  document.getElementById('acc-modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  // Attach booking button
+  document.getElementById('acc-modal-book-btn').onclick=()=>{closeAccDetails(null);openBooking(title);};
+  // Fetch Firebase data
+  const fbData=await fetchAccData(type);
+  const desc=fbData?.desc||fbData?.description||'';
+  let html='';
+  if(desc)html+=`<p class="acc-modal-desc">${desc}</p>`;
+  html+=buildAccDetailsHTML(template,fbData);
+  document.getElementById('acc-modal-body').innerHTML=html;
+  track('acc_details_open',{type,title});
+};
+window.closeAccDetails=function(e){
+  if(!e||e.target===document.getElementById('acc-modal-overlay')){
+    document.getElementById('acc-modal-overlay').classList.remove('open');
+    document.body.style.overflow='';
+  }
+};
+
+/* ══════════════════════════════════════════════════════
+   GALLERY — isActive filter, admin-controlled categories
+══════════════════════════════════════════════════════ */
+let allGalleryItems=[];
+async function loadGallery(){
+  const grid=document.getElementById('gallery-grid');
+  try{
+    // Only fetch active images (isActive !== false)
+    const snap=await getDocs(query(collection(db,'gallery'),orderBy('order','asc')));
+    allGalleryItems=snap.docs.map(d=>({id:d.id,...d.data()})).filter(i=>i.isActive!==false);
     renderGallery('all');
-  } catch(e) {
-    grid.innerHTML = '<div class="gallery-empty" style="grid-column:1/-1"><i class="fas fa-images" style="font-size:2rem;opacity:0.3;display:block;margin-bottom:0.5rem;"></i>Gallery images will appear here once added from the admin panel.</div>';
+  }catch(e){
+    grid.innerHTML='<div class="gallery-empty" style="grid-column:1/-1"><i class="fas fa-images" style="font-size:2rem;opacity:0.3;display:block;margin-bottom:0.5rem;"></i>Gallery images will appear here once added from the admin panel.</div>';
   }
 }
-
-function renderGallery(cat) {
-  const grid = document.getElementById('gallery-grid');
-  const items = cat === 'all' ? allGalleryItems : allGalleryItems.filter(i => i.category === cat);
-  if(!items.length) {
-    grid.innerHTML = '<div class="gallery-empty" style="grid-column:1/-1">No images in this category yet.</div>';
-    return;
-  }
-  grid.innerHTML = items.map(item => `
-    <div class="gallery-item" data-cat="${item.category}" onclick="openGalleryModal('${item.url}','${(item.title||'').replace(/'/g,"\\'")}','${item.storagePath||''}')">
-      <img src="${item.url}" alt="${item.title||''}" loading="lazy" onerror="refreshImg(this,'${item.storagePath||''}')" />
-    </div>
-  `).join('');
+function renderGallery(cat){
+  const grid=document.getElementById('gallery-grid');
+  const items=cat==='all'?allGalleryItems:allGalleryItems.filter(i=>i.category===cat);
+  if(!items.length){grid.innerHTML='<div class="gallery-empty" style="grid-column:1/-1">No images in this category yet.</div>';return;}
+  grid.innerHTML=items.map(item=>`
+    <div class="gallery-item" data-cat="${item.category||''}" onclick="openGalleryModal('${item.url||item.imageUrl}','${(item.title||'').replace(/'/g,"\\'")}','${item.storagePath||''}')">
+      <img src="${item.url||item.imageUrl}" alt="${item.title||''}" loading="lazy" onerror="refreshImg(this,'${item.storagePath||''}')" />
+    </div>`).join('');
 }
-
-window.filterGallery = function(cat, btn) {
-  document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
+window.filterGallery=function(cat,btn){
+  document.querySelectorAll('.filter').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
   renderGallery(cat);
-  track('gallery_filter', { category: cat });
+  track('gallery_filter',{category:cat});
 };
-
-window.openGalleryModal = function(url, title, storagePath='') {
-  const img = document.getElementById('modal-img');
-  safeImage(img, url, storagePath);
-  img.alt = title;
+window.openGalleryModal=function(url,title,sp=''){
+  const img=document.getElementById('modal-img');
+  safeImage(img,url,sp);img.alt=title;
   document.getElementById('gallery-modal').classList.add('open');
-  track('gallery_image_view', { image: title });
+  track('gallery_image_view',{image:title});
 };
-window.closeGalleryModal = function(e) {
-  if(!e || e.target === document.getElementById('gallery-modal') || e.type === 'click')
+window.closeGalleryModal=function(e){
+  if(!e||e.target===document.getElementById('gallery-modal')||e.type==='click')
     document.getElementById('gallery-modal').classList.remove('open');
 };
-
 loadGallery();
 
-// ── BLOG POSTS ───────────────────────────────────────
-async function loadPosts() {
-  const grid = document.getElementById('posts-grid');
-  try {
-    const snap = await getDocs(query(collection(db,'posts'), where('published','==',true), orderBy('date','desc')));
-    if(snap.empty) { renderDefaultPosts(); return; }
-    const posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    grid.innerHTML = posts.map(p => `
-      <div class="post-card" onclick="track('blog_click',{title:'${(p.title||'').replace(/'/g,"\\'")}'})" style="cursor:pointer;">
-        <div class="post-thumb">
-          ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.title||''}" loading="lazy" onerror="refreshImg(this,'${p.storagePath||''}')" />` : `<div class="post-emoji">${p.emoji||'📝'}</div>`}
-        </div>
-        <div class="post-body">
-          <div class="post-meta">
-            <span>${p.date ? (p.date.toDate ? p.date.toDate().toLocaleDateString('en-IN',{month:'short',year:'numeric'}) : p.date) : ''}</span>
-            <span class="post-category">${p.category||'Blog'}</span>
-          </div>
-          <h4 class="post-title">${p.title||''}</h4>
-          <p class="post-excerpt">${p.excerpt||''}</p>
-        </div>
-      </div>
-    `).join('');
-  } catch(e) { renderDefaultPosts(); }
+/* ══════════════════════════════════════════════════════
+   BLOG — clickable, opens full content modal
+   Collection 'blog' (or 'posts'):
+   { title, summary/excerpt, content, image/imageUrl,
+     emoji, date, category, isActive/published }
+══════════════════════════════════════════════════════ */
+const DEFAULT_POSTS=[
+  {emoji:'🦜',title:'Top 10 Birds to Spot in Kumaon This Winter',date:'Nov 2024',category:'Bird Watching',excerpt:"Winter is prime time for birding in Kumaon. From the elusive Himalayan Monal to Siberian migrants.",content:"<p>Winter in Kumaon transforms the forests into a birder's paradise. As temperatures drop, migratory species flood in from Central Asia and the Himalayas, joining the resident mountain birds.</p><p><strong>Top species to look for:</strong></p><p>1. <em>Himalayan Monal</em> — the jewel of the pheasants, iridescent in morning sun<br>2. <em>Siberian Rubythroat</em> — a tiny winter visitor with a gem-like throat<br>3. <em>Verditer Flycatcher</em> — vivid turquoise, impossible to miss<br>4. <em>White-capped Water Redstart</em> — along every stream<br>5. <em>Rufous Sibia</em> — melodic, secretive in the canopy<br>6. <em>Bar-tailed Treecreeper</em> — spirals up oak trunks<br>7. <em>Great Barbet</em> — the loudest bird in the jungle<br>8. <em>Kalij Pheasant</em> — scratching in leaf litter at dawn<br>9. <em>Oriental Turtle Dove</em> — soft purring in the pines<br>10. <em>Black-throated Tit</em> — in mixed flocks with warblers</p><p>Our guided morning tours start at 5:30 AM when activity is highest. Bring binoculars, dress in muted colours, and move slowly — the birds reward patience.</p>"},
+  {emoji:'🥾',title:"Beginner's Guide to Trekking Near Nainital",date:'Oct 2024',category:'Trekking',excerpt:'New to trekking? We break down the 5 best beginner routes with tips on gear, timing, and what to pack.',content:"<p>The Kumaon hills offer some of India's most accessible yet rewarding trekking, with routes suitable for first-timers and families alike.</p><p><strong>Top 5 Beginner Routes from StoneAgeHuts:</strong></p><p><em>1. Nainital–Kilbury Forest Trail (3 km)</em><br>A gentle forested walk with panoramic views. Best in early morning for birding en route.</p><p><em>2. Ramgarh Orchards Loop (5 km)</em><br>Through apple and peach orchards, magical during blossom season (March–April).</p><p><em>3. Pangot Forest Circuit (4 km)</em><br>Dense oak-rhododendron forest, excellent for wildlife. Keep eyes open for leopard pugmarks.</p><p><em>4. Sat Tal Lake Trail (6 km)</em><br>Connects seven lakes through mixed woodland. Bring a picnic lunch.</p><p><em>5. Khurpatal Ridge Walk (4 km)</em><br>360° Himalayan views on a clear day. Best October–December.</p><p><strong>What to pack:</strong> Sturdy shoes, at least 1.5L water, light snack, sunscreen, and a light jacket even in summer. Our guides carry first-aid and carry emergency contacts.</p>"},
+  {emoji:'🌿',title:'Why Slow Travel in the Hills is the Best Travel',date:'Sep 2024',category:'Travel Tips',excerpt:"Stop rushing. Here's why spending a week in one mountain village will change how you travel forever.",content:"<p>We live in an age of travel lists — 10 cities in 10 days, passport stamps collected like trophies. But the hills have taught us a different rhythm.</p><p>When you stay in one place for five days or more, something shifts. You begin to notice the way the fog moves through the valley at 7 AM, different every morning. You recognise the call of the bird outside your window. The woman at the chai stall learns how you take your tea.</p><p><strong>What slow travel gives you:</strong></p><p>• Genuine rest — not the exhaustion of constant movement<br>• Real connection — with locals, with landscape, with yourself<br>• Serendipity — unexpected conversations, unplanned walks, moments that don't fit on an itinerary<br>• Permission to do nothing — which, in the hills, means sitting on a rock watching clouds</p><p>Our most satisfied guests are almost always those who book for four nights or more. They leave with a mental image of a specific tree, a specific sunset, a specific cup of coffee on a certain morning. Not a blur of highlights.</p><p>The hills will still be here. Come slowly.</p>"},
+];
+
+let _blogPosts=[];
+
+async function loadPosts(){
+  const grid=document.getElementById('posts-grid');
+  try{
+    // Try 'blog' collection first, fall back to 'posts'
+    let snap=await getDocs(query(collection(db,'blog'),where('isActive','==',true),orderBy('date','desc')));
+    if(snap.empty)snap=await getDocs(query(collection(db,'posts'),where('published','==',true),orderBy('date','desc')));
+    if(snap.empty){_blogPosts=DEFAULT_POSTS;renderPosts();return;}
+    _blogPosts=snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderPosts();
+  }catch(e){_blogPosts=DEFAULT_POSTS;renderPosts();}
 }
 
-function renderDefaultPosts() {
-  const defaults = [
-    { emoji:'🦜', title:'Top 10 Birds to Spot in Kumaon This Winter', date:'Nov 2024', category:'Bird Watching', excerpt:"Winter is prime time for birding in Kumaon. From the elusive Himalayan Monal to Siberian migrants — here's what to look for." },
-    { emoji:'🥾', title:"Beginner's Guide to Trekking Near Nainital", date:'Oct 2024', category:'Trekking', excerpt:'New to trekking? We break down the 5 best beginner routes with tips on gear, timing, and what to pack.' },
-    { emoji:'🌿', title:'Why Slow Travel in the Hills is the Best Travel', date:'Sep 2024', category:'Travel Tips', excerpt:"Stop rushing from one place to the next. Here's why spending a week in one mountain village will change how you travel forever." },
-  ];
-  document.getElementById('posts-grid').innerHTML = defaults.map(p => `
-    <div class="post-card">
-      <div class="post-thumb"><div class="post-emoji">${p.emoji}</div></div>
+function renderPosts(){
+  const grid=document.getElementById('posts-grid');
+  if(!_blogPosts.length){grid.innerHTML='<p style="color:var(--text-muted);text-align:center;">No posts yet.</p>';return;}
+  grid.innerHTML=_blogPosts.map((p,i)=>`
+    <div class="post-card" onclick="openBlogModal(${i})" role="button" tabindex="0" aria-label="Read post: ${(p.title||'').replace(/"/g,'&quot;')}">
+      <div class="post-thumb">
+        ${p.imageUrl||p.image?`<img src="${p.imageUrl||p.image}" alt="${p.title||''}" loading="lazy" onerror="refreshImg(this,'${p.storagePath||''}')" />`:`<div class="post-emoji">${p.emoji||'📝'}</div>`}
+      </div>
       <div class="post-body">
-        <div class="post-meta"><span>${p.date}</span><span class="post-category">${p.category}</span></div>
-        <h4 class="post-title">${p.title}</h4>
-        <p class="post-excerpt">${p.excerpt}</p>
+        <div class="post-meta">
+          <span>${p.date?(p.date.toDate?fmtDate(p.date):p.date):''}</span>
+          <span class="post-category">${p.category||'Blog'}</span>
+        </div>
+        <h4 class="post-title">${p.title||''}</h4>
+        <p class="post-excerpt">${p.summary||p.excerpt||''}</p>
+        <span class="post-read-more">Read More <i class="fas fa-arrow-right" style="font-size:0.7rem;"></i></span>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
+  // keyboard accessibility
+  document.querySelectorAll('.post-card').forEach((card,i)=>{
+    card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openBlogModal(i);}});
+  });
 }
 
+window.openBlogModal=function(idx){
+  const p=_blogPosts[idx];
+  if(!p)return;
+  // Image or fallback
+  const imgWrap=document.getElementById('blog-modal-img-wrap');
+  if(p.imageUrl||p.image){
+    imgWrap.innerHTML=`<img class="blog-modal-img" src="${p.imageUrl||p.image}" alt="${p.title||''}" onerror="this.style.display='none'" />`;
+  }else{
+    imgWrap.innerHTML=`<div class="blog-modal-img-fallback">${p.emoji||'📝'}</div>`;
+  }
+  // Meta
+  const date=p.date?(p.date.toDate?fmtDate(p.date):p.date):'';
+  document.getElementById('blog-modal-meta').innerHTML=`
+    ${date?`<span style="font-size:0.78rem;color:var(--text-muted);">${date}</span>`:''}
+    <span class="post-category">${p.category||'Blog'}</span>`;
+  document.getElementById('blog-modal-title').textContent=p.title||'';
+  // Content: use 'content' field, or wrap excerpt in <p>
+  const content=p.content||(p.summary||p.excerpt||'');
+  document.getElementById('blog-modal-content').innerHTML=content.startsWith('<')?content:`<p>${content}</p>`;
+  document.getElementById('blog-modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  track('blog_open',{title:p.title||''});
+};
+window.closeBlogModal=function(e){
+  if(!e||e.target===document.getElementById('blog-modal-overlay')){
+    document.getElementById('blog-modal-overlay').classList.remove('open');
+    document.body.style.overflow='';
+  }
+};
 loadPosts();
 
-// ── REVIEWS ──────────────────────────────────────────
-function loadReviews() {
-  const grid = document.getElementById('reviews-grid');
-  try {
-    const q = query(collection(db, 'reviews'),
-                    where('status', '==', 'approved'),
-                    orderBy('createdAt', 'desc'));
-    onSnapshot(q, snap => {
-      if (snap.empty) {
-        grid.innerHTML = '<div class="reviews-empty">🌿 No reviews yet. Be the first to share!</div>';
-        return;
-      }
-      grid.innerHTML = snap.docs.map(d => {
-        const r = d.data();
-        const date = r.createdAt?.toDate?.()
-                      ?.toLocaleDateString('en-IN',
-                        {month: 'short', year: 'numeric'}) || 'Recently';
-        return `<div class="review-card">
-          <div class="rv-header"><span class="rv-name">${r.name}</span>
-            <span class="rv-date">${date}</span></div>
-          <div class="rv-stars">${'⭐'.repeat(r.rating)}</div>
-          <p class="rv-text">"${r.text}"</p>
-        </div>`;
-      }).join('');
-    }, err => {
-      console.error('reviews snapshot error', err);
-      grid.innerHTML = '<div class="reviews-empty">Could not load reviews. Please refresh.</div>';
-    });
-  } catch (e) {
-    console.error('loadReviews caught', e);
-    grid.innerHTML = '<div class="reviews-empty">Could not load reviews. Please refresh.</div>';
-  }
+/* ══════════════════════════════════════════════════════
+   REVIEWS — form gated behind button, star rating input
+══════════════════════════════════════════════════════ */
+let _allReviews=[];
+
+function rvCardHTML(r){
+  const date=r.createdAt?.toDate?.()?.toLocaleDateString('en-IN',{month:'short',year:'numeric'})||'Recently';
+  return`<div class="review-card">
+    <div class="rv-header"><span class="rv-name">${r.name}</span><span class="rv-date">${date}</span></div>
+    <div class="rv-stars">${'⭐'.repeat(Math.min(r.rating||0,5))}</div>
+    <p class="rv-text">"${r.text}"</p>
+  </div>`;
+}
+
+function loadReviews(){
+  const grid=document.getElementById('reviews-grid');
+  try{
+    const q=query(collection(db,'reviews'),where('status','==','approved'),orderBy('createdAt','desc'));
+    onSnapshot(q,snap=>{
+      _allReviews=snap.docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.isActive!==false);
+      const n=_allReviews.length;
+      document.getElementById('review-count-label').textContent=n?`${n} Guest Review${n!==1?'s':''}`:'Recent Reviews';
+      grid.innerHTML=n?_allReviews.map(r=>rvCardHTML(r)).join(''):'<div class="reviews-empty">🌿 No reviews yet. Be the first to share!</div>';
+      if(n)initReviewDrag();
+      if(document.getElementById('rv-all-overlay').classList.contains('open'))renderAllReviewsModal();
+    },err=>{console.error(err);grid.innerHTML='<div class="reviews-empty">Could not load reviews.</div>';});
+  }catch(e){document.getElementById('reviews-grid').innerHTML='<div class="reviews-empty">Could not load reviews.</div>';}
 }
 loadReviews();
 
-window.submitReview = async function(e) {
+function initReviewDrag(){
+  const el=document.getElementById('reviews-grid');
+  let down=false,sx=0,sl=0;
+  el.addEventListener('mousedown',e=>{down=true;sx=e.pageX-el.offsetLeft;sl=el.scrollLeft;el.style.cursor='grabbing';});
+  el.addEventListener('mouseleave',()=>{down=false;el.style.cursor='grab';});
+  el.addEventListener('mouseup',()=>{down=false;el.style.cursor='grab';});
+  el.addEventListener('mousemove',e=>{if(!down)return;e.preventDefault();el.scrollLeft=sl-(e.pageX-el.offsetLeft-sx)*1.2;});
+}
+window.scrollReviews=function(dir){document.getElementById('reviews-grid').scrollBy({left:dir*300,behavior:'smooth'});};
+function renderAllReviewsModal(){
+  const n=_allReviews.length;
+  document.getElementById('rv-all-count').textContent=`${n} approved review${n!==1?'s':''}`;
+  document.getElementById('rv-all-grid').innerHTML=n?_allReviews.map(r=>rvCardHTML(r)).join(''):'<div class="reviews-empty" style="color:rgba(255,255,255,0.4);grid-column:1/-1">No reviews yet.</div>';
+}
+window.openAllReviews=function(){
+  renderAllReviewsModal();
+  document.getElementById('rv-all-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  track('view_all_reviews');
+};
+window.closeAllReviews=function(e){
+  if(!e||e.target===document.getElementById('rv-all-overlay')){
+    document.getElementById('rv-all-overlay').classList.remove('open');
+    document.body.style.overflow='';
+  }
+};
+window.submitReview=async function(e){
   e.preventDefault();
-  const form = e.target;
-  const name = form.name.value.trim();
-  const rating = parseInt(form.rating.value);
-  const text = form.text.value.trim();
-  if(!name || !text) return;
-  try {
-    await addDoc(collection(db,'reviews'), { name, rating, text, status: 'pending', createdAt: serverTimestamp() });
-    form.reset();
+  const f=e.target;
+  const name=f.name.value.trim();
+  // Get star rating value
+  const ratingEl=document.querySelector('input[name="rating"]:checked');
+  const rating=ratingEl?parseInt(ratingEl.value):5;
+  const text=f.text.value.trim();
+  if(!name||!text)return;
+  try{
+    await addDoc(collection(db,'reviews'),{name,rating,text,status:'pending',createdAt:serverTimestamp()});
+    f.reset();
+    // reset star selection
+    document.querySelectorAll('.star-rating label').forEach(l=>l.classList.remove('selected'));
     showToast('🌟 Thank you! Your review is pending approval.');
-    track('review_submitted', { rating });
-  } catch(err) { showToast('❌ Could not submit. Please try again.'); }
+    toggleReviewForm();
+    track('review_submitted',{rating});
+  }catch(err){showToast('❌ Could not submit. Please try again.');}
 };
 
-// ── CONTACT FORM ─────────────────────────────────────
-window.submitContact = async function(e) {
-  e.preventDefault();
-  const form = e.target;
-  const name    = form.name.value.trim();
-  const email   = form.email.value.trim();
-  const phone   = form.phone.value.trim();
-  const message = form.message.value.trim();
-  try {
-    await addDoc(collection(db,'enquiries'), { name, email, phone, message, status: 'new', createdAt: serverTimestamp() });
-    form.reset();
-    showToast('📩 Message sent! We\'ll get back to you soon.');
-    track('contact_submitted');
-  } catch(err) { showToast('❌ Could not send message. Please try again.'); }
-};
-
-// ── BOOKING ──────────────────────────────────────────
-window.openBooking = function(room) {
-  document.getElementById('bk-room-name').textContent = room;
-  document.getElementById('booking-modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  track('booking_modal_open', { room });
-};
-window.closeBooking = function() {
-  document.getElementById('booking-modal').classList.remove('open');
-  document.body.style.overflow = '';
-};
-document.getElementById('booking-modal').addEventListener('click', e => {
-  if(e.target === document.getElementById('booking-modal')) window.closeBooking();
-});
-window.submitBooking = async function(e) {
-  e.preventDefault();
-  const form = e.target;
-  try {
-    await addDoc(collection(db,'bookings'), {
-      room:    document.getElementById('bk-room-name').textContent,
-      name:    form.name.value.trim(),
-      email:   form.email.value.trim(),
-      phone:   form.phone.value.trim(),
-      checkin: form.checkin.value,
-      checkout:form.checkout.value,
-      guests:  form.guests.value,
-      special: form.special.value.trim(),
-      status:  'pending',
-      createdAt: serverTimestamp()
+/* ── Star rating visual feedback ── */
+document.querySelectorAll('.star-rating label').forEach(label=>{
+  label.addEventListener('mouseover',()=>{
+    const val=parseInt(label.getAttribute('for').replace('s',''));
+    document.querySelectorAll('.star-rating label').forEach(l=>{
+      l.classList.toggle('selected',parseInt(l.getAttribute('for').replace('s',''))>=val);
     });
-    window.closeBooking();
-    showToast('✅ Booking enquiry sent! We\'ll contact you within 24 hours.');
-    track('booking_submitted', { room: document.getElementById('bk-room-name').textContent });
-  } catch(err) { showToast('❌ Could not submit. Please try again.'); }
-};
+  });
+  label.addEventListener('mouseout',()=>{
+    const checked=document.querySelector('.star-rating input:checked');
+    const val=checked?parseInt(checked.value):0;
+    document.querySelectorAll('.star-rating label').forEach(l=>{
+      l.classList.toggle('selected',parseInt(l.getAttribute('for').replace('s',''))>=val);
+    });
+  });
+});
+document.querySelectorAll('.star-rating input').forEach(inp=>{
+  inp.addEventListener('change',()=>{
+    const val=parseInt(inp.value);
+    document.querySelectorAll('.star-rating label').forEach(l=>{
+      l.classList.toggle('selected',parseInt(l.getAttribute('for').replace('s',''))>=val);
+    });
+  });
+});
 
-// ── NEWSLETTER ───────────────────────────────────────
-window.subscribeNewsletter = async function(e) {
+/* ── Contact form ── */
+window.submitContact=async function(e){
   e.preventDefault();
-  const email = e.target.email.value.trim();
-  try {
-    await addDoc(collection(db,'newsletter'), { email, createdAt: serverTimestamp() });
-    e.target.reset();
-    showToast('🌿 Subscribed! Nature stories coming your way.');
-    track('newsletter_subscribe');
-  } catch(err) { showToast('❌ Could not subscribe. Please try again.'); }
+  const f=e.target;
+  try{
+    await addDoc(collection(db,'enquiries'),{name:f.name.value.trim(),email:f.email.value.trim(),phone:f.phone.value.trim(),message:f.message.value.trim(),status:'new',createdAt:serverTimestamp()});
+    f.reset();showToast('📩 Message sent! We\'ll get back to you soon.');track('contact_submitted');
+  }catch(err){showToast('❌ Could not send message. Please try again.');}
 };
 
-// Make track global for inline HTML
-window.track = track;
+/* ── Booking modal ── */
+window.openBooking=function(room){
+  document.getElementById('bk-room-name').textContent=room;
+  document.getElementById('booking-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+  track('booking_modal_open',{room});
+};
+window.closeBooking=function(){document.getElementById('booking-modal').classList.remove('open');document.body.style.overflow='';};
+document.getElementById('booking-modal').addEventListener('click',e=>{if(e.target===document.getElementById('booking-modal'))window.closeBooking();});
+window.submitBooking=async function(e){
+  e.preventDefault();
+  const f=e.target;
+  try{
+    await addDoc(collection(db,'bookings'),{
+      room:document.getElementById('bk-room-name').textContent,
+      name:f.name.value.trim(),email:f.email.value.trim(),phone:f.phone.value.trim(),
+      checkin:f.checkin.value,checkout:f.checkout.value,guests:f.guests.value,
+      special:f.special.value.trim(),status:'pending',createdAt:serverTimestamp()
+    });
+    window.closeBooking();showToast('✅ Booking enquiry sent! We\'ll contact you within 24 hours.');
+    track('booking_submitted',{room:document.getElementById('bk-room-name').textContent});
+  }catch(err){showToast('❌ Could not submit. Please try again.');}
+};
+
+/* ── Newsletter ── */
+window.subscribeNewsletter=async function(e){
+  e.preventDefault();
+  const email=e.target.email.value.trim();
+  try{
+    await addDoc(collection(db,'newsletter'),{email,createdAt:serverTimestamp()});
+    e.target.reset();showToast('🌿 Subscribed! Nature stories coming your way.');track('newsletter_subscribe');
+  }catch(err){showToast('❌ Could not subscribe. Please try again.');}
+};
 </script>
 
 <!-- NON-MODULE JS -->
 <script>
-// ── TRANSLATIONS ──────────────────────────────────────
-const T = {
-  en: { heroTitle:"Experience<br><em>Nature's Embrace</em>", heroSub:"Resort • Hostel • Bird Watching Retreat" },
-  hi: { heroTitle:"प्रकृति की<br><em>गोद में आइए</em>",   heroSub:"रिसोर्ट • हॉस्टल • पक्षी दर्शन रिट्रीट" }
-};
-function setLang(lang) {
-  document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
-  document.getElementById('btn-'+lang).classList.add('active');
-  document.getElementById('hero-title').innerHTML = T[lang].heroTitle;
-  document.getElementById('hero-sub').textContent  = T[lang].heroSub;
-}
+/* Header scroll */
+const HDR=document.getElementById('site-header');
+window.addEventListener('scroll',()=>{
+  HDR.classList.toggle('scrolled',window.scrollY>60);
+  document.getElementById('scroll-top').classList.toggle('visible',window.scrollY>300);
+  let cur='';
+  document.querySelectorAll('section[id]').forEach(s=>{if(window.scrollY>=s.offsetTop-120)cur=s.id;});
+  document.querySelectorAll('.nav-link').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+});
+function toggleMobileNav(){document.getElementById('mobile-nav').classList.toggle('open');}
+function closeMobileNav(){document.getElementById('mobile-nav').classList.remove('open');}
 
-// ── HEADER SCROLL ─────────────────────────────────────
-const HDR = document.getElementById('site-header');
-window.addEventListener('scroll', () => {
-  HDR.classList.toggle('scrolled', window.scrollY > 60);
-  document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 300);
-  const secs = document.querySelectorAll('section[id]');
-  let cur = '';
-  secs.forEach(s => { if(window.scrollY >= s.offsetTop - 120) cur = s.id; });
-  document.querySelectorAll('.nav-link').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+cur));
+/* Toast */
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  t.style.background=type==='error'?'#8b2020':'';
+  clearTimeout(window._tt);
+  window._tt=setTimeout(()=>t.classList.remove('show'),4000);
+}
+window.showToast=showToast;
+
+/* Review form toggle */
+function toggleReviewForm(){
+  const wrap=document.getElementById('review-form-wrap');
+  const btn=document.getElementById('write-review-toggle');
+  const isOpen=wrap.classList.contains('visible');
+  wrap.classList.toggle('visible',!isOpen);
+  btn.classList.toggle('open',!isOpen);
+  btn.innerHTML=!isOpen
+    ?'<i class="fas fa-times wrbtn-icon open"></i> Close Form'
+    :'<i class="fas fa-pen wrbtn-icon"></i> Write a Review';
+  if(!isOpen)wrap.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+window.toggleReviewForm=toggleReviewForm;
+
+/* Escape key closes all modals */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    window.closeBooking&&window.closeBooking();
+    window.closeAllReviews&&window.closeAllReviews(null);
+    window.closeGalleryModal&&window.closeGalleryModal();
+    window.closeAccDetails&&window.closeAccDetails(null);
+    window.closeBlogModal&&window.closeBlogModal(null);
+  }
 });
 
-// ── MOBILE NAV ────────────────────────────────────────
-function toggleMobileNav() { document.getElementById('mobile-nav').classList.toggle('open'); }
-function closeMobileNav()  { document.getElementById('mobile-nav').classList.remove('open'); }
-
-// ── TOAST ─────────────────────────────────────────────
-function showToast(msg, type='') {
-  const t = document.getElementById('toast');
-  document.getElementById('toast-msg').textContent = msg;
-  t.classList.add('show');
-  if(type==='error') t.style.background = '#8b2020'; else t.style.background = '';
-  clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
-}
-
-// Set min dates for booking
-const today = new Date().toISOString().split('T')[0];
-document.querySelectorAll('input[type=date]').forEach(i => i.min = today);
+/* Date inputs min = today */
+const today=new Date().toISOString().split('T')[0];
+document.querySelectorAll('input[type=date]').forEach(i=>i.min=today);
 </script>
 </body>
 </html>
