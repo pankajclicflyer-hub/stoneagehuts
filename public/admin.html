@@ -610,9 +610,6 @@
 <!-- TOAST -->
 <div class="toast" id="admin-toast"><i class="fas fa-check-circle"></i><span id="admin-toast-msg"></span></div>
 
-<!-- ═══════════════════════════════════════════════════
-     FIREBASE + ADMIN JS
-═══════════════════════════════════════════════════ -->
 <script type="module">
 import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
@@ -621,8 +618,6 @@ import { getFirestore, collection, addDoc, getDocs, getDoc, doc,
          updateDoc, deleteDoc, query, orderBy, where, limit, startAfter,
          serverTimestamp, onSnapshot, setDoc }
                             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject }
-                            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 // ── CONFIG ───────────────────────────────────────────
 const firebaseConfig = {
@@ -634,80 +629,59 @@ const firebaseConfig = {
   appId: "1:512951842420:web:16fd229d1b79fdc0880321",
 };
 // ─────────────────────────────────────────────────────
-
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
-const stor = getStorage(app);
 
-// keep track of blog image path for refresh/fallback
 let blogImagePath = '';
 
-// helper to upload files to storage with progress callback
+// ═══════════════════════════════════════════════════
+// IMAGE UPLOAD — saves file to public/images/ via local API
+// ═══════════════════════════════════════════════════
 async function uploadToStorage(file, folder, onProgress) {
-  const filePath = `${folder}/${Date.now()}_${file.name}`;
-  const r = ref(stor, filePath);
-  const task = uploadBytesResumable(r, file);
-  return new Promise((resolve, reject) => {
-    task.on('state_changed',
-      snap => {
-        const pct = Math.round(snap.bytesTransferred/snap.totalBytes*100);
-        if(onProgress) onProgress(pct, snap);
-      },
-      err => reject(err),
-      async () => {
-        try {
-          const url = await getDownloadURL(task.snapshot.ref);
-          resolve({ url, path: task.snapshot.ref.fullPath });
-        } catch(e) {
-          reject(e);
-        }
-      }
-    );
+  const fileName = Date.now() + '_' + file.name;
+  const folderName = folder.split('/').pop();
+  const imgPath = '/images/' + folder + '/' + fileName;
+  if(onProgress) onProgress(50);
+  const res = await fetch('/api/images', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: fileName,
+      folder: folderName,
+      path: imgPath,
+      size: file.size,
+      type: file.type
+    })
   });
+  if(!res.ok) throw new Error('Upload failed');
+  if(onProgress) onProgress(100);
+  return { url: imgPath, path: imgPath };
 }
 
-// set image src with error/fallback handling (optionally refresh from storagePath)
-function safeImage(el, url, storagePath) {
+function safeImage(el, url) {
   el.src = url;
-  el.onerror = async () => {
-    if(storagePath) {
-      try {
-        const fresh = await getDownloadURL(ref(stor, storagePath));
-        el.src = fresh;
-        return;
-      } catch(e) {
-        console.error('refresh failed', e);
-      }
-    }
+  el.onerror = () => {
     el.onerror = null;
     el.src = 'https://via.placeholder.com/400x300?text=Image+Unavailable';
   };
 }
 
-// expose for inline handlers
-window.refreshImg = async function(imgEl, path) {
-  try {
-    const url = await getDownloadURL(ref(stor, path));
-    imgEl.src = url;
-  } catch(e) {
-    imgEl.onerror = null;
-    imgEl.src = 'https://via.placeholder.com/400x300?text=Image+Unavailable';
-  }
+window.refreshImg = function(imgEl) {
+  imgEl.onerror = null;
+  imgEl.src = 'https://via.placeholder.com/400x300?text=Image+Unavailable';
 };
 
 // ── AUTH ─────────────────────────────────────────────
 onAuthStateChanged(auth, async user => {
   console.log('auth state changed', user);
   if(user) {
-    // verify the admin claim before booting the dashboard
     try {
       const token = await user.getIdTokenResult();
       if(token.claims.admin) {
         document.getElementById('login-screen').style.display = 'none';
         initAdmin();
       } else {
-        // not an admin – show message and sign out immediately
         showError('This account does not have admin privileges.');
         await signOut(auth);
         document.getElementById('login-screen').style.display = 'flex';
@@ -722,122 +696,53 @@ onAuthStateChanged(auth, async user => {
   }
 });
 
-// helpers for login UI
 function showLoading(on) {
   const btn = document.querySelector('.login-btn');
-  if(btn) {
-    btn.disabled = on;
-    btn.textContent = on ? 'Signing in...' : 'Sign In';
-  }
+  if(btn) { btn.disabled = on; btn.textContent = on ? 'Signing in...' : 'Sign In'; }
 }
 function showError(msg) { document.getElementById('login-error').textContent = msg; }
 function hideError() { showError(''); }
 function showSuccess(msg) { toast(msg, 'success'); }
 
-// improved login with timeout, diagnostics, claims check
 window.login = async function(email, password) {
   try {
-    showLoading(true);
-    hideError();
-    console.log('1. Attempting login for:', email);
-
-    // with ES modules we don't have a global `firebase` object;
-    // just make sure our initialized app/auth objects exist
-    if (!app || !auth) {
-      throw new Error('Firebase not initialized');
-    }
-
+    showLoading(true); hideError();
+    if (!app || !auth) throw new Error('Firebase not initialized');
     const loginPromise = signInWithEmailAndPassword(auth, email, password);
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Login timeout')), 10000)
-    );
-
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Login timeout')), 10000));
     const result = await Promise.race([loginPromise, timeoutPromise]);
-    console.log('2. Login successful:', result.user.email);
-
     const token = await result.user.getIdTokenResult();
-    console.log('3. Token claims:', token.claims);
-
     if (token.claims.admin) {
-      console.log('4. Admin access granted');
       showSuccess('Login successful! Redirecting...');
       localStorage.setItem('lastLogin', new Date().toISOString());
       localStorage.setItem('userEmail', result.user.email);
-      setTimeout(() => {
-        window.location.href = '/admin/dashboard.html';
-      }, 1000);
+      setTimeout(() => { window.location.href = '/admin/dashboard.html'; }, 1000);
     } else {
-      console.log('4. Not an admin user');
       showError('This account does not have admin privileges. Please contact administrator.');
       await signOut(auth);
     }
   } catch (error) {
-    console.error('Login error:', error);
     let errorMessage = 'Login failed. Please try again.';
     switch (error.code) {
-      case 'auth/user-not-found':
-        errorMessage = 'User not found. Please check your email.';
-        break;
-      case 'auth/wrong-password':
-        errorMessage = 'Incorrect password. Please try again.';
-        break;
-      case 'auth/invalid-email':
-        errorMessage = 'Invalid email format.';
-        break;
-      case 'auth/too-many-requests':
-        errorMessage = 'Too many failed attempts. Please try again later.';
-        break;
-      case 'auth/network-request-failed':
-        errorMessage = 'Network error. Please check your connection.';
-        break;
-      default:
-        errorMessage = error.message || errorMessage;
+      case 'auth/user-not-found': errorMessage = 'User not found. Please check your email.'; break;
+      case 'auth/wrong-password': errorMessage = 'Incorrect password. Please try again.'; break;
+      case 'auth/invalid-email': errorMessage = 'Invalid email format.'; break;
+      case 'auth/too-many-requests': errorMessage = 'Too many failed attempts. Please try again later.'; break;
+      case 'auth/network-request-failed': errorMessage = 'Network error. Please check your connection.'; break;
+      default: errorMessage = error.message || errorMessage;
     }
     showError(errorMessage);
-  } finally {
-    showLoading(false);
-  }
+  } finally { showLoading(false); }
 };
 
 window.doLogin = function() {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-password').value;
-  if (!email || !pass) {
-    document.getElementById('login-error').textContent = 'Please enter both email and password';
-    return;
-  }
+  if (!email || !pass) { document.getElementById('login-error').textContent = 'Please enter both email and password'; return; }
   window.login(email, pass);
 };
 
-// diagnostic helper
-async function checkFirebaseStatus() {
-  const status = {
-    initialized: false,
-    auth: false,
-    firestore: false,
-    user: null
-  };
-  try {
-    status.initialized = !!app;
-    status.auth = !!auth;
-    const currentUser = auth.currentUser;
-    status.user = currentUser ? currentUser.email : null;
-    if (db) {
-      const snap = await getDocs(query(collection(db,'test'), limit(1)));
-      status.firestore = true;
-    }
-    console.log('Firebase Status:', status);
-    return status;
-  } catch (error) {
-    console.error('Status check failed:', error);
-    return { ...status, error: error.message };
-  }
-}
-
-window.doLogout = async function() {
-  await signOut(auth);
-  location.reload();
-};
+window.doLogout = async function() { await signOut(auth); location.reload(); };
 
 // ── INIT ─────────────────────────────────────────────
 function initAdmin() {
@@ -845,13 +750,10 @@ function initAdmin() {
   loadContactSettingsForm();
   watchBadges();
   watchStats();
-  // analytics filter buttons
   document.getElementById('analytics-apply-filter')?.addEventListener('click', () => loadAnalytics(true));
   document.getElementById('analytics-export')?.addEventListener('click', exportAnalytics);
   document.getElementById('analytics-load-more')?.addEventListener('click', loadMoreAnalytics);
-  // kick off analytics list with defaults
   loadAnalytics(true);
-  // pagination buttons
   const rbtn = document.getElementById('reviews-load-more');
   if(rbtn) rbtn.addEventListener('click', loadMoreReviews);
   const ebtn = document.getElementById('enq-load-more');
@@ -867,7 +769,6 @@ window.showPage = function(id) {
   if(btn) btn.classList.add('active');
   const titles = { dashboard:'Dashboard', hero:'Hero Image', gallery:'Gallery', blog:'Blog Posts', reviews:'Reviews', enquiries:'Enquiries', bookings:'Bookings', newsletter:'Newsletter', 'contact-settings':'Contact Info', analytics:'Analytics' };
   document.getElementById('page-title').textContent = titles[id] || id;
-  // Lazy load
   const loaders = {
     gallery: loadGalleryAdmin,
     blog: loadBlogAdmin,
@@ -894,26 +795,20 @@ function toast(msg, type='success') {
 // ── BADGES ───────────────────────────────────────────
 function watchBadges() {
   onSnapshot(query(collection(db,'reviews'), where('status','==','pending')), s => {
-    const n = s.size;
-    const b = document.getElementById('rv-badge');
+    const n = s.size; const b = document.getElementById('rv-badge');
     b.textContent = n; b.style.display = n ? 'inline' : 'none';
   });
   onSnapshot(query(collection(db,'enquiries'), where('status','==','new')), s => {
-    const n = s.size;
-    const b = document.getElementById('enq-badge');
+    const n = s.size; const b = document.getElementById('enq-badge');
     b.textContent = n; b.style.display = n ? 'inline' : 'none';
   });
 }
 
-// watch dashboard statistics in real time
 function watchStats() {
   const map = [
-    {col:'reviews',id:'st-reviews'},
-    {col:'enquiries',id:'st-enquiries'},
-    {col:'bookings',id:'st-bookings'},
-    {col:'gallery',id:'st-gallery'},
-    {col:'posts',id:'st-posts'},
-    {col:'newsletter',id:'st-subs'}
+    {col:'reviews',id:'st-reviews'},{col:'enquiries',id:'st-enquiries'},
+    {col:'bookings',id:'st-bookings'},{col:'gallery',id:'st-gallery'},
+    {col:'posts',id:'st-posts'},{col:'newsletter',id:'st-subs'}
   ];
   map.forEach(m => {
     onSnapshot(collection(db,m.col), snap => {
@@ -925,7 +820,6 @@ function watchStats() {
 
 // ── DASHBOARD ────────────────────────────────────────
 async function loadDashboard() {
-  // initial counts (real‑time listeners will update these)
   try {
     const counts = {
       reviews:   (await getDocs(collection(db,'reviews'))).size,
@@ -944,14 +838,8 @@ async function loadDashboard() {
   } catch(e) {
     console.error('dashboard count error',e);
     toast('🔒 Unable to load dashboard. Please ensure you are signed in.', 'error');
-    // if permission error, log out to force re-login (optional)
-    if(e.code && e.code.includes('permission')) {
-      await signOut(auth);
-      document.getElementById('login-screen').style.display = 'flex';
-    }
+    if(e.code && e.code.includes('permission')) { await signOut(auth); document.getElementById('login-screen').style.display = 'flex'; }
   }
-
-  // Activity feed (analytics)
   const aSnap = await getDocs(query(collection(db,'analytics'), orderBy('ts','desc'), limit(8)));
   const feed = document.getElementById('activity-feed');
   if(aSnap.empty) { feed.innerHTML = '<div class="empty-state"><i class="fas fa-stream"></i><p>No activity yet</p></div>'; }
@@ -962,8 +850,6 @@ async function loadDashboard() {
       return `<div class="feed-item"><div class="feed-dot ${dot}"></div><div class="feed-content"><p>${ev.event} ${ev.data?.label||ev.data?.section||ev.data?.title||''}</p><small>${ts}</small></div></div>`;
     }).join('');
   }
-
-  // Pending reviews
   const rvSnap = await getDocs(query(collection(db,'reviews'), where('status','==','pending'), limit(5)));
   const pv = document.getElementById('dash-pending-reviews');
   if(rvSnap.empty) { pv.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>No pending reviews</p></div>'; }
@@ -985,34 +871,54 @@ async function loadDashboard() {
   }
 }
 
-window.quickApprove = async function(id) {
-  await updateDoc(doc(db,'reviews',id), { status:'approved' });
-  toast('✅ Review approved!');
-  loadDashboard();
-};
-window.quickReject = async function(id) {
-  await updateDoc(doc(db,'reviews',id), { status:'rejected' });
-  toast('Review rejected.','error');
-  loadDashboard();
-};
+window.quickApprove = async function(id) { await updateDoc(doc(db,'reviews',id), { status:'approved' }); toast('✅ Review approved!'); loadDashboard(); };
+window.quickReject  = async function(id) { await updateDoc(doc(db,'reviews',id), { status:'rejected' }); toast('Review rejected.','error'); loadDashboard(); };
 
-// ── HERO IMAGE ────────────────────────────────────────
+// ── HERO IMAGE — now loads from /api/images ───────────
 async function loadCurrentHero() {
   const wrap = document.getElementById('current-hero');
   try {
-    const snap = await getDocs(query(collection(db,'settings'), where('key','==','hero_image')));
-    if(!snap.empty && snap.docs[0].data().value) {
-      const data = snap.docs[0].data();
-      const url = data.value;
-      const path = data.storagePath || '';
-      wrap.innerHTML = `<div style="margin-bottom:1rem;"><p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem;">Current Hero Image:</p><img id="current-hero-img" src="${url}" style="width:100%;max-height:280px;object-fit:cover;border-radius:12px;border:1px solid var(--border);" /></div>`;
-      // attach error handler
-      const imgEl = document.getElementById('current-hero-img');
-      safeImage(imgEl, url, path);
+    let heroImgs = [];
+
+    // Local API se check karo
+    const res = await fetch('/api/images?folder=hero');
+    const data = await res.json();
+    heroImgs = data.images || [];
+
+    // Agar local mein nahi hain toh Firestore se lo
+    if (!heroImgs.length) {
+      const snap = await getDocs(query(collection(db,'hero_images'), orderBy('order','asc')));
+      if (!snap.empty) {
+        heroImgs = snap.docs.map(d => ({
+          path: d.data().url, name: d.data().title || 'Hero Image'
+        }));
+      }
+      if (!heroImgs.length) {
+        const snap2 = await getDocs(query(collection(db,'settings'), where('key','==','hero_image')));
+        if (!snap2.empty) {
+          const d = snap2.docs[0].data();
+          if (d.value) heroImgs = [{ path: d.value, name: 'Hero Image' }];
+        }
+      }
+    }
+
+    if (heroImgs.length) {
+      wrap.innerHTML = `
+        <p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.75rem;">Current Hero Images (${heroImgs.length}):</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.75rem;margin-bottom:1rem;">
+          ${heroImgs.map(img => `
+            <div style="position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;border:1px solid var(--border);">
+              <img src="${img.path}" style="width:100%;height:100%;object-fit:cover;"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/320x180?text=Unavailable'" />
+              <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.6);padding:0.3rem 0.5rem;font-size:0.7rem;color:#fff;">
+                ${img.name}
+              </div>
+            </div>`).join('')}
+        </div>`;
     } else {
       wrap.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">No hero image set yet.</p>';
     }
-  } catch(e) { wrap.innerHTML = ''; }
+  } catch(e) { wrap.innerHTML = ''; console.error(e); }
 }
 
 window.uploadHeroImage = async function(file) {
@@ -1021,13 +927,7 @@ window.uploadHeroImage = async function(file) {
   const fillEl = document.getElementById('hero-prog-fill');
   progEl.style.display = 'block';
   try {
-    const {url, path} = await uploadToStorage(file, 'hero', pct => {
-      fillEl.style.width = pct + '%';
-    });
-    // Save to Firestore settings (store path too)
-    const snap = await getDocs(query(collection(db,'settings'), where('key','==','hero_image')));
-    if(snap.empty) await addDoc(collection(db,'settings'), { key:'hero_image', value: url, storagePath: path });
-    else await updateDoc(doc(db,'settings',snap.docs[0].id), { value: url, storagePath: path });
+    const { url } = await uploadToStorage(file, 'hero', pct => { fillEl.style.width = pct + '%'; });
     toast('✅ Hero image updated! It will show on the website now.');
     loadCurrentHero();
   } catch(e) {
@@ -1047,7 +947,7 @@ const heroDrop = document.getElementById('hero-drop');
   if(ev === 'drop') { heroDrop.classList.remove('drag'); window.uploadHeroImage(e.dataTransfer.files[0]); }
 }));
 
-// ── GALLERY ───────────────────────────────────────────
+// ── GALLERY — now loads from /api/images ──────────────
 let pendingGalleryFiles = [];
 
 window.handleGalleryFiles = function(files) {
@@ -1076,19 +976,12 @@ window.uploadGalleryImages = async function() {
   const uploadBtn = document.getElementById('gal-upload-btn');
   uploadBtn.disabled = true;
   prog.style.display = 'block';
-
   try {
     for(let i=0; i<pendingGalleryFiles.length; i++) {
       const file = pendingGalleryFiles[i];
       label.textContent = `Uploading ${i+1}/${pendingGalleryFiles.length}: ${file.name}`;
       fill.style.width = '0%';
-      const {url, path} = await uploadToStorage(file, `gallery/${cat}`, pct => {
-        fill.style.width = pct + '%';
-      });
-      await addDoc(collection(db,'gallery'), {
-        url, category: cat, title: title || file.name.replace(/\.[^.]+$/,''), order,
-        storagePath: path, createdAt: serverTimestamp()
-      });
+      await uploadToStorage(file, `gallery/${cat}`, pct => { fill.style.width = pct + '%'; });
     }
     toast(`✅ ${pendingGalleryFiles.length} image(s) uploaded successfully!`);
   } catch(e) {
@@ -1115,29 +1008,28 @@ async function loadGalleryAdmin() {
   const grid = document.getElementById('admin-gallery-grid');
   grid.innerHTML = '<div class="spinner"></div>';
   const cat = document.getElementById('gal-filter-cat').value;
-  const q = cat==='all'
-    ? query(collection(db,'gallery'), orderBy('order','asc'))
-    : query(collection(db,'gallery'), where('category','==',cat), orderBy('order','asc'));
-  const snap = await getDocs(q);
-  if(snap.empty) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-images"></i><p>No images yet</p></div>'; return; }
-  grid.innerHTML = snap.docs.map(d => {
-    const item = d.data();
-    return `<div class="admin-gallery-item">
-      <img src="${item.url}" alt="${item.title||''}" loading="lazy" onerror="refreshImg(this,'${item.storagePath||''}')" />
-      <div class="item-overlay">
-        <button class="btn btn-danger btn-sm" onclick="deleteGalleryItem('${d.id}','${item.storagePath||''}')"><i class="fas fa-trash"></i> Delete</button>
-      </div>
-      <div class="item-label">${item.title||''} <span style="opacity:0.6;">(${item.category})</span></div>
-    </div>`;
-  }).join('');
+  try {
+    const url = cat === 'all' ? '/api/images' : `/api/images?folder=${cat}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const imgs = data.images || [];
+    if(!imgs.length) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-images"></i><p>No images yet</p></div>'; return; }
+    grid.innerHTML = imgs.map(item => `
+      <div class="admin-gallery-item">
+        <img src="${item.path}" alt="${item.name}" loading="lazy" onerror="refreshImg(this)" />
+        <div class="item-overlay">
+          <button class="btn btn-danger btn-sm" onclick="deleteGalleryItem('${item.id}')"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+        <div class="item-label">${item.name} <span style="opacity:0.6;">(${item.folder})</span></div>
+      </div>`).join('');
+  } catch(e) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><p>Error loading images</p></div>'; }
 }
 window.loadGalleryAdmin = loadGalleryAdmin;
 
-window.deleteGalleryItem = async function(id, path) {
+window.deleteGalleryItem = async function(id) {
   if(!confirm('Delete this image?')) return;
   try {
-    if(path) await deleteObject(ref(stor, path)).catch(()=>{});
-    await deleteDoc(doc(db,'gallery',id));
+    await fetch(`/api/images/${id}`, { method: 'DELETE' });
     toast('Image deleted.','error');
     loadGalleryAdmin();
   } catch(e) { toast('Error: '+e.message,'error'); }
@@ -1195,7 +1087,7 @@ window.editBlogPost = async function(id) {
   blogImagePath = p.storagePath || '';
   document.getElementById('blog-img-path').value = blogImagePath;
   const prev = document.getElementById('blog-img-preview');
-  if(p.imageUrl) { safeImage(prev, p.imageUrl, blogImagePath); prev.style.display = 'block'; }
+  if(p.imageUrl) { safeImage(prev, p.imageUrl); prev.style.display = 'block'; }
   document.getElementById('blog-modal').classList.add('open');
 };
 
@@ -1215,9 +1107,7 @@ window.previewBlogImage = async function(input) {
   prev.style.display = 'block';
   progContainer.style.display = 'block';
   try {
-    const {url, path} = await uploadToStorage(file, 'blog', pct => {
-      progFill.style.width = pct + '%';
-    });
+    const {url, path} = await uploadToStorage(file, 'blog', pct => { progFill.style.width = pct + '%'; });
     document.getElementById('blog-img-url').value = url;
     document.getElementById('blog-img-path').value = path;
     blogImagePath = path;
@@ -1244,9 +1134,7 @@ window.saveBlogPost = async function() {
   try {
     if(id) { await updateDoc(doc(db,'posts',id), data); toast('✅ Post updated!'); }
     else   { await addDoc(collection(db,'posts'), data); toast('✅ Post published!'); }
-  } catch(e) {
-    toast('Error saving post: '+(e.message||e),'error');
-  }
+  } catch(e) { toast('Error saving post: '+(e.message||e),'error'); }
   window.closeBlogModal(); loadBlogAdmin();
 };
 
@@ -1258,18 +1146,14 @@ window.deleteBlogPost = async function(id) {
 
 // ── REVIEWS ──────────────────────────────────────────
 let rvFilter = 'all';
-
 window.setRvFilter = function(f, btn) {
   rvFilter = f;
   document.querySelectorAll('.rv-filter').forEach(b => b.classList.remove('active','btn-primary'));
   btn.classList.add('active','btn-primary');
-  // reset pagination/cache when filter changes
   loadReviewsAdmin(f, true);
 };
 
-// simple in‑memory cache/pagination for reviews
 const reviewsCache = { filter:'all', docs: [], lastDoc: null, loading:false, finished:false };
-
 let reviewsUnsub = null;
 
 async function loadReviewsAdmin(filter, reset=false) {
@@ -1277,55 +1161,31 @@ async function loadReviewsAdmin(filter, reset=false) {
   const loadMoreBtn = document.getElementById('reviews-load-more');
   try {
     if(reset || reviewsCache.filter !== filter) {
-      // clear cache and UI
-      reviewsCache.filter = filter;
-      reviewsCache.docs = [];
-      reviewsCache.lastDoc = null;
-      reviewsCache.finished = false;
-
-      // detach existing realtime listener
+      reviewsCache.filter = filter; reviewsCache.docs = []; reviewsCache.lastDoc = null; reviewsCache.finished = false;
       if(reviewsUnsub) { reviewsUnsub(); reviewsUnsub = null; }
-      // subscribe to full filtered collection for real‑time updates
       const base = collection(db,'reviews');
-      let baseQuery = filter==='all'
-        ? query(base, orderBy('createdAt','desc'))
-        : query(base, where('status','==',filter), orderBy('createdAt','desc'));
+      let baseQuery = filter==='all' ? query(base, orderBy('createdAt','desc')) : query(base, where('status','==',filter), orderBy('createdAt','desc'));
       reviewsUnsub = onSnapshot(baseQuery, snap => {
-        reviewsCache.docs = snap.docs;
-        reviewsCache.lastDoc = snap.docs[snap.docs.length-1] || null;
-        reviewsCache.finished = true; // we've got the full set
+        reviewsCache.docs = snap.docs; reviewsCache.lastDoc = snap.docs[snap.docs.length-1] || null; reviewsCache.finished = true;
         renderReviews(reviewsCache.docs);
         if(loadMoreBtn) loadMoreBtn.style.display = 'none';
       }, err => console.error('reviews realtime error', err));
     }
-    if(reviewsCache.loading) return; // already fetching
-
-    // if we already have some items (from cache or listener), just render them
-    if(reviewsCache.docs.length && !reset) {
-      renderReviews(reviewsCache.docs);
-      if(loadMoreBtn) loadMoreBtn.style.display = reviewsCache.finished ? 'none' : 'block';
-      return;
-    }
-
-    // show skeletons while fetching
+    if(reviewsCache.loading) return;
+    if(reviewsCache.docs.length && !reset) { renderReviews(reviewsCache.docs); if(loadMoreBtn) loadMoreBtn.style.display = reviewsCache.finished ? 'none' : 'block'; return; }
     list.innerHTML = '<div class="skeleton skeleton-row"></div>'.repeat(4);
     reviewsCache.loading = true;
-
     let q;
     const base2 = collection(db,'reviews');
     if(filter==='all') q = query(base2, orderBy('createdAt','desc'));
     else q = query(base2, where('status','==',filter), orderBy('createdAt','desc'));
     if(reviewsCache.lastDoc) q = query(q, startAfter(reviewsCache.lastDoc));
     q = query(q, limit(20));
-
     const snap = await getDocs(q);
     if(snap.empty) {
-      if(!reviewsCache.docs.length) {
-        list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>No reviews found</p></div>';
-      }
+      if(!reviewsCache.docs.length) list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>No reviews found</p></div>';
       reviewsCache.finished = true;
     } else {
-      // append to cache
       snap.docs.forEach(d => reviewsCache.docs.push(d));
       reviewsCache.lastDoc = snap.docs[snap.docs.length-1];
       renderReviews(reviewsCache.docs);
@@ -1335,14 +1195,11 @@ async function loadReviewsAdmin(filter, reset=false) {
   } catch(e) {
     console.error('Error loading reviews', e);
     list.innerHTML = `<div class="empty-state" style="color:var(--red)"><i class="fas fa-exclamation-triangle"></i><p>Error loading reviews: ${e.message||e}</p></div>`;
-  } finally {
-    reviewsCache.loading = false;
-  }
+  } finally { reviewsCache.loading = false; }
 }
 
 function renderReviews(docs) {
   const list = document.getElementById('reviews-list-admin');
-  // ensure correct order if some documents lack timestamps
   docs.sort((a,b)=> (b.data().createdAt?.toMillis?.()||0) - (a.data().createdAt?.toMillis?.()||0));
   list.innerHTML = docs.map(d => {
     const r = d.data();
@@ -1368,27 +1225,11 @@ function renderReviews(docs) {
   }).join('');
 }
 
-window.loadMoreReviews = function() {
-  if(reviewsCache.finished) return;
-  loadReviewsAdmin(reviewsCache.filter);
-};
-
-
-window.saveReviewStatus = async function(id) {
-  const status = document.getElementById(`rv-sel-${id}`).value;
-  await updateDoc(doc(db,'reviews',id), { status });
-  toast(`✅ Review ${status}.`);
-  loadReviewsAdmin(rvFilter);
-};
-
-window.deleteReview = async function(id) {
-  if(!confirm('Delete this review?')) return;
-  await deleteDoc(doc(db,'reviews',id));
-  toast('Review deleted.','error'); loadReviewsAdmin(rvFilter);
-};
+window.loadMoreReviews = function() { if(reviewsCache.finished) return; loadReviewsAdmin(reviewsCache.filter); };
+window.saveReviewStatus = async function(id) { const status = document.getElementById(`rv-sel-${id}`).value; await updateDoc(doc(db,'reviews',id), { status }); toast(`✅ Review ${status}.`); loadReviewsAdmin(rvFilter); };
+window.deleteReview = async function(id) { if(!confirm('Delete this review?')) return; await deleteDoc(doc(db,'reviews',id)); toast('Review deleted.','error'); loadReviewsAdmin(rvFilter); };
 
 // ── ENQUIRIES ─────────────────────────────────────────
-// caching + pagination for enquiries
 const enqCache = { docs: [], lastDoc: null, loading:false, finished:false };
 let enqUnsub = null;
 
@@ -1397,28 +1238,17 @@ async function loadEnquiries(reset=false) {
   const loadMoreBtn = document.getElementById('enq-load-more');
   try {
     if(reset) {
-      enqCache.docs = [];
-      enqCache.lastDoc = null;
-      enqCache.finished = false;
+      enqCache.docs = []; enqCache.lastDoc = null; enqCache.finished = false;
       if(enqUnsub) { enqUnsub(); enqUnsub = null; }
-      // realtime listener on full collection
-      const base = collection(db,'enquiries');
-      const baseQ = query(base, orderBy('createdAt','desc'));
+      const baseQ = query(collection(db,'enquiries'), orderBy('createdAt','desc'));
       enqUnsub = onSnapshot(baseQ, snap => {
-        enqCache.docs = snap.docs;
-        enqCache.lastDoc = snap.docs[snap.docs.length-1] || null;
-        enqCache.finished = true;
+        enqCache.docs = snap.docs; enqCache.lastDoc = snap.docs[snap.docs.length-1] || null; enqCache.finished = true;
         renderEnquiries(enqCache.docs);
         if(loadMoreBtn) loadMoreBtn.style.display = 'none';
       }, err => console.error('enquiries realtime error', err));
     }
     if(enqCache.loading) return;
-    if(enqCache.docs.length && !reset) {
-      renderEnquiries(enqCache.docs);
-      loadMoreBtn.style.display = enqCache.finished ? 'none' : 'block';
-      return;
-    }
-    // skeletons
+    if(enqCache.docs.length && !reset) { renderEnquiries(enqCache.docs); loadMoreBtn.style.display = enqCache.finished ? 'none' : 'block'; return; }
     wrap.innerHTML = '<div class="skeleton skeleton-row"></div>'.repeat(3);
     enqCache.loading = true;
     let q = query(collection(db,'enquiries'), orderBy('createdAt','desc'));
@@ -1426,9 +1256,7 @@ async function loadEnquiries(reset=false) {
     q = query(q, limit(20));
     const snap = await getDocs(q);
     if(snap.empty) {
-      if(!enqCache.docs.length) {
-        wrap.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No enquiries yet</p></div>';
-      }
+      if(!enqCache.docs.length) wrap.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No enquiries yet</p></div>';
       enqCache.finished = true;
     } else {
       snap.docs.forEach(d => enqCache.docs.push(d));
@@ -1440,9 +1268,7 @@ async function loadEnquiries(reset=false) {
   } catch(e) {
     console.error('Error loading enquiries', e);
     wrap.innerHTML = `<div class="empty-state" style="color:var(--red)"><i class="fas fa-exclamation-triangle"></i><p>Error loading enquiries: ${e.message||e}</p></div>`;
-  } finally {
-    enqCache.loading = false;
-  }
+  } finally { enqCache.loading = false; }
 }
 
 function renderEnquiries(docs) {
@@ -1472,20 +1298,9 @@ function renderEnquiries(docs) {
   }).join('');
 }
 
-window.loadMoreEnquiries = function() {
-  if(enqCache.finished) return;
-  loadEnquiries();
-};
-
-window.markEnquiryRead = async function(id) {
-  await updateDoc(doc(db,'enquiries',id), { status:'read' });
-  toast('Marked as read.'); loadEnquiries();
-};
-window.deleteEnquiry = async function(id) {
-  if(!confirm('Delete this enquiry?')) return;
-  await deleteDoc(doc(db,'enquiries',id));
-  toast('Enquiry deleted.','error'); loadEnquiries();
-};
+window.loadMoreEnquiries = function() { if(enqCache.finished) return; loadEnquiries(); };
+window.markEnquiryRead = async function(id) { await updateDoc(doc(db,'enquiries',id), { status:'read' }); toast('Marked as read.'); loadEnquiries(); };
+window.deleteEnquiry = async function(id) { if(!confirm('Delete this enquiry?')) return; await deleteDoc(doc(db,'enquiries',id)); toast('Enquiry deleted.','error'); loadEnquiries(); };
 
 // ── BOOKINGS ──────────────────────────────────────────
 async function loadBookings() {
@@ -1496,11 +1311,8 @@ async function loadBookings() {
   tbody.innerHTML = snap.docs.map(d => {
     const b = d.data();
     return `<tr>
-      <td><strong>${b.name}</strong></td>
-      <td>${b.room||'—'}</td>
-      <td>${b.checkin||'—'}</td>
-      <td>${b.checkout||'—'}</td>
-      <td>${b.guests||'—'}</td>
+      <td><strong>${b.name}</strong></td><td>${b.room||'—'}</td><td>${b.checkin||'—'}</td>
+      <td>${b.checkout||'—'}</td><td>${b.guests||'—'}</td>
       <td style="font-size:0.8rem;color:var(--muted);">${b.email||''}<br>${b.phone||''}</td>
       <td><span class="badge badge-${b.status||'pending'}">${b.status||'pending'}</span></td>
     </tr>`;
@@ -1555,7 +1367,6 @@ window.saveContactInfo = async function(e) {
 };
 
 // ── ANALYTICS ─────────────────────────────────────────
-// analytics caching/pagination/filtering
 const analyticsCache = { docs: [], lastDoc: null, loading:false, finished:false, event:'all', range:'all' };
 
 function getRangeStart(range) {
@@ -1573,36 +1384,22 @@ async function loadAnalytics(reset=false) {
   const rangeFilter = document.getElementById('analytics-range-filter').value;
   try {
     if(reset || analyticsCache.event!==evtFilter || analyticsCache.range!==rangeFilter) {
-      analyticsCache.docs=[];
-      analyticsCache.lastDoc=null;
-      analyticsCache.finished=false;
-      analyticsCache.event=evtFilter;
-      analyticsCache.range=rangeFilter;
+      analyticsCache.docs=[]; analyticsCache.lastDoc=null; analyticsCache.finished=false;
+      analyticsCache.event=evtFilter; analyticsCache.range=rangeFilter;
     }
     if(analyticsCache.loading) return;
-    if(analyticsCache.docs.length && !reset) {
-      renderAnalytics(analyticsCache.docs);
-      loadMoreBtn.style.display = analyticsCache.finished ? 'none' : 'block';
-      return;
-    }
+    if(analyticsCache.docs.length && !reset) { renderAnalytics(analyticsCache.docs); loadMoreBtn.style.display = analyticsCache.finished ? 'none' : 'block'; return; }
     tbody.innerHTML = '<tr><td colspan="4"><div class="spinner"></div></td></tr>';
     analyticsCache.loading = true;
-
     let q = collection(db,'analytics');
     if(evtFilter!=='all') q = query(q, where('event','==',evtFilter));
-    if(rangeFilter!=='all') {
-      const start = getRangeStart(rangeFilter);
-      if(start) q = query(q, where('ts','>=', start));
-    }
+    if(rangeFilter!=='all') { const start = getRangeStart(rangeFilter); if(start) q = query(q, where('ts','>=', start)); }
     q = query(q, orderBy('ts','desc'));
     if(analyticsCache.lastDoc) q = query(q, startAfter(analyticsCache.lastDoc));
     q = query(q, limit(50));
-
     const snap = await getDocs(q);
     if(snap.empty) {
-      if(!analyticsCache.docs.length) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No analytics data yet</td></tr>';
-      }
+      if(!analyticsCache.docs.length) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No analytics data yet</td></tr>';
       analyticsCache.finished = true;
     } else {
       snap.docs.forEach(d=>analyticsCache.docs.push(d));
@@ -1630,37 +1427,28 @@ function renderAnalytics(docs) {
 
 function updateAnalyticsStats(docs) {
   const allEvents = docs.map(d=>d.data());
-  const pageViews   = allEvents.filter(e => e.event==='page_view').length;
-  const clicks      = allEvents.filter(e => e.event==='click').length;
+  const pageViews = allEvents.filter(e => e.event==='page_view').length;
+  const clicks = allEvents.filter(e => e.event==='click').length;
   const bookingClicks = allEvents.filter(e => e.event==='booking_modal_open').length;
   const contactSubmits = allEvents.filter(e => e.event==='contact_submitted').length;
-
   document.getElementById('analytics-stats').innerHTML = `
     <div class="stat-card blue"><div class="sc-label">Page Views</div><div class="sc-num">${pageViews}</div></div>
     <div class="stat-card"><div class="sc-label">Clicks Tracked</div><div class="sc-num">${clicks}</div></div>
     <div class="stat-card green"><div class="sc-label">Booking Opens</div><div class="sc-num">${bookingClicks}</div></div>
-    <div class="stat-card clay"><div class="sc-label">Contact Submits</div><div class="sc-num">${contactSubmits}</div></div>
-  `;
+    <div class="stat-card clay"><div class="sc-label">Contact Submits</div><div class="sc-num">${contactSubmits}</div></div>`;
 }
 
-window.loadMoreAnalytics = function() {
-  if(analyticsCache.finished) return;
-  loadAnalytics();
-};
+window.loadMoreAnalytics = function() { if(analyticsCache.finished) return; loadAnalytics(); };
 
 function exportAnalytics() {
   const rows = ['Event,Details,Page,Time'];
   analyticsCache.docs.forEach(d=>{
-    const ev=d.data();
-    const detail=JSON.stringify(ev.data||{}).replace(/"/g,'""');
+    const ev=d.data(); const detail=JSON.stringify(ev.data||{}).replace(/"/g,'""');
     const ts=ev.ts?.toDate?.()?.toLocaleString()||'';
     rows.push(`${ev.event},"${detail}",${ev.page||''},${ts}`);
   });
   const blob=new Blob([rows.join('\n')],{type:'text/csv'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='analytics.csv';
-  a.click();
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='analytics.csv'; a.click();
 }
 
 </script>

@@ -876,11 +876,10 @@ const FALLBACKS=[{emoji:'🌿',bg:'s0'},{emoji:'🦜',bg:'s1'},{emoji:'🏕️',
 async function loadHeroImages(){
   let images=[];
   try{
-    const snap=await getDocs(query(collection(db,'hero_images'),orderBy('order','asc')));
-    if(!snap.empty)images=snap.docs.map(d=>({id:d.id,...d.data()}));
-    if(!images.length){
-      const snap2=await getDocs(query(collection(db,'settings'),where('key','==','hero_image')));
-      if(!snap2.empty){const d=snap2.docs[0].data();if(d.value)images=[{url:d.value,storagePath:d.storagePath||'',title:'Hero',order:0}];}
+    const res = await fetch('/api/images?folder=hero');
+    const data = await res.json();
+    if(data.images && data.images.length){
+      images = data.images.map(img=>({url:img.path, title:img.name, order:0}));
     }
   }catch(e){}
   buildCarousel(images.length?images:null);
@@ -897,7 +896,7 @@ function buildCarousel(images){
     if(images){
       const img=document.createElement('img');
       img.className='hero-slide-img';img.alt=images[i].title||'Hero';img.loading=i===0?'eager':'lazy';
-      safeImage(img,images[i].url,images[i].storagePath||'');slide.appendChild(img);
+      img.src=images[i].url; img.onerror=()=>{img.onerror=null;}; slide.appendChild(img);
     }else{
       const fb=document.createElement('div');
       fb.className=`hero-slide-fallback ${FALLBACKS[i].bg}`;fb.textContent=FALLBACKS[i].emoji;slide.appendChild(fb);
@@ -913,7 +912,7 @@ function buildCarousel(images){
   for(let i=0;i<n;i++){
     const th=document.createElement('div');th.className='hero-thumb'+(i===0?' active':'');
     th.setAttribute('role','button');th.setAttribute('aria-label',`View slide ${i+1}`);
-    if(images){const img=document.createElement('img');img.alt='';img.loading='lazy';safeImage(img,images[i].url,images[i].storagePath||'');th.appendChild(img);}
+    if(images){const img=document.createElement('img');img.alt='';img.loading='lazy';img.src=images[i].url; img.onerror=()=>{img.onerror=null;}; th.appendChild(img);}
     else{const fb=document.createElement('div');fb.className='hero-thumb-fallback';fb.style.background=['#1a1208','#0d1a0b','#1c1208','#0a1510','#180e04'][i];fb.textContent=FALLBACKS[i].emoji;th.appendChild(fb);}
     th.addEventListener('click',()=>goToSlide(i));thumbsEl.appendChild(th);
   }
