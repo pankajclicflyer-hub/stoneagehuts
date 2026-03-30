@@ -5,6 +5,31 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Login - StoneAgeHuts</title>
   <link rel="stylesheet" href="/style.css">
+  <style>
+    /* Additional styles for better error highlighting */
+    .login-error {
+      background: #fee;
+      border-left: 4px solid #dc2626;
+      padding: 0.75rem;
+      border-radius: 0.375rem;
+      margin-top: 1rem;
+      font-size: 0.875rem;
+    }
+    .login-error.success {
+      background: #e6f4ea;
+      border-left-color: #10b981;
+      color: #065f46;
+    }
+    .login-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .input-error {
+      border-color: #dc2626 !important;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(220,38,38,0.2);
+    }
+  </style>
 </head>
 <body>
   <main class="wrap">
@@ -17,16 +42,17 @@
       <label for="login-password">Password</label><br />
       <input type="password" id="login-password" placeholder="••••••••" required />
     </div>
-    <button class="login-btn" onclick="doLogin()">Sign In</button>
-    <p class="login-error" id="login-error" style="display:none;color:red;margin-top:0.5rem;"></p>
+    <button class="login-btn" id="login-btn">Sign In</button>
+    <p class="login-error" id="login-error" style="display:none;"></p>
     <p><a href="/">Back to site</a></p>
+
     <script type="module">
       // Import Firebase
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
       import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
       import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-      // Your Firebase config (copy from admin.html)
+      // Your Firebase config (UPDATED with correct values)
       const firebaseConfig = {
         apiKey: "AIzaSyDbSoPFLN2XXEO4f1jlEF2bfoRG1TZsEkY",
         authDomain: "stoneagehuts-fecda.firebaseapp.com",
@@ -41,127 +67,255 @@
       const auth = getAuth(app);
       const db = getFirestore(app);
 
-      // Make auth available globally
+      // Make auth available globally for debugging
       window.auth = auth;
       window.db = db;
 
-      // LOGIN FUNCTION
-      window.doLogin = async function() {
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-        const errorEl = document.getElementById('login-error');
-        const loginBtn = document.querySelector('.login-btn');
-        
-        // Clear previous error
-        errorEl.textContent = '';
+      // DOM Elements
+      const emailInput = document.getElementById('login-email');
+      const passwordInput = document.getElementById('login-password');
+      const loginBtn = document.getElementById('login-btn');
+      const errorEl = document.getElementById('login-error');
+
+      // Helper function to show error
+      function showError(message, isSuccess = false) {
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+        errorEl.classList.remove('success');
+        if (isSuccess) {
+          errorEl.classList.add('success');
+          errorEl.style.color = '#065f46';
+        } else {
+          errorEl.style.color = '#dc2626';
+        }
+      }
+
+      // Helper function to hide error
+      function hideError() {
         errorEl.style.display = 'none';
+        errorEl.textContent = '';
+      }
+
+      // Helper function to remove input highlights
+      function removeHighlights() {
+        emailInput.classList.remove('input-error');
+        passwordInput.classList.remove('input-error');
+      }
+
+      // Helper function to highlight input
+      function highlightInput(input) {
+        input.classList.add('input-error');
+        setTimeout(() => {
+          input.classList.remove('input-error');
+        }, 2000);
+      }
+
+      // LOGIN FUNCTION
+      async function doLogin() {
+        // Reset states
+        hideError();
+        removeHighlights();
         
-        // Validate inputs
-        if (!email || !password) {
-          errorEl.textContent = 'Please enter both email and password';
-          errorEl.style.display = 'block';
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        
+        // Validate inputs with highlighting
+        if (!email) {
+          showError('❌ Please enter your email address');
+          highlightInput(emailInput);
+          emailInput.focus();
+          return;
+        }
+        
+        if (!password) {
+          showError('❌ Please enter your password');
+          highlightInput(passwordInput);
+          passwordInput.focus();
+          return;
+        }
+        
+        // Email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          showError('❌ Please enter a valid email address');
+          highlightInput(emailInput);
+          emailInput.focus();
           return;
         }
         
         try {
           // Show loading state
-          loginBtn.textContent = 'Signing in...';
+          loginBtn.textContent = '⏳ Signing in...';
           loginBtn.disabled = true;
           
-          console.log('Attempting login for:', email);
+          console.log('🔵 Attempting login for:', email);
+          showError('⏳ Authenticating...', false);
           
           // Attempt login
           const userCredential = await signInWithEmailAndPassword(auth, email, password);
-          console.log('Login successful:', userCredential.user.email);
+          console.log('✅ Login successful:', userCredential.user.email);
+          
+          showError('✅ Authentication successful! Verifying admin access...', true);
           
           // Get token with claims
-          const token = await userCredential.user.getIdTokenResult();
-          console.log('Token claims:', token.claims);
+          const token = await userCredential.user.getIdTokenResult(true); // Force refresh
+          console.log('📋 Token claims:', token.claims);
           
           // Check if admin
           if (token.claims.admin === true) {
-            console.log('Admin access granted');
-            errorEl.textContent = 'Login successful! Redirecting...';
-            errorEl.style.color = 'green';
-            errorEl.style.display = 'block';
+            console.log('✅ Admin access granted');
+            showError('✅ Admin access granted! Redirecting to dashboard...', true);
+            
+            // Store admin status in session
+            sessionStorage.setItem('adminAuthenticated', 'true');
+            sessionStorage.setItem('adminEmail', email);
             
             // Redirect to dashboard
             setTimeout(() => {
-              window.location.href = 'admin/dashboard.html';
-            }, 1000);
+              window.location.href = '/admin.html';
+            }, 1500);
           } else {
-            // Not admin - sign out
-            console.log('Not an admin user');
+            // Not admin - sign out and show error
+            console.log('❌ Not an admin user - claims:', token.claims);
             await signOut(auth);
-            errorEl.textContent = 'This account does not have admin privileges';
-            errorEl.style.color = 'red';
-            errorEl.style.display = 'block';
+            showError('⛔ This account does not have admin privileges. Please contact the system administrator.');
+            highlightInput(emailInput);
+            highlightInput(passwordInput);
           }
           
         } catch (error) {
-          console.error('Login error:', error);
+          console.error('❌ Login error:', error);
           
-          // Show user-friendly error message
-          let message = 'Login failed. Please try again.';
+          // Clear password field for security
+          passwordInput.value = '';
+          
+          // Show specific error messages with highlighting
+          let message = '';
           switch (error.code) {
             case 'auth/user-not-found':
-              message = 'User not found. Check your email.';
+              message = '❌ No account found with this email address';
+              highlightInput(emailInput);
+              emailInput.focus();
               break;
             case 'auth/wrong-password':
-              message = 'Incorrect password.';
+              message = '❌ Incorrect password. Please try again.';
+              highlightInput(passwordInput);
+              passwordInput.focus();
               break;
             case 'auth/invalid-email':
-              message = 'Invalid email format.';
+              message = '❌ Invalid email format. Please check your email address.';
+              highlightInput(emailInput);
+              emailInput.focus();
               break;
             case 'auth/too-many-requests':
-              message = 'Too many failed attempts. Try again later.';
+              message = '⛔ Too many failed attempts. Please try again later.';
               break;
             case 'auth/network-request-failed':
-              message = 'Network error. Check your connection.';
+              message = '🌐 Network error. Please check your internet connection.';
               break;
+            case 'auth/invalid-credential':
+              message = '❌ Invalid email or password. Please try again.';
+              highlightInput(emailInput);
+              highlightInput(passwordInput);
+              break;
+            default:
+              message = `❌ Login failed: ${error.message}`;
           }
           
-          errorEl.textContent = message;
-          errorEl.style.color = 'red';
-          errorEl.style.display = 'block';
+          showError(message);
           
         } finally {
           // Reset button
           loginBtn.textContent = 'Sign In';
           loginBtn.disabled = false;
         }
+      }
+
+      // Attach login function to button
+      loginBtn.addEventListener('click', doLogin);
+      
+      // Allow Enter key to submit
+      const handleEnter = (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          doLogin();
+        }
       };
+      
+      emailInput.addEventListener('keypress', handleEnter);
+      passwordInput.addEventListener('keypress', handleEnter);
+      
+      // Real-time validation - remove highlight when user types
+      emailInput.addEventListener('input', () => {
+        emailInput.classList.remove('input-error');
+        hideError();
+      });
+      
+      passwordInput.addEventListener('input', () => {
+        passwordInput.classList.remove('input-error');
+        hideError();
+      });
 
       // Check auth state on load
-      onAuthStateChanged(auth, (user) => {
+      onAuthStateChanged(auth, async (user) => {
         if (user) {
-          console.log('User is signed in:', user.email);
-          // Check if already on dashboard page
-          if (!window.location.pathname.includes('dashboard')) {
-            // Verify admin status
-            user.getIdTokenResult().then(token => {
+          console.log('👤 User already signed in:', user.email);
+          
+          // Check if already on admin page
+          if (!window.location.pathname.includes('/admin.html')) {
+            try {
+              const token = await user.getIdTokenResult(true);
               if (token.claims.admin === true) {
-                window.location.href = 'admin/dashboard.html';
+                console.log('✅ Auto-redirecting to admin panel');
+                window.location.href = '/admin.html';
+              } else {
+                console.log('⚠️ User is not admin, signing out');
+                await signOut(auth);
               }
-            });
+            } catch (err) {
+              console.error('Error checking admin status:', err);
+            }
           }
         } else {
-          console.log('User is signed out');
+          console.log('👤 No user signed in');
+          // Clear any stored session data
+          sessionStorage.removeItem('adminAuthenticated');
+          sessionStorage.removeItem('adminEmail');
         }
       });
 
-      // Add status check function
+      // Debug function - accessible from console
       window.checkFirebaseStatus = async function() {
         console.log('🔥 Firebase Status Check');
-        console.log('Auth:', auth);
+        console.log('Auth initialized:', !!auth);
         console.log('Current user:', auth.currentUser?.email || 'No user');
+        console.log('Firebase Config:', firebaseConfig);
         
         if (auth.currentUser) {
-          const token = await auth.currentUser.getIdTokenResult();
+          const token = await auth.currentUser.getIdTokenResult(true);
           console.log('Token claims:', token.claims);
           console.log('Is Admin:', token.claims.admin === true);
+          console.log('Token expires:', new Date(token.expirationTime));
         }
       };
+      
+      // Test connection function
+      window.testFirebaseConnection = async function() {
+        console.log('🔌 Testing Firebase connection...');
+        try {
+          const testAuth = getAuth(app);
+          console.log('✅ Firebase Auth initialized:', !!testAuth);
+          console.log('✅ Firebase project:', firebaseConfig.projectId);
+          showError('✅ Firebase connection successful!', true);
+          setTimeout(() => hideError(), 2000);
+        } catch (err) {
+          console.error('❌ Firebase connection failed:', err);
+          showError('❌ Firebase connection failed. Check console for details.');
+        }
+      };
+      
+      console.log('✅ Admin login page loaded successfully');
+      console.log('🔵 Firebase project:', firebaseConfig.projectId);
     </script>
 </body>
 </html>

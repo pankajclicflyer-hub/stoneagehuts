@@ -1,0 +1,105 @@
+// ── HERO FUNCTIONS ──
+async function loadCurrentHero() {
+  const wrap = document.getElementById('hero-list');
+  const countEl = document.getElementById('hero-count');
+  try {
+    const res = await fetch('/api/images/hero');
+    const data = await res.json();
+    const heroImgs = data.heroImages || [];
+    const activeCount = heroImgs.filter(img => img.active).length;
+    countEl.textContent = `Total: ${heroImgs.length} (${activeCount} active)`;
+    if (heroImgs.length) {
+      wrap.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1rem;">${heroImgs.map(img => `
+        <div style="position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;border:1px solid var(--border);">
+          <img src="${img.path}" style="width:100%;height:100%;object-fit:cover;" onerror="this.onerror=null;this.src='https://via.placeholder.com/320x180?text=Unavailable'" />
+          <div style="position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.4rem;opacity:0;transition:opacity 0.2s;" class="hero-overlay">
+            <button class="btn ${img.active ? 'btn-approve' : 'btn-reject'} btn-sm" onclick="toggleHeroActive('${img.id}', ${!img.active})"><i class="fas fa-${img.active ? 'eye-slash' : 'eye'}"></i> ${img.active ? 'Active' : 'Inactive'}</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteHeroImage('${img.id}')"><i class="fas fa-trash"></i> Delete</button>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.6);padding:0.3rem 0.5rem;font-size:0.7rem;color:#fff;">${img.filename || 'Hero Image'} <span style="opacity:0.6;">#${img.order}</span></div>
+        </div>`).join('')}</div><style>.hero-overlay:hover { opacity: 1 !important; }</style>`;
+    } else {
+      wrap.innerHTML = '<div class="empty-state"><i class="fas fa-image"></i><p>No hero images yet</p></div>';
+    }
+  } catch(e) { wrap.innerHTML = '<p style="color:var(--muted);">Error loading images</p>'; }
+}
+
+window.toggleHeroActive = async function(id, newStatus) {
+  try {
+    const res = await fetch(`/api/images/hero/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: newStatus }) });
+    if (!res.ok) throw new Error(await res.text());
+    toast(newStatus ? '✅ Hero image activated!' : '⏸️ Hero image deactivated!');
+    loadCurrentHero();
+  } catch(e) { toast('Error: ' + (e.message || 'Failed to update status'), 'error'); }
+};
+
+window.deleteHeroImage = async function(id) {
+  if(!confirm('Delete this hero image?')) return;
+  try {
+    const res = await fetch(`/api/images/hero/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error(await res.text());
+    toast('Hero image deleted.', 'error');
+    loadCurrentHero();
+  } catch(e) { toast('Error: ' + (e.message || 'Failed to delete'), 'error'); }
+};
+
+window.handleHeroImageFile = async function(file) {
+  if(!file) return;
+  const progEl = document.getElementById('hero-progress');
+  const fillEl = document.getElementById('hero-prog-fill');
+  progEl.style.display = 'block';
+  try {
+    const base64Data = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); });
+    fillEl.style.width = '50%';
+    const filename = Date.now() + '_' + file.name;
+    const res = await fetch('/api/images/hero', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ filename, imageData: base64Data }) });
+    if (!res.ok) throw new Error(await res.text());
+    fillEl.style.width = '100%';
+    toast('✅ Hero image uploaded!');
+    loadCurrentHero();
+  } catch(e) { toast('Upload failed: '+(e.message||e),'error'); } finally { progEl.style.display = 'none'; fillEl.style.width = '0%'; }
+};
+
+// ── GALLERY FUNCTIONS ──
+async function loadGalleryAdmin() {
+  const grid = document.getElementById('admin-gallery-grid');
+  grid.innerHTML = '<div class="spinner"></div>';
+  const cat = document.getElementById('gal-filter-cat').value;
+  try {
+    const url = cat === 'all' ? '/api/images/gallery' : `/api/images/gallery?category=${cat}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const imgs = data.galleryImages || [];
+    const stats = document.getElementById('gallery-stats');
+    const activeCount = imgs.filter(img => img.active).length;
+    if (stats) stats.innerHTML = `<strong>${imgs.length}</strong> total | <strong style="color:var(--moss);">${activeCount}</strong> active`;
+    if(!imgs.length) { grid.innerHTML = '<div class="empty-state"><i class="fas fa-images"></i><p>No images yet</p></div>'; return; }
+    grid.innerHTML = imgs.map(item => `
+      <div class="admin-gallery-item">
+        <img src="${item.path}" alt="${item.filename}" loading="lazy" onerror="refreshImg(this)" />
+        <div class="item-overlay">
+          <button class="btn ${item.active ? 'btn-approve' : 'btn-reject'} btn-sm" onclick="toggleGalleryActive('${item.id}', '${item.category}', ${!item.active})"><i class="fas fa-${item.active ? 'eye-slash' : 'eye'}"></i> ${item.active ? 'Active' : 'Inactive'}</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteGalleryItem('${item.id}', '${item.category}')"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+        <div class="item-label">${item.filename} (${item.category})</div>
+      </div>`).join('');
+  } catch(e) { grid.innerHTML = '<div class="empty-state"><p>Error loading images</p></div>'; }
+}
+
+window.toggleGalleryActive = async function(id, category, newStatus) {
+  try {
+    const res = await fetch(`/api/images/gallery/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: newStatus, category }) });
+    if (!res.ok) throw new Error(await res.text());
+    toast(newStatus ? '✅ Image activated!' : '⏸️ Image deactivated!');
+    loadGalleryAdmin();
+  } catch(e) { toast('Error: ' + (e.message || 'Failed to update status'), 'error'); }
+};
+
+window.deleteGalleryItem = async function(id, category) {
+  if(!confirm('Delete this image?')) return;
+  try {
+    await fetch(`/api/images/gallery/${id}`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ category }) });
+    toast('Image deleted.','error');
+    loadGalleryAdmin();
+  } catch(e) { toast('Error: '+e.message,'error'); }
+};

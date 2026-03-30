@@ -251,7 +251,7 @@
 </head>
 <body>
 
-<!-- ═══════════════ LOGIN ═══════════════ -->
+<!-- LOGIN SCREEN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">
@@ -272,7 +272,7 @@
   </div>
 </div>
 
-<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<!-- SIDEBAR -->
 <nav id="sidebar">
   <div class="sidebar-brand">
     <span>🏕️ StoneAgeHuts</span>
@@ -281,18 +281,15 @@
   <div class="sidebar-nav">
     <div class="nav-section-label">Overview</div>
     <button class="nav-item active" onclick="showPage('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</button>
-
     <div class="nav-section-label">Content</div>
     <button class="nav-item" onclick="showPage('hero')"><i class="fas fa-image"></i> Hero Image</button>
     <button class="nav-item" onclick="showPage('gallery')"><i class="fas fa-images"></i> Gallery</button>
     <button class="nav-item" onclick="showPage('blog')"><i class="fas fa-pen-nib"></i> Blog Posts</button>
-
     <div class="nav-section-label">People</div>
     <button class="nav-item" id="nav-reviews" onclick="showPage('reviews')"><i class="fas fa-star"></i> Reviews <span class="badge" id="rv-badge" style="display:none"></span></button>
     <button class="nav-item" id="nav-enquiries" onclick="showPage('enquiries')"><i class="fas fa-envelope"></i> Enquiries <span class="badge" id="enq-badge" style="display:none"></span></button>
     <button class="nav-item" onclick="showPage('bookings')"><i class="fas fa-calendar-check"></i> Bookings</button>
     <button class="nav-item" onclick="showPage('newsletter')"><i class="fas fa-mail-bulk"></i> Newsletter</button>
-
     <div class="nav-section-label">Settings</div>
     <button class="nav-item" onclick="showPage('contact-settings')"><i class="fas fa-address-card"></i> Contact Info</button>
     <button class="nav-item" onclick="showPage('analytics')"><i class="fas fa-chart-bar"></i> Analytics</button>
@@ -302,7 +299,7 @@
   </div>
 </nav>
 
-<!-- ═══════════════ MAIN ═══════════════ -->
+<!-- MAIN CONTENT -->
 <div id="main-content">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:1rem;">
@@ -315,7 +312,7 @@
     </div>
   </div>
 
-  <!-- ── DASHBOARD ── -->
+  <!-- DASHBOARD -->
   <div class="page active" id="page-dashboard">
     <div class="stats-grid" id="stats-grid">
       <div class="stat-card green"><div class="sc-label">Total Reviews</div><div class="sc-num" id="st-reviews">—</div><div class="sc-sub">Pending approval</div></div>
@@ -337,58 +334,60 @@
     </div>
   </div>
 
-  <!-- ── HERO ── -->
+  <!-- HERO IMAGES -->
   <div class="page" id="page-hero">
-    <div class="panel-card">
-      <div class="panel-card-header"><h3><i class="fas fa-image"></i> Hero Background Image</h3></div>
+    <div class="panel-card" style="margin-bottom:1.5rem;">
+      <div class="panel-card-header"><h3><i class="fas fa-cloud-upload-alt"></i> Upload New Hero Image</h3></div>
       <div class="panel-card-body">
-        <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;">This image appears as the main background on the home page hero section.</p>
-        <div id="current-hero" style="margin-bottom:1.5rem;"></div>
+        <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;">Add hero carousel image (up to 5). Images display only if marked Active.</p>
         <div class="upload-area" id="hero-drop" onclick="document.getElementById('hero-file').click()">
           <i class="fas fa-cloud-upload-alt"></i>
           <p>Click to upload hero image</p>
-          <small>JPG, PNG, WebP — Recommended: 1920×1080px</small>
+          <small>JPG, PNG, WebP — Recommended: 1920×1080px, Max: 5MB</small>
         </div>
-        <input type="file" id="hero-file" accept="image/*" style="display:none" onchange="uploadHeroImage(this.files[0])" />
+        <input type="file" id="hero-file" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handleHeroImageFile(this.files[0])" />
         <div id="hero-progress" style="display:none;margin-top:1rem;">
           <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.4rem;">Uploading...</p>
           <div class="progress-bar"><div class="progress-fill" id="hero-prog-fill" style="width:0%"></div></div>
         </div>
       </div>
     </div>
+    <div class="panel-card">
+      <div class="panel-card-header">
+        <h3><i class="fas fa-images"></i> Manage Hero Images</h3>
+        <span style="font-size:0.78rem;color:var(--muted);margin-left:auto;" id="hero-count">Total: 0</span>
+      </div>
+      <div class="panel-card-body" id="hero-list">
+        <div class="empty-state"><i class="fas fa-image"></i><p>No hero images yet</p></div>
+      </div>
+    </div>
   </div>
 
-  <!-- ── GALLERY ── -->
+  <!-- GALLERY -->
   <div class="page" id="page-gallery">
     <div class="panel-card" style="margin-bottom:1.5rem;">
-      <div class="panel-card-header"><h3><i class="fas fa-upload"></i> Upload Images</h3></div>
+      <div class="panel-card-header"><h3><i class="fas fa-cloud-upload-alt"></i> Upload Gallery Images</h3></div>
       <div class="panel-card-body">
-        <div class="form-row cols-3">
+        <div class="form-row cols-2">
           <div class="form-group">
-            <label>Category</label>
+            <label>Category *</label>
             <select id="gal-category">
-              <option value="property">Property</option>
-              <option value="rooms">Rooms</option>
+              <option value="">Select a category...</option>
+              <option value="resort">Resort</option>
+              <option value="hotel">Hotel</option>
               <option value="activities">Activities</option>
               <option value="nature">Nature</option>
               <option value="bird">Bird Watching</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>Title (optional)</label>
-            <input type="text" id="gal-title" placeholder="Image title" />
-          </div>
-          <div class="form-group">
-            <label>Display Order</label>
-            <input type="number" id="gal-order" value="99" min="1" max="999" />
-          </div>
+          <div></div>
         </div>
         <div class="upload-area" id="gal-drop" onclick="document.getElementById('gal-files').click()">
           <i class="fas fa-images"></i>
           <p>Click to select images (multiple allowed)</p>
           <small>JPG, PNG, WebP — Max 5MB each</small>
         </div>
-        <input type="file" id="gal-files" accept="image/*" multiple style="display:none" onchange="handleGalleryFiles(this.files)" />
+        <input type="file" id="gal-files" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="handleGalleryFiles(this.files)" />
         <div class="preview-grid" id="gal-preview"></div>
         <div id="gal-progress" style="display:none;margin-top:1rem;">
           <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.4rem;" id="gal-prog-label">Uploading...</p>
@@ -397,28 +396,28 @@
         <button class="btn btn-primary" style="margin-top:1rem;" onclick="uploadGalleryImages()" id="gal-upload-btn" disabled><i class="fas fa-upload"></i> Upload Selected</button>
       </div>
     </div>
-
     <div class="panel-card">
       <div class="panel-card-header">
-        <h3><i class="fas fa-th"></i> Manage Gallery</h3>
-        <div style="display:flex;gap:0.5rem;">
-          <select id="gal-filter-cat" onchange="loadGalleryAdmin()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:0.4rem 0.7rem;border-radius:7px;font-family:inherit;font-size:0.82rem;">
-            <option value="all">All Categories</option>
-            <option value="property">Property</option>
-            <option value="rooms">Rooms</option>
-            <option value="activities">Activities</option>
-            <option value="nature">Nature</option>
-            <option value="bird">Bird Watching</option>
-          </select>
-        </div>
+        <h3><i class="fas fa-th"></i> Gallery Images</h3>
+        <select id="gal-filter-cat" onchange="loadGalleryAdmin()" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:0.4rem 0.7rem;border-radius:7px;font-family:inherit;font-size:0.82rem;margin-left:auto;">
+          <option value="all">All Categories</option>
+          <option value="resort">Resort</option>
+          <option value="hotel">Hotel</option>
+          <option value="activities">Activities</option>
+          <option value="nature">Nature</option>
+          <option value="bird">Bird Watching</option>
+        </select>
       </div>
       <div class="panel-card-body">
-        <div class="admin-gallery-grid" id="admin-gallery-grid"><div class="spinner"></div></div>
+        <div id="gallery-stats" style="margin-bottom:1.5rem;padding:0.75rem;background:rgba(74,140,80,0.1);border-radius:9px;font-size:0.88rem;color:var(--muted);">
+          <strong style="color:var(--text);">0</strong> total images | <strong style="color:var(--moss);">0</strong> active
+        </div>
+        <div class="admin-gallery-grid" id="admin-gallery-grid"><div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-image"></i><p>No images in this category</p></div></div>
       </div>
     </div>
   </div>
 
-  <!-- ── BLOG ── -->
+  <!-- BLOG -->
   <div class="page" id="page-blog">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
       <h2 style="font-size:1.1rem;font-weight:600;">Blog Posts</h2>
@@ -434,7 +433,7 @@
     </div>
   </div>
 
-  <!-- ── REVIEWS ── -->
+  <!-- REVIEWS -->
   <div class="page" id="page-reviews">
     <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap;">
       <button class="btn btn-outline btn-sm rv-filter active" onclick="setRvFilter('all',this)">All</button>
@@ -443,10 +442,10 @@
       <button class="btn btn-outline btn-sm rv-filter" onclick="setRvFilter('rejected',this)">Rejected</button>
     </div>
     <div id="reviews-list-admin"><div class="spinner"></div></div>
-  <button class="btn btn-outline btn-sm" id="reviews-load-more" style="display:none;margin-top:1rem;">Load more</button>
+    <button class="btn btn-outline btn-sm" id="reviews-load-more" style="display:none;margin-top:1rem;">Load more</button>
   </div>
 
-  <!-- ── ENQUIRIES ── -->
+  <!-- ENQUIRIES -->
   <div class="page" id="page-enquiries">
     <div class="panel-card">
       <div class="panel-card-header"><h3><i class="fas fa-inbox"></i> Contact Enquiries</h3></div>
@@ -455,7 +454,7 @@
     </div>
   </div>
 
-  <!-- ── BOOKINGS ── -->
+  <!-- BOOKINGS -->
   <div class="page" id="page-bookings">
     <div class="panel-card">
       <div class="panel-card-header"><h3><i class="fas fa-calendar-alt"></i> Booking Requests</h3></div>
@@ -468,7 +467,7 @@
     </div>
   </div>
 
-  <!-- ── NEWSLETTER ── -->
+  <!-- NEWSLETTER -->
   <div class="page" id="page-newsletter">
     <div class="panel-card">
       <div class="panel-card-header">
@@ -484,7 +483,7 @@
     </div>
   </div>
 
-  <!-- ── CONTACT SETTINGS ── -->
+  <!-- CONTACT SETTINGS -->
   <div class="page" id="page-contact-settings">
     <div class="panel-card">
       <div class="panel-card-header"><h3><i class="fas fa-address-card"></i> Contact Information</h3><p style="font-size:0.8rem;color:var(--muted);">Changes sync to website instantly</p></div>
@@ -514,7 +513,7 @@
     </div>
   </div>
 
-  <!-- ── ANALYTICS ── -->
+  <!-- ANALYTICS -->
   <div class="page" id="page-analytics">
     <div class="stats-grid" id="analytics-stats"></div>
     <div class="panel-card">
@@ -555,7 +554,7 @@
   </div>
 </div>
 
-<!-- ═══ BLOG MODAL ═══ -->
+<!-- BLOG MODAL -->
 <div class="modal-backdrop" id="blog-modal">
   <div class="modal-panel">
     <div class="modal-header">
@@ -611,15 +610,15 @@
 <div class="toast" id="admin-toast"><i class="fas fa-check-circle"></i><span id="admin-toast-msg"></span></div>
 
 <script type="module">
-import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
-                            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+                         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, getDoc, doc,
          updateDoc, deleteDoc, query, orderBy, where, limit, startAfter,
          serverTimestamp, onSnapshot, setDoc }
-                            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+                         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// ── CONFIG ───────────────────────────────────────────
+// FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDbSoPFLN2XXEO4f1jlEF2bfoRG1TZsEkY",
   authDomain: "stoneagehuts-fecda.firebaseapp.com",
@@ -628,16 +627,14 @@ const firebaseConfig = {
   messagingSenderId: "512951842420",
   appId: "1:512951842420:web:16fd229d1b79fdc0880321",
 };
-// ─────────────────────────────────────────────────────
-const app  = initializeApp(firebaseConfig);
+
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db   = getFirestore(app);
+const db = getFirestore(app);
 
 let blogImagePath = '';
 
-// ═══════════════════════════════════════════════════
-// IMAGE UPLOAD — saves file to public/images/ via local API
-// ═══════════════════════════════════════════════════
+// IMAGE UPLOAD HELPER
 async function uploadToStorage(file, folder, onProgress) {
   const fileName = Date.now() + '_' + file.name;
   const folderName = folder.split('/').pop();
@@ -646,13 +643,7 @@ async function uploadToStorage(file, folder, onProgress) {
   const res = await fetch('/api/images', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name: fileName,
-      folder: folderName,
-      path: imgPath,
-      size: file.size,
-      type: file.type
-    })
+    body: JSON.stringify({ name: fileName, folder: folderName, path: imgPath, size: file.size, type: file.type })
   });
   if(!res.ok) throw new Error('Upload failed');
   if(onProgress) onProgress(100);
@@ -661,10 +652,7 @@ async function uploadToStorage(file, folder, onProgress) {
 
 function safeImage(el, url) {
   el.src = url;
-  el.onerror = () => {
-    el.onerror = null;
-    el.src = 'https://via.placeholder.com/400x300?text=Image+Unavailable';
-  };
+  el.onerror = () => { el.onerror = null; el.src = 'https://via.placeholder.com/400x300?text=Image+Unavailable'; };
 }
 
 window.refreshImg = function(imgEl) {
@@ -672,7 +660,7 @@ window.refreshImg = function(imgEl) {
   imgEl.src = 'https://via.placeholder.com/400x300?text=Image+Unavailable';
 };
 
-// ── AUTH ─────────────────────────────────────────────
+// ========== WORKING LOGIN FROM OLD CODE ==========
 onAuthStateChanged(auth, async user => {
   console.log('auth state changed', user);
   if(user) {
@@ -716,7 +704,7 @@ window.login = async function(email, password) {
       showSuccess('Login successful! Redirecting...');
       localStorage.setItem('lastLogin', new Date().toISOString());
       localStorage.setItem('userEmail', result.user.email);
-      setTimeout(() => { window.location.href = '/admin/dashboard.html'; }, 1000);
+      setTimeout(() => { window.location.href = '/admin'; }, 1000);
     } else {
       showError('This account does not have admin privileges. Please contact administrator.');
       await signOut(auth);
@@ -744,210 +732,77 @@ window.doLogin = function() {
 
 window.doLogout = async function() { await signOut(auth); location.reload(); };
 
-// ── INIT ─────────────────────────────────────────────
-function initAdmin() {
-  loadDashboard();
-  loadContactSettingsForm();
-  watchBadges();
-  watchStats();
-  document.getElementById('analytics-apply-filter')?.addEventListener('click', () => loadAnalytics(true));
-  document.getElementById('analytics-export')?.addEventListener('click', exportAnalytics);
-  document.getElementById('analytics-load-more')?.addEventListener('click', loadMoreAnalytics);
-  loadAnalytics(true);
-  const rbtn = document.getElementById('reviews-load-more');
-  if(rbtn) rbtn.addEventListener('click', loadMoreReviews);
-  const ebtn = document.getElementById('enq-load-more');
-  if(ebtn) ebtn.addEventListener('click', loadMoreEnquiries);
+// ========== HERO FUNCTIONS ==========
+async function loadCurrentHero() {
+  const wrap = document.getElementById('hero-list');
+  const countEl = document.getElementById('hero-count');
+  try {
+    const res = await fetch('/api/images/hero');
+    const data = await res.json();
+    const heroImgs = data.heroImages || [];
+    const activeCount = heroImgs.filter(img => img.active).length;
+    countEl.textContent = `Total: ${heroImgs.length} (${activeCount} active)`;
+    if (heroImgs.length) {
+      wrap.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1rem;">${heroImgs.map(img => `
+        <div style="position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;border:1px solid var(--border);">
+          <img src="${img.path}" style="width:100%;height:100%;object-fit:cover;" onerror="this.onerror=null;this.src='https://via.placeholder.com/320x180?text=Unavailable'" />
+          <div style="position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.4rem;opacity:0;transition:opacity 0.2s;" class="hero-overlay">
+            <button class="btn ${img.active ? 'btn-approve' : 'btn-reject'} btn-sm" onclick="toggleHeroActive('${img.id}', ${!img.active})"><i class="fas fa-${img.active ? 'eye-slash' : 'eye'}"></i> ${img.active ? 'Active' : 'Inactive'}</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteHeroImage('${img.id}')"><i class="fas fa-trash"></i> Delete</button>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.6);padding:0.3rem 0.5rem;font-size:0.7rem;color:#fff;">${img.filename || 'Hero Image'} <span style="opacity:0.6;">#${img.order}</span></div>
+        </div>`).join('')}</div><style>.hero-overlay:hover { opacity: 1 !important; }</style>`;
+    } else {
+      wrap.innerHTML = '<div class="empty-state"><i class="fas fa-image"></i><p>No hero images yet</p></div>';
+    }
+  } catch(e) { wrap.innerHTML = '<p style="color:var(--muted);">Error loading images</p>'; }
 }
 
-// ── NAVIGATION ───────────────────────────────────────
-window.showPage = function(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  const btn = document.querySelector(`.nav-item[onclick="showPage('${id}')"]`);
-  if(btn) btn.classList.add('active');
-  const titles = { dashboard:'Dashboard', hero:'Hero Image', gallery:'Gallery', blog:'Blog Posts', reviews:'Reviews', enquiries:'Enquiries', bookings:'Bookings', newsletter:'Newsletter', 'contact-settings':'Contact Info', analytics:'Analytics' };
-  document.getElementById('page-title').textContent = titles[id] || id;
-  const loaders = {
-    gallery: loadGalleryAdmin,
-    blog: loadBlogAdmin,
-    reviews: () => loadReviewsAdmin('all', true),
-    enquiries: () => loadEnquiries(true),
-    bookings: loadBookings,
-    newsletter: loadNewsletter,
-    'contact-settings': loadContactSettingsForm,
-    analytics: loadAnalytics,
-    hero: loadCurrentHero
-  };
-  if(loaders[id]) loaders[id]();
+window.toggleHeroActive = async function(id, newStatus) {
+  try {
+    const res = await fetch(`/api/images/hero/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: newStatus }) });
+    if (!res.ok) throw new Error(await res.text());
+    toast(newStatus ? '✅ Hero image activated!' : '⏸️ Hero image deactivated!');
+    loadCurrentHero();
+  } catch(e) { toast('Error: ' + (e.message || 'Failed to update status'), 'error'); }
 };
 
-// ── TOAST ─────────────────────────────────────────────
-function toast(msg, type='success') {
-  const t = document.getElementById('admin-toast');
-  document.getElementById('admin-toast-msg').textContent = msg;
-  t.className = `toast show ${type}`;
-  clearTimeout(window._at);
-  window._at = setTimeout(() => t.classList.remove('show'), 4000);
-}
-
-// ── BADGES ───────────────────────────────────────────
-function watchBadges() {
-  onSnapshot(query(collection(db,'reviews'), where('status','==','pending')), s => {
-    const n = s.size; const b = document.getElementById('rv-badge');
-    b.textContent = n; b.style.display = n ? 'inline' : 'none';
-  });
-  onSnapshot(query(collection(db,'enquiries'), where('status','==','new')), s => {
-    const n = s.size; const b = document.getElementById('enq-badge');
-    b.textContent = n; b.style.display = n ? 'inline' : 'none';
-  });
-}
-
-function watchStats() {
-  const map = [
-    {col:'reviews',id:'st-reviews'},{col:'enquiries',id:'st-enquiries'},
-    {col:'bookings',id:'st-bookings'},{col:'gallery',id:'st-gallery'},
-    {col:'posts',id:'st-posts'},{col:'newsletter',id:'st-subs'}
-  ];
-  map.forEach(m => {
-    onSnapshot(collection(db,m.col), snap => {
-      const el = document.getElementById(m.id);
-      if(el) el.textContent = snap.size;
-    }, err => console.error('stat watch error', err));
-  });
-}
-
-// ── DASHBOARD ────────────────────────────────────────
-async function loadDashboard() {
+window.deleteHeroImage = async function(id) {
+  if(!confirm('Delete this hero image?')) return;
   try {
-    const counts = {
-      reviews:   (await getDocs(collection(db,'reviews'))).size,
-      enquiries: (await getDocs(collection(db,'enquiries'))).size,
-      bookings:  (await getDocs(collection(db,'bookings'))).size,
-      gallery:   (await getDocs(collection(db,'gallery'))).size,
-      posts:     (await getDocs(collection(db,'posts'))).size,
-      subs:      (await getDocs(collection(db,'newsletter'))).size,
-    };
-    document.getElementById('st-reviews').textContent   = counts.reviews;
-    document.getElementById('st-enquiries').textContent = counts.enquiries;
-    document.getElementById('st-bookings').textContent  = counts.bookings;
-    document.getElementById('st-gallery').textContent   = counts.gallery;
-    document.getElementById('st-posts').textContent     = counts.posts;
-    document.getElementById('st-subs').textContent      = counts.subs;
-  } catch(e) {
-    console.error('dashboard count error',e);
-    toast('🔒 Unable to load dashboard. Please ensure you are signed in.', 'error');
-    if(e.code && e.code.includes('permission')) { await signOut(auth); document.getElementById('login-screen').style.display = 'flex'; }
-  }
-  const aSnap = await getDocs(query(collection(db,'analytics'), orderBy('ts','desc'), limit(8)));
-  const feed = document.getElementById('activity-feed');
-  if(aSnap.empty) { feed.innerHTML = '<div class="empty-state"><i class="fas fa-stream"></i><p>No activity yet</p></div>'; }
-  else {
-    feed.innerHTML = aSnap.docs.map(d => {
-      const ev = d.data(); const ts = ev.ts?.toDate?.()?.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) || '';
-      const dot = ev.event==='page_view'?'blue':ev.event.includes('submit')?'red':'';
-      return `<div class="feed-item"><div class="feed-dot ${dot}"></div><div class="feed-content"><p>${ev.event} ${ev.data?.label||ev.data?.section||ev.data?.title||''}</p><small>${ts}</small></div></div>`;
-    }).join('');
-  }
-  const rvSnap = await getDocs(query(collection(db,'reviews'), where('status','==','pending'), limit(5)));
-  const pv = document.getElementById('dash-pending-reviews');
-  if(rvSnap.empty) { pv.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>No pending reviews</p></div>'; }
-  else {
-    pv.innerHTML = rvSnap.docs.map(d => {
-      const r = d.data();
-      return `<div style="padding:0.75rem 0;border-bottom:1px solid var(--border);">
-        <div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;">
-          <strong style="font-size:0.88rem;">${r.name}</strong>
-          <span style="color:#d4a93a;font-size:0.8rem;">${'⭐'.repeat(r.rating)}</span>
-        </div>
-        <p style="font-size:0.82rem;color:var(--muted);">${r.text?.slice(0,80)}...</p>
-        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
-          <button class="btn btn-sm btn-approve" onclick="quickApprove('${d.id}')">Approve</button>
-          <button class="btn btn-sm btn-reject"  onclick="quickReject('${d.id}')">Reject</button>
-        </div>
-      </div>`;
-    }).join('');
-  }
-}
+    const res = await fetch(`/api/images/hero/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error(await res.text());
+    toast('Hero image deleted.', 'error');
+    loadCurrentHero();
+  } catch(e) { toast('Error: ' + (e.message || 'Failed to delete'), 'error'); }
+};
 
-window.quickApprove = async function(id) { await updateDoc(doc(db,'reviews',id), { status:'approved' }); toast('✅ Review approved!'); loadDashboard(); };
-window.quickReject  = async function(id) { await updateDoc(doc(db,'reviews',id), { status:'rejected' }); toast('Review rejected.','error'); loadDashboard(); };
-
-// ── HERO IMAGE — now loads from /api/images ───────────
-async function loadCurrentHero() {
-  const wrap = document.getElementById('current-hero');
-  try {
-    let heroImgs = [];
-
-    // Local API se check karo
-    const res = await fetch('/api/images?folder=hero');
-    const data = await res.json();
-    heroImgs = data.images || [];
-
-    // Agar local mein nahi hain toh Firestore se lo
-    if (!heroImgs.length) {
-      const snap = await getDocs(query(collection(db,'hero_images'), orderBy('order','asc')));
-      if (!snap.empty) {
-        heroImgs = snap.docs.map(d => ({
-          path: d.data().url, name: d.data().title || 'Hero Image'
-        }));
-      }
-      if (!heroImgs.length) {
-        const snap2 = await getDocs(query(collection(db,'settings'), where('key','==','hero_image')));
-        if (!snap2.empty) {
-          const d = snap2.docs[0].data();
-          if (d.value) heroImgs = [{ path: d.value, name: 'Hero Image' }];
-        }
-      }
-    }
-
-    if (heroImgs.length) {
-      wrap.innerHTML = `
-        <p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.75rem;">Current Hero Images (${heroImgs.length}):</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.75rem;margin-bottom:1rem;">
-          ${heroImgs.map(img => `
-            <div style="position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;border:1px solid var(--border);">
-              <img src="${img.path}" style="width:100%;height:100%;object-fit:cover;"
-                onerror="this.onerror=null;this.src='https://via.placeholder.com/320x180?text=Unavailable'" />
-              <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.6);padding:0.3rem 0.5rem;font-size:0.7rem;color:#fff;">
-                ${img.name}
-              </div>
-            </div>`).join('')}
-        </div>`;
-    } else {
-      wrap.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">No hero image set yet.</p>';
-    }
-  } catch(e) { wrap.innerHTML = ''; console.error(e); }
-}
-
-window.uploadHeroImage = async function(file) {
+window.handleHeroImageFile = async function(file) {
   if(!file) return;
   const progEl = document.getElementById('hero-progress');
   const fillEl = document.getElementById('hero-prog-fill');
   progEl.style.display = 'block';
   try {
-    const { url } = await uploadToStorage(file, 'hero', pct => { fillEl.style.width = pct + '%'; });
-    toast('✅ Hero image updated! It will show on the website now.');
+    const base64Data = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); });
+    fillEl.style.width = '50%';
+    const filename = Date.now() + '_' + file.name;
+    const res = await fetch('/api/images/hero', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ filename, imageData: base64Data }) });
+    if (!res.ok) throw new Error(await res.text());
+    fillEl.style.width = '100%';
+    toast('✅ Hero image uploaded!');
     loadCurrentHero();
-  } catch(e) {
-    toast('Upload failed: '+(e.message||e),'error');
-  } finally {
-    progEl.style.display = 'none';
-    fillEl.style.width = '0%';
-  }
+  } catch(e) { toast('Upload failed: '+(e.message||e),'error'); } finally { progEl.style.display = 'none'; fillEl.style.width = '0%'; }
 };
 
-// drag & drop hero
 const heroDrop = document.getElementById('hero-drop');
 ['dragover','dragleave','drop'].forEach(ev => heroDrop.addEventListener(ev, e => {
   e.preventDefault();
   if(ev === 'dragover') heroDrop.classList.add('drag');
   if(ev === 'dragleave') heroDrop.classList.remove('drag');
-  if(ev === 'drop') { heroDrop.classList.remove('drag'); window.uploadHeroImage(e.dataTransfer.files[0]); }
+  if(ev === 'drop') { heroDrop.classList.remove('drag'); window.handleHeroImageFile(e.dataTransfer.files[0]); }
 }));
 
-// ── GALLERY — now loads from /api/images ──────────────
+// ========== GALLERY FUNCTIONS ==========
 let pendingGalleryFiles = [];
 
 window.handleGalleryFiles = function(files) {
@@ -967,12 +822,11 @@ window.removeGalFile = function(i) {
 
 window.uploadGalleryImages = async function() {
   if(!pendingGalleryFiles.length) return;
-  const cat    = document.getElementById('gal-category').value;
-  const title  = document.getElementById('gal-title').value.trim();
-  const order  = parseInt(document.getElementById('gal-order').value) || 99;
-  const prog   = document.getElementById('gal-progress');
-  const label  = document.getElementById('gal-prog-label');
-  const fill   = document.getElementById('gal-prog-fill');
+  const cat = document.getElementById('gal-category').value;
+  if (!cat) { toast('Please select a category', 'error'); return; }
+  const prog = document.getElementById('gal-progress');
+  const label = document.getElementById('gal-prog-label');
+  const fill = document.getElementById('gal-prog-fill');
   const uploadBtn = document.getElementById('gal-upload-btn');
   uploadBtn.disabled = true;
   prog.style.display = 'block';
@@ -981,12 +835,16 @@ window.uploadGalleryImages = async function() {
       const file = pendingGalleryFiles[i];
       label.textContent = `Uploading ${i+1}/${pendingGalleryFiles.length}: ${file.name}`;
       fill.style.width = '0%';
-      await uploadToStorage(file, `gallery/${cat}`, pct => { fill.style.width = pct + '%'; });
+      const base64Data = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); });
+      fill.style.width = '50%';
+      const filename = Date.now() + i + '_' + file.name;
+      const res = await fetch('/api/images/gallery', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ category: cat, filename, imageData: base64Data }) });
+      if (!res.ok) throw new Error(await res.text());
+      fill.style.width = '100%';
     }
     toast(`✅ ${pendingGalleryFiles.length} image(s) uploaded successfully!`);
-  } catch(e) {
-    toast('Gallery upload failed: '+(e.message||e),'error');
-  } finally {
+  } catch(e) { toast('Gallery upload failed: '+(e.message||e),'error'); }
+  finally {
     pendingGalleryFiles = [];
     document.getElementById('gal-preview').innerHTML = '';
     uploadBtn.disabled = true;
@@ -995,7 +853,6 @@ window.uploadGalleryImages = async function() {
   }
 };
 
-// drag & drop gallery
 const galDrop = document.getElementById('gal-drop');
 ['dragover','dragleave','drop'].forEach(ev => galDrop.addEventListener(ev, e => {
   e.preventDefault();
@@ -1009,448 +866,169 @@ async function loadGalleryAdmin() {
   grid.innerHTML = '<div class="spinner"></div>';
   const cat = document.getElementById('gal-filter-cat').value;
   try {
-    const url = cat === 'all' ? '/api/images' : `/api/images?folder=${cat}`;
+    const url = cat === 'all' ? '/api/images/gallery' : `/api/images/gallery?category=${cat}`;
     const res = await fetch(url);
     const data = await res.json();
-    const imgs = data.images || [];
-    if(!imgs.length) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-images"></i><p>No images yet</p></div>'; return; }
+    const imgs = data.galleryImages || [];
+    const stats = document.getElementById('gallery-stats');
+    const activeCount = imgs.filter(img => img.active).length;
+    if (stats) stats.innerHTML = `<strong>${imgs.length}</strong> total | <strong style="color:var(--moss);">${activeCount}</strong> active`;
+    if(!imgs.length) { grid.innerHTML = '<div class="empty-state"><i class="fas fa-images"></i><p>No images yet</p></div>'; return; }
     grid.innerHTML = imgs.map(item => `
       <div class="admin-gallery-item">
-        <img src="${item.path}" alt="${item.name}" loading="lazy" onerror="refreshImg(this)" />
+        <img src="${item.path}" alt="${item.filename}" loading="lazy" onerror="refreshImg(this)" />
         <div class="item-overlay">
-          <button class="btn btn-danger btn-sm" onclick="deleteGalleryItem('${item.id}')"><i class="fas fa-trash"></i> Delete</button>
+          <button class="btn ${item.active ? 'btn-approve' : 'btn-reject'} btn-sm" onclick="toggleGalleryActive('${item.id}', '${item.category}', ${!item.active})"><i class="fas fa-${item.active ? 'eye-slash' : 'eye'}"></i> ${item.active ? 'Active' : 'Inactive'}</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteGalleryItem('${item.id}', '${item.category}')"><i class="fas fa-trash"></i> Delete</button>
         </div>
-        <div class="item-label">${item.name} <span style="opacity:0.6;">(${item.folder})</span></div>
+        <div class="item-label">${item.filename} (${item.category})</div>
       </div>`).join('');
-  } catch(e) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><p>Error loading images</p></div>'; }
+  } catch(e) { grid.innerHTML = '<div class="empty-state"><p>Error loading images</p></div>'; }
 }
-window.loadGalleryAdmin = loadGalleryAdmin;
 
-window.deleteGalleryItem = async function(id) {
+window.toggleGalleryActive = async function(id, category, newStatus) {
+  try {
+    const res = await fetch(`/api/images/gallery/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: newStatus, category }) });
+    if (!res.ok) throw new Error(await res.text());
+    toast(newStatus ? '✅ Image activated!' : '⏸️ Image deactivated!');
+    loadGalleryAdmin();
+  } catch(e) { toast('Error: ' + (e.message || 'Failed to update status'), 'error'); }
+};
+
+window.deleteGalleryItem = async function(id, category) {
   if(!confirm('Delete this image?')) return;
   try {
-    await fetch(`/api/images/${id}`, { method: 'DELETE' });
+    await fetch(`/api/images/gallery/${id}`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ category }) });
     toast('Image deleted.','error');
     loadGalleryAdmin();
   } catch(e) { toast('Error: '+e.message,'error'); }
 };
 
-// ── BLOG ─────────────────────────────────────────────
+// ========== OTHER FUNCTIONS ==========
+function initAdmin() {
+  loadDashboard();
+  loadContactSettingsForm();
+  watchBadges();
+  watchStats();
+  document.getElementById('analytics-apply-filter')?.addEventListener('click', () => loadAnalytics(true));
+  document.getElementById('analytics-export')?.addEventListener('click', exportAnalytics);
+  document.getElementById('analytics-load-more')?.addEventListener('click', loadMoreAnalytics);
+  loadAnalytics(true);
+  const rbtn = document.getElementById('reviews-load-more');
+  if(rbtn) rbtn.addEventListener('click', loadMoreReviews);
+  const ebtn = document.getElementById('enq-load-more');
+  if(ebtn) ebtn.addEventListener('click', loadMoreEnquiries);
+}
+
+window.showPage = function(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const btn = document.querySelector(`.nav-item[onclick="showPage('${id}')"]`);
+  if(btn) btn.classList.add('active');
+  const titles = { dashboard:'Dashboard', hero:'Hero Image', gallery:'Gallery', blog:'Blog Posts', reviews:'Reviews', enquiries:'Enquiries', bookings:'Bookings', newsletter:'Newsletter', 'contact-settings':'Contact Info', analytics:'Analytics' };
+  document.getElementById('page-title').textContent = titles[id] || id;
+  const loaders = { gallery: loadGalleryAdmin, blog: loadBlogAdmin, reviews: () => loadReviewsAdmin('all', true), enquiries: () => loadEnquiries(true), bookings: loadBookings, newsletter: loadNewsletter, 'contact-settings': loadContactSettingsForm, analytics: loadAnalytics, hero: loadCurrentHero };
+  if(loaders[id]) loaders[id]();
+};
+
+function toast(msg, type='success') {
+  const t = document.getElementById('admin-toast');
+  document.getElementById('admin-toast-msg').textContent = msg;
+  t.className = `toast show ${type}`;
+  clearTimeout(window._at);
+  window._at = setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+function watchBadges() {
+  onSnapshot(query(collection(db,'reviews'), where('status','==','pending')), s => {
+    const n = s.size; const b = document.getElementById('rv-badge');
+    b.textContent = n; b.style.display = n ? 'inline' : 'none';
+  });
+  onSnapshot(query(collection(db,'enquiries'), where('status','==','new')), s => {
+    const n = s.size; const b = document.getElementById('enq-badge');
+    b.textContent = n; b.style.display = n ? 'inline' : 'none';
+  });
+}
+
+function watchStats() {
+  const map = [{col:'reviews',id:'st-reviews'},{col:'enquiries',id:'st-enquiries'},{col:'bookings',id:'st-bookings'},{col:'gallery',id:'st-gallery'},{col:'posts',id:'st-posts'},{col:'newsletter',id:'st-subs'}];
+  map.forEach(m => { onSnapshot(collection(db,m.col), snap => { const el = document.getElementById(m.id); if(el) el.textContent = snap.size; }, err => console.error('stat watch error', err)); });
+}
+
+async function loadDashboard() {
+  try {
+    const counts = { reviews: (await getDocs(collection(db,'reviews'))).size, enquiries: (await getDocs(collection(db,'enquiries'))).size, bookings: (await getDocs(collection(db,'bookings'))).size, gallery: (await getDocs(collection(db,'gallery'))).size, posts: (await getDocs(collection(db,'posts'))).size, subs: (await getDocs(collection(db,'newsletter'))).size };
+    document.getElementById('st-reviews').textContent = counts.reviews; document.getElementById('st-enquiries').textContent = counts.enquiries; document.getElementById('st-bookings').textContent = counts.bookings; document.getElementById('st-gallery').textContent = counts.gallery; document.getElementById('st-posts').textContent = counts.posts; document.getElementById('st-subs').textContent = counts.subs;
+  } catch(e) { console.error('dashboard count error',e); toast('Unable to load dashboard.', 'error'); }
+  const aSnap = await getDocs(query(collection(db,'analytics'), orderBy('ts','desc'), limit(8)));
+  const feed = document.getElementById('activity-feed');
+  if(aSnap.empty) { feed.innerHTML = '<div class="empty-state"><i class="fas fa-stream"></i><p>No activity yet</p></div>'; }
+  else { feed.innerHTML = aSnap.docs.map(d => { const ev = d.data(); const ts = ev.ts?.toDate?.()?.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) || ''; const dot = ev.event==='page_view'?'blue':ev.event.includes('submit')?'red':''; return `<div class="feed-item"><div class="feed-dot ${dot}"></div><div class="feed-content"><p>${ev.event} ${ev.data?.label||ev.data?.section||ev.data?.title||''}</p><small>${ts}</small></div></div>`; }).join(''); }
+  const rvSnap = await getDocs(query(collection(db,'reviews'), where('status','==','pending'), limit(5)));
+  const pv = document.getElementById('dash-pending-reviews');
+  if(rvSnap.empty) { pv.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>No pending reviews</p></div>'; }
+  else { pv.innerHTML = rvSnap.docs.map(d => { const r = d.data(); return `<div style="padding:0.75rem 0;border-bottom:1px solid var(--border);"><div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><strong>${r.name}</strong><span style="color:#d4a93a;">${'⭐'.repeat(r.rating)}</span></div><p style="font-size:0.82rem;color:var(--muted);">${r.text?.slice(0,80)}...</p><div style="display:flex;gap:0.5rem;margin-top:0.5rem;"><button class="btn btn-sm btn-approve" onclick="quickApprove('${d.id}')">Approve</button><button class="btn btn-sm btn-reject" onclick="quickReject('${d.id}')">Reject</button></div></div>`; }).join(''); }
+}
+
+window.quickApprove = async function(id) { await updateDoc(doc(db,'reviews',id), { status:'approved' }); toast('Review approved!'); loadDashboard(); };
+window.quickReject = async function(id) { await updateDoc(doc(db,'reviews',id), { status:'rejected' }); toast('Review rejected.','error'); loadDashboard(); };
+
+// BLOG FUNCTIONS
 async function loadBlogAdmin() {
   const tbody = document.getElementById('blog-tbody');
   tbody.innerHTML = '<tr><td colspan="5"><div class="spinner"></div></td></tr>';
   const snap = await getDocs(query(collection(db,'posts'), orderBy('date','desc')));
   if(snap.empty) { tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><i class="fas fa-pen"></i><p>No posts yet</p></div></td></tr>'; return; }
-  tbody.innerHTML = snap.docs.map(d => {
-    const p = d.data();
-    const date = p.date?.toDate?.()?.toLocaleDateString('en-IN') || p.date || '—';
-    const status = p.published ? '<span class="badge badge-published">Published</span>' : '<span class="badge badge-draft">Draft</span>';
-    return `<tr>
-      <td><strong>${p.title||''}</strong></td>
-      <td><span class="badge badge-new">${p.category||''}</span></td>
-      <td style="color:var(--muted);font-size:0.82rem;">${date}</td>
-      <td>${status}</td>
-      <td><div style="display:flex;gap:0.4rem;">
-        <button class="btn btn-sm btn-edit" onclick="editBlogPost('${d.id}')"><i class="fas fa-edit"></i></button>
-        <button class="btn btn-sm btn-danger" onclick="deleteBlogPost('${d.id}')"><i class="fas fa-trash"></i></button>
-      </div></td>
-    </tr>`;
-  }).join('');
+  tbody.innerHTML = snap.docs.map(d => { const p = d.data(); const date = p.date?.toDate?.()?.toLocaleDateString('en-IN') || p.date || '—'; const status = p.published ? '<span class="badge badge-published">Published</span>' : '<span class="badge badge-draft">Draft</span>'; return `<tr><td><strong>${p.title||''}</strong></td><td><span class="badge badge-new">${p.category||''}</span></td><td style="color:var(--muted);font-size:0.82rem;">${date}</td><td>${status}</td><td><div style="display:flex;gap:0.4rem;"><button class="btn btn-sm btn-edit" onclick="editBlogPost('${d.id}')"><i class="fas fa-edit"></i></button><button class="btn btn-sm btn-danger" onclick="deleteBlogPost('${d.id}')"><i class="fas fa-trash"></i></button></div></td></tr>`; }).join('');
 }
 
-window.openBlogModal = function() {
-  blogImagePath = '';
-  document.getElementById('blog-edit-id').value = '';
-  document.getElementById('blog-modal-title').textContent = 'New Blog Post';
-  document.getElementById('blog-title').value = '';
-  document.getElementById('blog-excerpt').value = '';
-  document.getElementById('blog-emoji').value = '📝';
-  document.getElementById('blog-status').value = 'true';
-  document.getElementById('blog-img-url').value = '';
-  document.getElementById('blog-img-path').value = '';
-  const prev = document.getElementById('blog-img-preview');
-  prev.style.display = 'none';
-  document.getElementById('blog-modal').classList.add('open');
-};
+window.openBlogModal = function() { blogImagePath = ''; document.getElementById('blog-edit-id').value = ''; document.getElementById('blog-modal-title').textContent = 'New Blog Post'; document.getElementById('blog-title').value = ''; document.getElementById('blog-excerpt').value = ''; document.getElementById('blog-emoji').value = '📝'; document.getElementById('blog-status').value = 'true'; document.getElementById('blog-img-url').value = ''; document.getElementById('blog-img-path').value = ''; const prev = document.getElementById('blog-img-preview'); prev.style.display = 'none'; document.getElementById('blog-modal').classList.add('open'); };
+window.editBlogPost = async function(id) { const d = await getDoc(doc(db,'posts',id)); const p = d.data(); document.getElementById('blog-edit-id').value = id; document.getElementById('blog-modal-title').textContent = 'Edit Blog Post'; document.getElementById('blog-title').value = p.title||''; document.getElementById('blog-category').value = p.category||'Bird Watching'; document.getElementById('blog-excerpt').value = p.excerpt||''; document.getElementById('blog-emoji').value = p.emoji||'📝'; document.getElementById('blog-status').value = String(p.published); document.getElementById('blog-img-url').value = p.imageUrl||''; blogImagePath = p.storagePath || ''; document.getElementById('blog-img-path').value = blogImagePath; const prev = document.getElementById('blog-img-preview'); if(p.imageUrl) { safeImage(prev, p.imageUrl); prev.style.display = 'block'; } document.getElementById('blog-modal').classList.add('open'); };
+window.closeBlogModal = function() { document.getElementById('blog-modal').classList.remove('open'); blogImagePath = ''; const progFill = document.getElementById('blog-img-prog-fill'); if(progFill) progFill.style.width = '0%'; };
+window.previewBlogImage = async function(input) { const file = input.files[0]; if(!file) return; const prev = document.getElementById('blog-img-preview'); const progContainer = document.getElementById('blog-img-progress'); const progFill = document.getElementById('blog-img-prog-fill'); prev.src = URL.createObjectURL(file); prev.style.display = 'block'; progContainer.style.display = 'block'; try { const {url, path} = await uploadToStorage(file, 'blog', pct => { progFill.style.width = pct + '%'; }); document.getElementById('blog-img-url').value = url; document.getElementById('blog-img-path').value = path; blogImagePath = path; toast('Image uploaded!'); } catch(e) { toast('Image upload failed: '+(e.message||e),'error'); } finally { progContainer.style.display = 'none'; progFill.style.width = '0%'; } };
+window.saveBlogPost = async function() { const id = document.getElementById('blog-edit-id').value; const title = document.getElementById('blog-title').value.trim(); const cat = document.getElementById('blog-category').value; const excerpt = document.getElementById('blog-excerpt').value.trim(); const emoji = document.getElementById('blog-emoji').value.trim(); const status = document.getElementById('blog-status').value === 'true'; const imgUrl = document.getElementById('blog-img-url').value; if(!title || !excerpt) { toast('Title and excerpt are required.','error'); return; } const data = { title, category: cat, excerpt, emoji: emoji||'📝', published: status, imageUrl: imgUrl, date: serverTimestamp() }; if(blogImagePath) data.storagePath = blogImagePath; try { if(id) { await updateDoc(doc(db,'posts',id), data); toast('Post updated!'); } else { await addDoc(collection(db,'posts'), data); toast('Post published!'); } } catch(e) { toast('Error saving post: '+(e.message||e),'error'); } window.closeBlogModal(); loadBlogAdmin(); };
+window.deleteBlogPost = async function(id) { if(!confirm('Delete this post?')) return; await deleteDoc(doc(db,'posts',id)); toast('Post deleted.','error'); loadBlogAdmin(); };
 
-window.editBlogPost = async function(id) {
-  const d = await getDoc(doc(db,'posts',id));
-  const p = d.data();
-  document.getElementById('blog-edit-id').value = id;
-  document.getElementById('blog-modal-title').textContent = 'Edit Blog Post';
-  document.getElementById('blog-title').value    = p.title||'';
-  document.getElementById('blog-category').value = p.category||'Bird Watching';
-  document.getElementById('blog-excerpt').value  = p.excerpt||'';
-  document.getElementById('blog-emoji').value    = p.emoji||'📝';
-  document.getElementById('blog-status').value   = String(p.published);
-  document.getElementById('blog-img-url').value  = p.imageUrl||'';
-  blogImagePath = p.storagePath || '';
-  document.getElementById('blog-img-path').value = blogImagePath;
-  const prev = document.getElementById('blog-img-preview');
-  if(p.imageUrl) { safeImage(prev, p.imageUrl); prev.style.display = 'block'; }
-  document.getElementById('blog-modal').classList.add('open');
-};
-
-window.closeBlogModal = function() {
-  document.getElementById('blog-modal').classList.remove('open');
-  blogImagePath = '';
-  const progFill = document.getElementById('blog-img-prog-fill');
-  if(progFill) progFill.style.width = '0%';
-};
-
-window.previewBlogImage = async function(input) {
-  const file = input.files[0]; if(!file) return;
-  const prev = document.getElementById('blog-img-preview');
-  const progContainer = document.getElementById('blog-img-progress');
-  const progFill = document.getElementById('blog-img-prog-fill');
-  prev.src = URL.createObjectURL(file);
-  prev.style.display = 'block';
-  progContainer.style.display = 'block';
-  try {
-    const {url, path} = await uploadToStorage(file, 'blog', pct => { progFill.style.width = pct + '%'; });
-    document.getElementById('blog-img-url').value = url;
-    document.getElementById('blog-img-path').value = path;
-    blogImagePath = path;
-    toast('Image uploaded!');
-  } catch(e) {
-    toast('Image upload failed: '+(e.message||e),'error');
-  } finally {
-    progContainer.style.display = 'none';
-    progFill.style.width = '0%';
-  }
-};
-
-window.saveBlogPost = async function() {
-  const id      = document.getElementById('blog-edit-id').value;
-  const title   = document.getElementById('blog-title').value.trim();
-  const cat     = document.getElementById('blog-category').value;
-  const excerpt = document.getElementById('blog-excerpt').value.trim();
-  const emoji   = document.getElementById('blog-emoji').value.trim();
-  const status  = document.getElementById('blog-status').value === 'true';
-  const imgUrl  = document.getElementById('blog-img-url').value;
-  if(!title || !excerpt) { toast('Title and excerpt are required.','error'); return; }
-  const data = { title, category: cat, excerpt, emoji: emoji||'📝', published: status, imageUrl: imgUrl, date: serverTimestamp() };
-  if(blogImagePath) data.storagePath = blogImagePath;
-  try {
-    if(id) { await updateDoc(doc(db,'posts',id), data); toast('✅ Post updated!'); }
-    else   { await addDoc(collection(db,'posts'), data); toast('✅ Post published!'); }
-  } catch(e) { toast('Error saving post: '+(e.message||e),'error'); }
-  window.closeBlogModal(); loadBlogAdmin();
-};
-
-window.deleteBlogPost = async function(id) {
-  if(!confirm('Delete this post?')) return;
-  await deleteDoc(doc(db,'posts',id));
-  toast('Post deleted.','error'); loadBlogAdmin();
-};
-
-// ── REVIEWS ──────────────────────────────────────────
+// REVIEW FUNCTIONS
 let rvFilter = 'all';
-window.setRvFilter = function(f, btn) {
-  rvFilter = f;
-  document.querySelectorAll('.rv-filter').forEach(b => b.classList.remove('active','btn-primary'));
-  btn.classList.add('active','btn-primary');
-  loadReviewsAdmin(f, true);
-};
-
+window.setRvFilter = function(f, btn) { rvFilter = f; document.querySelectorAll('.rv-filter').forEach(b => b.classList.remove('active','btn-primary')); btn.classList.add('active','btn-primary'); loadReviewsAdmin(f, true); };
 const reviewsCache = { filter:'all', docs: [], lastDoc: null, loading:false, finished:false };
 let reviewsUnsub = null;
-
-async function loadReviewsAdmin(filter, reset=false) {
-  const list = document.getElementById('reviews-list-admin');
-  const loadMoreBtn = document.getElementById('reviews-load-more');
-  try {
-    if(reset || reviewsCache.filter !== filter) {
-      reviewsCache.filter = filter; reviewsCache.docs = []; reviewsCache.lastDoc = null; reviewsCache.finished = false;
-      if(reviewsUnsub) { reviewsUnsub(); reviewsUnsub = null; }
-      const base = collection(db,'reviews');
-      let baseQuery = filter==='all' ? query(base, orderBy('createdAt','desc')) : query(base, where('status','==',filter), orderBy('createdAt','desc'));
-      reviewsUnsub = onSnapshot(baseQuery, snap => {
-        reviewsCache.docs = snap.docs; reviewsCache.lastDoc = snap.docs[snap.docs.length-1] || null; reviewsCache.finished = true;
-        renderReviews(reviewsCache.docs);
-        if(loadMoreBtn) loadMoreBtn.style.display = 'none';
-      }, err => console.error('reviews realtime error', err));
-    }
-    if(reviewsCache.loading) return;
-    if(reviewsCache.docs.length && !reset) { renderReviews(reviewsCache.docs); if(loadMoreBtn) loadMoreBtn.style.display = reviewsCache.finished ? 'none' : 'block'; return; }
-    list.innerHTML = '<div class="skeleton skeleton-row"></div>'.repeat(4);
-    reviewsCache.loading = true;
-    let q;
-    const base2 = collection(db,'reviews');
-    if(filter==='all') q = query(base2, orderBy('createdAt','desc'));
-    else q = query(base2, where('status','==',filter), orderBy('createdAt','desc'));
-    if(reviewsCache.lastDoc) q = query(q, startAfter(reviewsCache.lastDoc));
-    q = query(q, limit(20));
-    const snap = await getDocs(q);
-    if(snap.empty) {
-      if(!reviewsCache.docs.length) list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>No reviews found</p></div>';
-      reviewsCache.finished = true;
-    } else {
-      snap.docs.forEach(d => reviewsCache.docs.push(d));
-      reviewsCache.lastDoc = snap.docs[snap.docs.length-1];
-      renderReviews(reviewsCache.docs);
-      if(loadMoreBtn) loadMoreBtn.style.display = 'block';
-      if(snap.docs.length < 20) reviewsCache.finished = true;
-    }
-  } catch(e) {
-    console.error('Error loading reviews', e);
-    list.innerHTML = `<div class="empty-state" style="color:var(--red)"><i class="fas fa-exclamation-triangle"></i><p>Error loading reviews: ${e.message||e}</p></div>`;
-  } finally { reviewsCache.loading = false; }
-}
-
-function renderReviews(docs) {
-  const list = document.getElementById('reviews-list-admin');
-  docs.sort((a,b)=> (b.data().createdAt?.toMillis?.()||0) - (a.data().createdAt?.toMillis?.()||0));
-  list.innerHTML = docs.map(d => {
-    const r = d.data();
-    const date = r.createdAt?.toDate?.()?.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) || 'Unknown';
-    return `<div class="review-detail" id="rv-${d.id}">
-      <div class="rv-meta">
-        <span class="rv-name-big">${r.name}</span>
-        <span class="rv-stars-big">${'⭐'.repeat(r.rating)}</span>
-        <span class="badge badge-${r.status}">${r.status}</span>
-        <span class="rv-date-small">${date}</span>
-      </div>
-      <p class="rv-quote">"${r.text}"</p>
-      <div class="rv-actions">
-        <select class="rv-status-select" id="rv-sel-${d.id}">
-          <option value="pending"  ${r.status==='pending' ?'selected':''}>Pending</option>
-          <option value="approved" ${r.status==='approved'?'selected':''}>Approved</option>
-          <option value="rejected" ${r.status==='rejected'?'selected':''}>Rejected</option>
-        </select>
-        <button class="btn btn-sm btn-edit" onclick="saveReviewStatus('${d.id}')"><i class="fas fa-check"></i> Update Status</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteReview('${d.id}')"><i class="fas fa-trash"></i></button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
+async function loadReviewsAdmin(filter, reset=false) { const list = document.getElementById('reviews-list-admin'); const loadMoreBtn = document.getElementById('reviews-load-more'); try { if(reset || reviewsCache.filter !== filter) { reviewsCache.filter = filter; reviewsCache.docs = []; reviewsCache.lastDoc = null; reviewsCache.finished = false; if(reviewsUnsub) { reviewsUnsub(); reviewsUnsub = null; } const base = collection(db,'reviews'); let baseQuery = filter==='all' ? query(base, orderBy('createdAt','desc')) : query(base, where('status','==',filter), orderBy('createdAt','desc')); reviewsUnsub = onSnapshot(baseQuery, snap => { reviewsCache.docs = snap.docs; reviewsCache.lastDoc = snap.docs[snap.docs.length-1] || null; reviewsCache.finished = true; renderReviews(reviewsCache.docs); if(loadMoreBtn) loadMoreBtn.style.display = 'none'; }, err => console.error('reviews realtime error', err)); } if(reviewsCache.loading) return; if(reviewsCache.docs.length && !reset) { renderReviews(reviewsCache.docs); if(loadMoreBtn) loadMoreBtn.style.display = reviewsCache.finished ? 'none' : 'block'; return; } list.innerHTML = '<div class="skeleton skeleton-row"></div>'.repeat(4); reviewsCache.loading = true; let q; const base2 = collection(db,'reviews'); if(filter==='all') q = query(base2, orderBy('createdAt','desc')); else q = query(base2, where('status','==',filter), orderBy('createdAt','desc')); if(reviewsCache.lastDoc) q = query(q, startAfter(reviewsCache.lastDoc)); q = query(q, limit(20)); const snap = await getDocs(q); if(snap.empty) { if(!reviewsCache.docs.length) list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>No reviews found</p></div>'; reviewsCache.finished = true; } else { snap.docs.forEach(d => reviewsCache.docs.push(d)); reviewsCache.lastDoc = snap.docs[snap.docs.length-1]; renderReviews(reviewsCache.docs); if(loadMoreBtn) loadMoreBtn.style.display = 'block'; if(snap.docs.length < 20) reviewsCache.finished = true; } } catch(e) { console.error('Error loading reviews', e); list.innerHTML = `<div class="empty-state" style="color:var(--red)"><i class="fas fa-exclamation-triangle"></i><p>Error loading reviews: ${e.message||e}</p></div>`; } finally { reviewsCache.loading = false; } }
+function renderReviews(docs) { const list = document.getElementById('reviews-list-admin'); docs.sort((a,b)=> (b.data().createdAt?.toMillis?.()||0) - (a.data().createdAt?.toMillis?.()||0)); list.innerHTML = docs.map(d => { const r = d.data(); const date = r.createdAt?.toDate?.()?.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) || 'Unknown'; return `<div class="review-detail" id="rv-${d.id}"><div class="rv-meta"><span class="rv-name-big">${r.name}</span><span class="rv-stars-big">${'⭐'.repeat(r.rating)}</span><span class="badge badge-${r.status}">${r.status}</span><span class="rv-date-small">${date}</span></div><p class="rv-quote">"${r.text}"</p><div class="rv-actions"><select class="rv-status-select" id="rv-sel-${d.id}"><option value="pending" ${r.status==='pending' ?'selected':''}>Pending</option><option value="approved" ${r.status==='approved'?'selected':''}>Approved</option><option value="rejected" ${r.status==='rejected'?'selected':''}>Rejected</option></select><button class="btn btn-sm btn-edit" onclick="saveReviewStatus('${d.id}')"><i class="fas fa-check"></i> Update Status</button><button class="btn btn-sm btn-danger" onclick="deleteReview('${d.id}')"><i class="fas fa-trash"></i></button></div></div>`; }).join(''); }
 window.loadMoreReviews = function() { if(reviewsCache.finished) return; loadReviewsAdmin(reviewsCache.filter); };
-window.saveReviewStatus = async function(id) { const status = document.getElementById(`rv-sel-${id}`).value; await updateDoc(doc(db,'reviews',id), { status }); toast(`✅ Review ${status}.`); loadReviewsAdmin(rvFilter); };
+window.saveReviewStatus = async function(id) { const status = document.getElementById(`rv-sel-${id}`).value; await updateDoc(doc(db,'reviews',id), { status }); toast(`Review ${status}.`); loadReviewsAdmin(rvFilter); };
 window.deleteReview = async function(id) { if(!confirm('Delete this review?')) return; await deleteDoc(doc(db,'reviews',id)); toast('Review deleted.','error'); loadReviewsAdmin(rvFilter); };
 
-// ── ENQUIRIES ─────────────────────────────────────────
+// ENQUIRY FUNCTIONS
 const enqCache = { docs: [], lastDoc: null, loading:false, finished:false };
 let enqUnsub = null;
-
-async function loadEnquiries(reset=false) {
-  const wrap = document.getElementById('enquiries-list');
-  const loadMoreBtn = document.getElementById('enq-load-more');
-  try {
-    if(reset) {
-      enqCache.docs = []; enqCache.lastDoc = null; enqCache.finished = false;
-      if(enqUnsub) { enqUnsub(); enqUnsub = null; }
-      const baseQ = query(collection(db,'enquiries'), orderBy('createdAt','desc'));
-      enqUnsub = onSnapshot(baseQ, snap => {
-        enqCache.docs = snap.docs; enqCache.lastDoc = snap.docs[snap.docs.length-1] || null; enqCache.finished = true;
-        renderEnquiries(enqCache.docs);
-        if(loadMoreBtn) loadMoreBtn.style.display = 'none';
-      }, err => console.error('enquiries realtime error', err));
-    }
-    if(enqCache.loading) return;
-    if(enqCache.docs.length && !reset) { renderEnquiries(enqCache.docs); loadMoreBtn.style.display = enqCache.finished ? 'none' : 'block'; return; }
-    wrap.innerHTML = '<div class="skeleton skeleton-row"></div>'.repeat(3);
-    enqCache.loading = true;
-    let q = query(collection(db,'enquiries'), orderBy('createdAt','desc'));
-    if(enqCache.lastDoc) q = query(q, startAfter(enqCache.lastDoc));
-    q = query(q, limit(20));
-    const snap = await getDocs(q);
-    if(snap.empty) {
-      if(!enqCache.docs.length) wrap.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No enquiries yet</p></div>';
-      enqCache.finished = true;
-    } else {
-      snap.docs.forEach(d => enqCache.docs.push(d));
-      enqCache.lastDoc = snap.docs[snap.docs.length-1];
-      renderEnquiries(enqCache.docs);
-      loadMoreBtn.style.display = 'block';
-      if(snap.docs.length < 20) enqCache.finished = true;
-    }
-  } catch(e) {
-    console.error('Error loading enquiries', e);
-    wrap.innerHTML = `<div class="empty-state" style="color:var(--red)"><i class="fas fa-exclamation-triangle"></i><p>Error loading enquiries: ${e.message||e}</p></div>`;
-  } finally { enqCache.loading = false; }
-}
-
-function renderEnquiries(docs) {
-  const wrap = document.getElementById('enquiries-list');
-  docs.sort((a,b)=> (b.data().createdAt?.toMillis?.()||0) - (a.data().createdAt?.toMillis?.()||0));
-  wrap.innerHTML = docs.map(d => {
-    const e = d.data();
-    const date = e.createdAt?.toDate?.()?.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) || '';
-    return `<div class="enq-row">
-      <div class="enq-header">
-        <div>
-          <div class="enq-name">${e.name}</div>
-          <div class="enq-contact">
-            <span><i class="fas fa-envelope" style="font-size:0.7rem;margin-right:3px;"></i><a href="mailto:${e.email}" style="color:inherit;text-decoration:none;">${e.email}</a></span>
-            ${e.phone ? `<span><i class="fas fa-phone" style="font-size:0.7rem;margin-right:3px;"></i>${e.phone}</span>` : ''}
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0;">
-          <span class="badge badge-${e.status||'new'}">${e.status||'new'}</span>
-          <span style="font-size:0.75rem;color:var(--muted);">${date}</span>
-          <button class="btn btn-sm btn-approve" onclick="markEnquiryRead('${d.id}')">Mark Read</button>
-          <button class="btn btn-sm btn-danger" onclick="deleteEnquiry('${d.id}')"><i class="fas fa-trash"></i></button>
-        </div>
-      </div>
-      <p class="enq-msg">${e.message||'—'}</p>
-    </div>`;
-  }).join('');
-}
-
+async function loadEnquiries(reset=false) { const wrap = document.getElementById('enquiries-list'); const loadMoreBtn = document.getElementById('enq-load-more'); try { if(reset) { enqCache.docs = []; enqCache.lastDoc = null; enqCache.finished = false; if(enqUnsub) { enqUnsub(); enqUnsub = null; } const baseQ = query(collection(db,'enquiries'), orderBy('createdAt','desc')); enqUnsub = onSnapshot(baseQ, snap => { enqCache.docs = snap.docs; enqCache.lastDoc = snap.docs[snap.docs.length-1] || null; enqCache.finished = true; renderEnquiries(enqCache.docs); if(loadMoreBtn) loadMoreBtn.style.display = 'none'; }, err => console.error('enquiries realtime error', err)); } if(enqCache.loading) return; if(enqCache.docs.length && !reset) { renderEnquiries(enqCache.docs); loadMoreBtn.style.display = enqCache.finished ? 'none' : 'block'; return; } wrap.innerHTML = '<div class="skeleton skeleton-row"></div>'.repeat(3); enqCache.loading = true; let q = query(collection(db,'enquiries'), orderBy('createdAt','desc')); if(enqCache.lastDoc) q = query(q, startAfter(enqCache.lastDoc)); q = query(q, limit(20)); const snap = await getDocs(q); if(snap.empty) { if(!enqCache.docs.length) wrap.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No enquiries yet</p></div>'; enqCache.finished = true; } else { snap.docs.forEach(d => enqCache.docs.push(d)); enqCache.lastDoc = snap.docs[snap.docs.length-1]; renderEnquiries(enqCache.docs); loadMoreBtn.style.display = 'block'; if(snap.docs.length < 20) enqCache.finished = true; } } catch(e) { console.error('Error loading enquiries', e); wrap.innerHTML = `<div class="empty-state" style="color:var(--red)"><i class="fas fa-exclamation-triangle"></i><p>Error loading enquiries: ${e.message||e}</p></div>`; } finally { enqCache.loading = false; } }
+function renderEnquiries(docs) { const wrap = document.getElementById('enquiries-list'); docs.sort((a,b)=> (b.data().createdAt?.toMillis?.()||0) - (a.data().createdAt?.toMillis?.()||0)); wrap.innerHTML = docs.map(d => { const e = d.data(); const date = e.createdAt?.toDate?.()?.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) || ''; return `<div class="enq-row"><div class="enq-header"><div><div class="enq-name">${e.name}</div><div class="enq-contact"><span><i class="fas fa-envelope" style="font-size:0.7rem;margin-right:3px;"></i><a href="mailto:${e.email}" style="color:inherit;text-decoration:none;">${e.email}</a></span>${e.phone ? `<span><i class="fas fa-phone" style="font-size:0.7rem;margin-right:3px;"></i>${e.phone}</span>` : ''}</div></div><div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0;"><span class="badge badge-${e.status||'new'}">${e.status||'new'}</span><span style="font-size:0.75rem;color:var(--muted);">${date}</span><button class="btn btn-sm btn-approve" onclick="markEnquiryRead('${d.id}')">Mark Read</button><button class="btn btn-sm btn-danger" onclick="deleteEnquiry('${d.id}')"><i class="fas fa-trash"></i></button></div></div><p class="enq-msg">${e.message||'—'}</p></div>`; }).join(''); }
 window.loadMoreEnquiries = function() { if(enqCache.finished) return; loadEnquiries(); };
 window.markEnquiryRead = async function(id) { await updateDoc(doc(db,'enquiries',id), { status:'read' }); toast('Marked as read.'); loadEnquiries(); };
 window.deleteEnquiry = async function(id) { if(!confirm('Delete this enquiry?')) return; await deleteDoc(doc(db,'enquiries',id)); toast('Enquiry deleted.','error'); loadEnquiries(); };
 
-// ── BOOKINGS ──────────────────────────────────────────
-async function loadBookings() {
-  const tbody = document.getElementById('bookings-tbody');
-  tbody.innerHTML = '<tr><td colspan="7"><div class="spinner"></div></td></tr>';
-  const snap = await getDocs(query(collection(db,'bookings'), orderBy('createdAt','desc')));
-  if(snap.empty) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="fas fa-calendar"></i><p>No bookings yet</p></div></td></tr>'; return; }
-  tbody.innerHTML = snap.docs.map(d => {
-    const b = d.data();
-    return `<tr>
-      <td><strong>${b.name}</strong></td><td>${b.room||'—'}</td><td>${b.checkin||'—'}</td>
-      <td>${b.checkout||'—'}</td><td>${b.guests||'—'}</td>
-      <td style="font-size:0.8rem;color:var(--muted);">${b.email||''}<br>${b.phone||''}</td>
-      <td><span class="badge badge-${b.status||'pending'}">${b.status||'pending'}</span></td>
-    </tr>`;
-  }).join('');
-}
+// BOOKING FUNCTIONS
+async function loadBookings() { const tbody = document.getElementById('bookings-tbody'); tbody.innerHTML = '<tr><td colspan="7"><div class="spinner"></div></td></tr>'; const snap = await getDocs(query(collection(db,'bookings'), orderBy('createdAt','desc'))); if(snap.empty) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="fas fa-calendar"></i><p>No bookings yet</p></div></td></tr>'; return; } tbody.innerHTML = snap.docs.map(d => { const b = d.data(); return `<tr><td><strong>${b.name}</strong></td><td>${b.room||'—'}</td><td>${b.checkin||'—'}</td><td>${b.checkout||'—'}</td><td>${b.guests||'—'}</td><td style="font-size:0.8rem;color:var(--muted);">${b.email||''}<br>${b.phone||''}</td><td><span class="badge badge-${b.status||'pending'}">${b.status||'pending'}</span></td></tr>`; }).join(''); }
 
-// ── NEWSLETTER ────────────────────────────────────────
-async function loadNewsletter() {
-  const tbody = document.getElementById('newsletter-tbody');
-  tbody.innerHTML = '<tr><td colspan="3"><div class="spinner"></div></td></tr>';
-  const snap = await getDocs(query(collection(db,'newsletter'), orderBy('createdAt','desc')));
-  if(snap.empty) { tbody.innerHTML = '<tr><td colspan="3"><div class="empty-state">No subscribers yet</div></td></tr>'; return; }
-  tbody.innerHTML = snap.docs.map((d,i) => {
-    const s = d.data();
-    const date = s.createdAt?.toDate?.()?.toLocaleDateString('en-IN') || '—';
-    return `<tr><td style="color:var(--muted);">${i+1}</td><td>${s.email}</td><td style="color:var(--muted);">${date}</td></tr>`;
-  }).join('');
-}
+// NEWSLETTER FUNCTIONS
+async function loadNewsletter() { const tbody = document.getElementById('newsletter-tbody'); tbody.innerHTML = '<tr><td colspan="3"><div class="spinner"></div></td></tr>'; const snap = await getDocs(query(collection(db,'newsletter'), orderBy('createdAt','desc'))); if(snap.empty) { tbody.innerHTML = '<tr><td colspan="3"><div class="empty-state">No subscribers yet</div></td></tr>'; return; } tbody.innerHTML = snap.docs.map((d,i) => { const s = d.data(); const date = s.createdAt?.toDate?.()?.toLocaleDateString('en-IN') || '—'; return `<tr><td style="color:var(--muted);">${i+1}</td><td>${s.email}</td><td style="color:var(--muted);">${date}</td></tr>`; }).join(''); }
+window.exportNewsletter = async function() { const snap = await getDocs(query(collection(db,'newsletter'), orderBy('createdAt','desc'))); const rows = ['Email,Date']; snap.docs.forEach(d => { const s = d.data(); rows.push(`${s.email},${s.createdAt?.toDate?.()?.toLocaleDateString('en-IN')||''}`); }); const blob = new Blob([rows.join('\n')], { type:'text/csv' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'subscribers.csv'; a.click(); };
 
-window.exportNewsletter = async function() {
-  const snap = await getDocs(query(collection(db,'newsletter'), orderBy('createdAt','desc')));
-  const rows = ['Email,Date'];
-  snap.docs.forEach(d => { const s = d.data(); rows.push(`${s.email},${s.createdAt?.toDate?.()?.toLocaleDateString('en-IN')||''}`); });
-  const blob = new Blob([rows.join('\n')], { type:'text/csv' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'subscribers.csv'; a.click();
-};
+// CONTACT INFO
+async function loadContactSettingsForm() { try { const snap = await getDocs(collection(db,'contact_info')); if(snap.empty) return; const d = snap.docs[0].data(); ['phone','email','address','checkin','instagram','facebook','twitter','tripadvisor','youtube'].forEach(k => { const el = document.getElementById(`ci-${k}-input`); if(el && d[k]) el.value = d[k]; }); } catch(e) {} }
+window.saveContactInfo = async function(e) { e.preventDefault(); const data = {}; ['phone','email','address','checkin','instagram','facebook','twitter','tripadvisor','youtube'].forEach(k => { const v = document.getElementById(`ci-${k}-input`)?.value?.trim(); if(v) data[k] = v; }); const snap = await getDocs(collection(db,'contact_info')); if(snap.empty) await addDoc(collection(db,'contact_info'), data); else await updateDoc(doc(db,'contact_info',snap.docs[0].id), data); toast('Contact info saved! Website updated instantly.'); };
 
-// ── CONTACT INFO ─────────────────────────────────────
-async function loadContactSettingsForm() {
-  try {
-    const snap = await getDocs(collection(db,'contact_info'));
-    if(snap.empty) return;
-    const d = snap.docs[0].data();
-    ['phone','email','address','checkin','instagram','facebook','twitter','tripadvisor','youtube'].forEach(k => {
-      const el = document.getElementById(`ci-${k}-input`);
-      if(el && d[k]) el.value = d[k];
-    });
-  } catch(e) {}
-}
-
-window.saveContactInfo = async function(e) {
-  e.preventDefault();
-  const data = {};
-  ['phone','email','address','checkin','instagram','facebook','twitter','tripadvisor','youtube'].forEach(k => {
-    const v = document.getElementById(`ci-${k}-input`)?.value?.trim();
-    if(v) data[k] = v;
-  });
-  const snap = await getDocs(collection(db,'contact_info'));
-  if(snap.empty) await addDoc(collection(db,'contact_info'), data);
-  else await updateDoc(doc(db,'contact_info',snap.docs[0].id), data);
-  toast('✅ Contact info saved! Website updated instantly.');
-};
-
-// ── ANALYTICS ─────────────────────────────────────────
+// ANALYTICS
 const analyticsCache = { docs: [], lastDoc: null, loading:false, finished:false, event:'all', range:'all' };
-
-function getRangeStart(range) {
-  const now = new Date();
-  if(range==='today') return new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  if(range==='week') return new Date(now.getFullYear(),now.getMonth(),now.getDate()-6);
-  if(range==='month') return new Date(now.getFullYear(),now.getMonth(),now.getDate()-29);
-  return null;
-}
-
-async function loadAnalytics(reset=false) {
-  const tbody = document.getElementById('analytics-tbody');
-  const loadMoreBtn = document.getElementById('analytics-load-more');
-  const evtFilter = document.getElementById('analytics-event-filter').value;
-  const rangeFilter = document.getElementById('analytics-range-filter').value;
-  try {
-    if(reset || analyticsCache.event!==evtFilter || analyticsCache.range!==rangeFilter) {
-      analyticsCache.docs=[]; analyticsCache.lastDoc=null; analyticsCache.finished=false;
-      analyticsCache.event=evtFilter; analyticsCache.range=rangeFilter;
-    }
-    if(analyticsCache.loading) return;
-    if(analyticsCache.docs.length && !reset) { renderAnalytics(analyticsCache.docs); loadMoreBtn.style.display = analyticsCache.finished ? 'none' : 'block'; return; }
-    tbody.innerHTML = '<tr><td colspan="4"><div class="spinner"></div></td></tr>';
-    analyticsCache.loading = true;
-    let q = collection(db,'analytics');
-    if(evtFilter!=='all') q = query(q, where('event','==',evtFilter));
-    if(rangeFilter!=='all') { const start = getRangeStart(rangeFilter); if(start) q = query(q, where('ts','>=', start)); }
-    q = query(q, orderBy('ts','desc'));
-    if(analyticsCache.lastDoc) q = query(q, startAfter(analyticsCache.lastDoc));
-    q = query(q, limit(50));
-    const snap = await getDocs(q);
-    if(snap.empty) {
-      if(!analyticsCache.docs.length) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No analytics data yet</td></tr>';
-      analyticsCache.finished = true;
-    } else {
-      snap.docs.forEach(d=>analyticsCache.docs.push(d));
-      analyticsCache.lastDoc = snap.docs[snap.docs.length-1];
-      renderAnalytics(analyticsCache.docs);
-      loadMoreBtn.style.display = 'block';
-      if(snap.docs.length<50) analyticsCache.finished=true;
-    }
-  } catch(e) {
-    console.error('Error loading analytics', e);
-    tbody.innerHTML = `<tr><td colspan="4" style="color:var(--red);text-align:center;padding:2rem;">Error loading analytics: ${e.message||e}</td></tr>`;
-  } finally { analyticsCache.loading=false; }
-}
-
-function renderAnalytics(docs) {
-  const tbody = document.getElementById('analytics-tbody');
-  tbody.innerHTML = docs.map(d=>{
-    const ev = d.data();
-    const ts = ev.ts?.toDate?.()?.toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})||'';
-    const detail = JSON.stringify(ev.data||{}).slice(0,60);
-    return `<tr><td><span class="badge badge-new">${ev.event}</span></td><td style="font-size:0.8rem;color:var(--muted);">${detail}</td><td style="font-size:0.8rem;color:var(--muted);">${ev.page||''}</td><td style="font-size:0.8rem;color:var(--muted);">${ts}</td></tr>`;
-  }).join('');
-  updateAnalyticsStats(docs);
-}
-
-function updateAnalyticsStats(docs) {
-  const allEvents = docs.map(d=>d.data());
-  const pageViews = allEvents.filter(e => e.event==='page_view').length;
-  const clicks = allEvents.filter(e => e.event==='click').length;
-  const bookingClicks = allEvents.filter(e => e.event==='booking_modal_open').length;
-  const contactSubmits = allEvents.filter(e => e.event==='contact_submitted').length;
-  document.getElementById('analytics-stats').innerHTML = `
-    <div class="stat-card blue"><div class="sc-label">Page Views</div><div class="sc-num">${pageViews}</div></div>
-    <div class="stat-card"><div class="sc-label">Clicks Tracked</div><div class="sc-num">${clicks}</div></div>
-    <div class="stat-card green"><div class="sc-label">Booking Opens</div><div class="sc-num">${bookingClicks}</div></div>
-    <div class="stat-card clay"><div class="sc-label">Contact Submits</div><div class="sc-num">${contactSubmits}</div></div>`;
-}
-
+function getRangeStart(range) { const now = new Date(); if(range==='today') return new Date(now.getFullYear(),now.getMonth(),now.getDate()); if(range==='week') return new Date(now.getFullYear(),now.getMonth(),now.getDate()-6); if(range==='month') return new Date(now.getFullYear(),now.getMonth(),now.getDate()-29); return null; }
+async function loadAnalytics(reset=false) { const tbody = document.getElementById('analytics-tbody'); const loadMoreBtn = document.getElementById('analytics-load-more'); const evtFilter = document.getElementById('analytics-event-filter').value; const rangeFilter = document.getElementById('analytics-range-filter').value; try { if(reset || analyticsCache.event!==evtFilter || analyticsCache.range!==rangeFilter) { analyticsCache.docs=[]; analyticsCache.lastDoc=null; analyticsCache.finished=false; analyticsCache.event=evtFilter; analyticsCache.range=rangeFilter; } if(analyticsCache.loading) return; if(analyticsCache.docs.length && !reset) { renderAnalytics(analyticsCache.docs); loadMoreBtn.style.display = analyticsCache.finished ? 'none' : 'block'; return; } tbody.innerHTML = '<tr><td colspan="4"><div class="spinner"></div></td></tr>'; analyticsCache.loading = true; let q = collection(db,'analytics'); if(evtFilter!=='all') q = query(q, where('event','==',evtFilter)); if(rangeFilter!=='all') { const start = getRangeStart(rangeFilter); if(start) q = query(q, where('ts','>=', start)); } q = query(q, orderBy('ts','desc')); if(analyticsCache.lastDoc) q = query(q, startAfter(analyticsCache.lastDoc)); q = query(q, limit(50)); const snap = await getDocs(q); if(snap.empty) { if(!analyticsCache.docs.length) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No analytics data yet</td></tr>'; analyticsCache.finished = true; } else { snap.docs.forEach(d=>analyticsCache.docs.push(d)); analyticsCache.lastDoc = snap.docs[snap.docs.length-1]; renderAnalytics(analyticsCache.docs); loadMoreBtn.style.display = 'block'; if(snap.docs.length<50) analyticsCache.finished=true; } } catch(e) { console.error('Error loading analytics', e); tbody.innerHTML = `<tr><td colspan="4" style="color:var(--red);text-align:center;padding:2rem;">Error loading analytics: ${e.message||e}</td></tr>`; } finally { analyticsCache.loading=false; } }
+function renderAnalytics(docs) { const tbody = document.getElementById('analytics-tbody'); tbody.innerHTML = docs.map(d=>{ const ev = d.data(); const ts = ev.ts?.toDate?.()?.toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})||''; const detail = JSON.stringify(ev.data||{}).slice(0,60); return `<tr><td><span class="badge badge-new">${ev.event}</span></td><td style="font-size:0.8rem;color:var(--muted);">${detail}</td><td style="font-size:0.8rem;color:var(--muted);">${ev.page||''}</td><td style="font-size:0.8rem;color:var(--muted);">${ts}</td></tr>`; }).join(''); updateAnalyticsStats(docs); }
+function updateAnalyticsStats(docs) { const allEvents = docs.map(d=>d.data()); const pageViews = allEvents.filter(e => e.event==='page_view').length; const clicks = allEvents.filter(e => e.event==='click').length; const bookingClicks = allEvents.filter(e => e.event==='booking_modal_open').length; const contactSubmits = allEvents.filter(e => e.event==='contact_submitted').length; document.getElementById('analytics-stats').innerHTML = `<div class="stat-card blue"><div class="sc-label">Page Views</div><div class="sc-num">${pageViews}</div></div><div class="stat-card"><div class="sc-label">Clicks Tracked</div><div class="sc-num">${clicks}</div></div><div class="stat-card green"><div class="sc-label">Booking Opens</div><div class="sc-num">${bookingClicks}</div></div><div class="stat-card clay"><div class="sc-label">Contact Submits</div><div class="sc-num">${contactSubmits}</div></div>`; }
 window.loadMoreAnalytics = function() { if(analyticsCache.finished) return; loadAnalytics(); };
-
-function exportAnalytics() {
-  const rows = ['Event,Details,Page,Time'];
-  analyticsCache.docs.forEach(d=>{
-    const ev=d.data(); const detail=JSON.stringify(ev.data||{}).replace(/"/g,'""');
-    const ts=ev.ts?.toDate?.()?.toLocaleString()||'';
-    rows.push(`${ev.event},"${detail}",${ev.page||''},${ts}`);
-  });
-  const blob=new Blob([rows.join('\n')],{type:'text/csv'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='analytics.csv'; a.click();
-}
-
+function exportAnalytics() { const rows = ['Event,Details,Page,Time']; analyticsCache.docs.forEach(d=>{ const ev=d.data(); const detail=JSON.stringify(ev.data||{}).replace(/"/g,'""'); const ts=ev.ts?.toDate?.()?.toLocaleString()||''; rows.push(`${ev.event},"${detail}",${ev.page||''},${ts}`); }); const blob=new Blob([rows.join('\n')],{type:'text/csv'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='analytics.csv'; a.click(); }
 </script>
 </body>
 </html>

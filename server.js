@@ -5,11 +5,20 @@ const fs = require('fs').promises;
 
 const DATA_DIR = path.join(__dirname, 'data');
 const BLOG_DIR = path.join(__dirname, 'blog');
+const IMAGES_DIR = path.join(__dirname, 'public', 'images');
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+async function ensureDir(dirPath) {
+  try {
+    await fs.mkdir(dirPath, { recursive: true });
+  } catch (err) {
+    console.error(`Error creating directory ${dirPath}:`, err);
+  }
+}
 
 async function ensureFile(filePath, defaultContent) {
   try {
@@ -33,15 +42,60 @@ async function writeJSON(filePath, data) {
   await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 }
 
-const REVIEWS_FILE  = path.join(DATA_DIR, 'reviews.json');
-const CONTACTS_FILE = path.join(DATA_DIR, 'contacts.json');
-const NEWS_FILE     = path.join(DATA_DIR, 'newsletter.json');
-const IMAGES_FILE   = path.join(DATA_DIR, 'images.json');
+// Save base64-encoded image file and return path
+async function saveImageFile(base64Data, folder, filename) {
+  try {
+    const folderPath = path.join(IMAGES_DIR, folder);
+    await ensureDir(folderPath);
+    
+    // Extract base64 data (remove data:image/...;base64, prefix if present)
+    const buffer = Buffer.from(
+      base64Data.replace(/^data:image\/[a-z]+;base64,/, ''),
+      'base64'
+    );
+    
+    const filePath = path.join(folderPath, filename);
+    await fs.writeFile(filePath, buffer);
+    
+    return `/images/${folder}/${filename}`;
+  } catch (err) {
+    console.error('Error saving image file:', err);
+    throw err;
+  }
+}
+
+const REVIEWS_FILE       = path.join(DATA_DIR, 'reviews.json');
+const CONTACTS_FILE      = path.join(DATA_DIR, 'contacts.json');
+const NEWS_FILE          = path.join(DATA_DIR, 'newsletter.json');
+const IMAGES_FILE        = path.join(DATA_DIR, 'images.json');
+const IMAGES_MANIFEST    = path.join(DATA_DIR, 'images-manifest.json');
 
 ensureFile(REVIEWS_FILE,  []);
 ensureFile(CONTACTS_FILE, []);
 ensureFile(NEWS_FILE,     []);
 ensureFile(IMAGES_FILE,   { images: [] });
+
+// Initialize manifest with default structure
+const defaultManifest = {
+  version: "1.0",
+  lastUpdated: new Date().toISOString(),
+  heroImages: [],
+  gallery: {
+    resort: [],
+    hotel: [],
+    activities: [],
+    nature: [],
+    bird: []
+  },
+  blogImages: [],
+  metadata: {
+    totalImages: 0,
+    totalActiveImages: 0,
+    categories: ["resort", "hotel", "activities", "nature", "bird"],
+    lastModified: new Date().toISOString()
+  }
+};
+ensureFile(IMAGES_MANIFEST, defaultManifest);
 
 // Reviews
 app.get('/api/reviews', async (req, res) => {
@@ -92,7 +146,296 @@ app.get('/api/blog', async (req, res) => {
   res.json(posts);
 });
 
-// Images
+// Images - Manifest
+app.get('/api/images/manifest', async (req, res) => {
+  const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+  res.json(manifest);
+});
+
+// Hero Images
+app.get('/api/images/hero', async (req, res) => {
+  const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+  const active = req.query.active === 'true' ? true : req.query.active === 'false' ? false : null;
+  let heroes = manifest.heroImages || [];
+  if (active !== null) heroes = heroes.filter(h => h.active === active);
+  res.json({ heroImages: heroes.sort((a, b) => (a.order || 0) - (b.order || 0)) });
+});
+
+app.post('/api/images/hero', async (req, res) => {
+  const { filename, imageData } = req.body;
+  if (!filename || !imageData) return res.status(400).json({ error: 'filename and imageData required' });
+  
+  try {
+    // Save the actual image file
+    const imgPath = await saveImageFile(imageData, 'hero', filename);
+    
+    const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+    const nextOrder = manifest.heroImages.length > 0 
+      ? Math.max(...manifest.heroImages.map(h => h.order || 0)) + 1 
+      : 1;
+    
+    const newHero = {
+      id: 'hero_' + Date.now(),
+      filename,
+      path: imgPath,
+      active: true,
+      order: nextOrder,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    
+    manifest.heroImages.push(newHero);
+    manifest.lastUpdated = new Date().toISOString();
+    manifest.metadata.totalImages = (manifest.heroImages || []).length + 
+                                     Object.values(manifest.gallery || {}).reduce((sum, arr) => sum + arr.length, 0) +
+                                     (manifest.blogImages || []).length;
+    manifest.metadata.totalActiveImages = (manifest.heroImages || []).filter(h => h.active).length +
+                                           Object.values(manifest.gallery || {}).flat().filter(g => g.active).length +
+                                           (manifest.blogImages || []).filter(b => b.active).length;
+    
+    await writeJSON(IMAGES_MANIFEST, manifest);
+    res.json({ success: true, image: newHero });
+  } catch (err) {
+    console.error('Error uploading hero image:', err);
+    res.status(500).json({ error: 'Failed to upload image: ' + err.message });
+  }
+});
+
+app.put('/api/images/hero/:id', async (req, res) => {
+  const { active, order } = req.body;
+  const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+  
+  const hero = manifest.heroImages.find(h => h.id === req.params.id);
+  if (!hero) return res.status(404).json({ error: 'Hero image not found' });
+  
+  if (active !== undefined) hero.active = active;
+  if (order !== undefined) hero.order = order;
+  hero.updatedAt = new Date().toISOString();
+  
+  manifest.lastUpdated = new Date().toISOString();
+  manifest.metadata.totalActiveImages = (manifest.heroImages || []).filter(h => h.active).length +
+                                         Object.values(manifest.gallery || {}).flat().filter(g => g.active).length +
+                                         (manifest.blogImages || []).filter(b => b.active).length;
+  
+  await writeJSON(IMAGES_MANIFEST, manifest);
+  res.json({ success: true, image: hero });
+});
+
+app.delete('/api/images/hero/:id', async (req, res) => {
+  const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+  manifest.heroImages = manifest.heroImages.filter(h => h.id !== req.params.id);
+  manifest.lastUpdated = new Date().toISOString();
+  manifest.metadata.totalImages = (manifest.heroImages || []).length + 
+                                   Object.values(manifest.gallery || {}).reduce((sum, arr) => sum + arr.length, 0) +
+                                   (manifest.blogImages || []).length;
+  manifest.metadata.totalActiveImages = (manifest.heroImages || []).filter(h => h.active).length +
+                                         Object.values(manifest.gallery || {}).flat().filter(g => g.active).length +
+                                         (manifest.blogImages || []).filter(b => b.active).length;
+  
+  await writeJSON(IMAGES_MANIFEST, manifest);
+  res.json({ success: true });
+});
+
+// Gallery Images
+app.get('/api/images/gallery', async (req, res) => {
+  const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+  const category = req.query.category;
+  const active = req.query.active === 'true' ? true : req.query.active === 'false' ? false : null;
+  
+  // Flatten all categories into a single array for the frontend
+  let galleryImages = [];
+  
+  if (category) {
+    // Specific category requested
+    if (manifest.gallery[category]) {
+      let images = manifest.gallery[category];
+      if (active !== null) images = images.filter(g => g.active === active);
+      galleryImages = images.sort((a, b) => (a.order || 0) - (b.order || 0));
+    }
+  } else {
+    // All categories - flatten into single array
+    for (const cat in manifest.gallery) {
+      let images = manifest.gallery[cat] || [];
+      if (active !== null) images = images.filter(g => g.active === active);
+      galleryImages = galleryImages.concat(images.sort((a, b) => (a.order || 0) - (b.order || 0)));
+    }
+  }
+  
+  res.json({ galleryImages });
+});
+
+app.post('/api/images/gallery', async (req, res) => {
+  const { category, filename, imageData } = req.body;
+  if (!category || !filename || !imageData) 
+    return res.status(400).json({ error: 'category, filename and imageData required' });
+  
+  try {
+    // Save the actual image file
+    const imgPath = await saveImageFile(imageData, `gallery/${category}`, filename);
+    
+    const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+    
+    if (!manifest.gallery[category]) {
+      manifest.gallery[category] = [];
+    }
+    
+    const nextOrder = manifest.gallery[category].length > 0
+      ? Math.max(...manifest.gallery[category].map(g => g.order || 0)) + 1
+      : 1;
+    
+    const newImage = {
+      id: 'gal_' + category + '_' + Date.now(),
+      filename,
+      path: imgPath,
+      category,
+      active: true,
+      order: nextOrder,
+      createdAt: new Date().toISOString()
+    };
+    
+    manifest.gallery[category].push(newImage);
+    manifest.lastUpdated = new Date().toISOString();
+    manifest.metadata.totalImages = (manifest.heroImages || []).length + 
+                                     Object.values(manifest.gallery || {}).reduce((sum, arr) => sum + arr.length, 0) +
+                                     (manifest.blogImages || []).length;
+    manifest.metadata.totalActiveImages = (manifest.heroImages || []).filter(h => h.active).length +
+                                           Object.values(manifest.gallery || {}).flat().filter(g => g.active).length +
+                                           (manifest.blogImages || []).filter(b => b.active).length;
+    
+    await writeJSON(IMAGES_MANIFEST, manifest);
+    res.json({ success: true, image: newImage });
+  } catch (err) {
+    console.error('Error uploading gallery image:', err);
+    res.status(500).json({ error: 'Failed to upload image: ' + err.message });
+  }
+});
+
+app.put('/api/images/gallery/:id', async (req, res) => {
+  const { active, order, category } = req.body;
+  const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+  
+  if (!category || !manifest.gallery[category]) {
+    return res.status(400).json({ error: 'category required' });
+  }
+  
+  const image = manifest.gallery[category].find(g => g.id === req.params.id);
+  if (!image) return res.status(404).json({ error: 'Gallery image not found' });
+  
+  if (active !== undefined) image.active = active;
+  if (order !== undefined) image.order = order;
+  
+  manifest.lastUpdated = new Date().toISOString();
+  manifest.metadata.totalActiveImages = (manifest.heroImages || []).filter(h => h.active).length +
+                                         Object.values(manifest.gallery || {}).flat().filter(g => g.active).length +
+                                         (manifest.blogImages || []).filter(b => b.active).length;
+  
+  await writeJSON(IMAGES_MANIFEST, manifest);
+  res.json({ success: true, image });
+});
+
+app.delete('/api/images/gallery/:id', async (req, res) => {
+  const { category } = req.body;
+  if (!category) return res.status(400).json({ error: 'category required' });
+  
+  const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+  
+  if (!manifest.gallery[category]) {
+    return res.status(404).json({ error: 'Category not found' });
+  }
+  
+  manifest.gallery[category] = manifest.gallery[category].filter(g => g.id !== req.params.id);
+  manifest.lastUpdated = new Date().toISOString();
+  manifest.metadata.totalImages = (manifest.heroImages || []).length + 
+                                   Object.values(manifest.gallery || {}).reduce((sum, arr) => sum + arr.length, 0) +
+                                   (manifest.blogImages || []).length;
+  manifest.metadata.totalActiveImages = (manifest.heroImages || []).filter(h => h.active).length +
+                                         Object.values(manifest.gallery || {}).flat().filter(g => g.active).length +
+                                         (manifest.blogImages || []).filter(b => b.active).length;
+  
+  await writeJSON(IMAGES_MANIFEST, manifest);
+  res.json({ success: true });
+});
+
+// Blog Images
+app.get('/api/images/blog', async (req, res) => {
+  const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+  const active = req.query.active === 'true' ? true : req.query.active === 'false' ? false : null;
+  let blogs = manifest.blogImages || [];
+  if (active !== null) blogs = blogs.filter(b => b.active === active);
+  res.json({ blogImages: blogs });
+});
+
+app.post('/api/images/blog', async (req, res) => {
+  const { postId, filename, imageData } = req.body;
+  if (!postId || !filename || !imageData) 
+    return res.status(400).json({ error: 'postId, filename and imageData required' });
+  
+  try {
+    // Save the actual image file
+    const imgPath = await saveImageFile(imageData, `blog/${postId}`, filename);
+    
+    const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+    
+    const newImage = {
+      id: 'blog_' + postId + '_' + Date.now(),
+      postId,
+      filename,
+      path: imgPath,
+      active: true,
+      createdAt: new Date().toISOString()
+    };
+    
+    manifest.blogImages.push(newImage);
+    manifest.lastUpdated = new Date().toISOString();
+    manifest.metadata.totalImages = (manifest.heroImages || []).length + 
+                                     Object.values(manifest.gallery || {}).reduce((sum, arr) => sum + arr.length, 0) +
+                                     (manifest.blogImages || []).length;
+    manifest.metadata.totalActiveImages = (manifest.heroImages || []).filter(h => h.active).length +
+                                           Object.values(manifest.gallery || {}).flat().filter(g => g.active).length +
+                                           (manifest.blogImages || []).filter(b => b.active).length;
+    
+    await writeJSON(IMAGES_MANIFEST, manifest);
+    res.json({ success: true, image: newImage });
+  } catch (err) {
+    console.error('Error uploading blog image:', err);
+    res.status(500).json({ error: 'Failed to upload image: ' + err.message });
+  }
+});
+
+app.put('/api/images/blog/:id', async (req, res) => {
+  const { active } = req.body;
+  const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+  
+  const image = manifest.blogImages.find(b => b.id === req.params.id);
+  if (!image) return res.status(404).json({ error: 'Blog image not found' });
+  
+  if (active !== undefined) image.active = active;
+  
+  manifest.lastUpdated = new Date().toISOString();
+  manifest.metadata.totalActiveImages = (manifest.heroImages || []).filter(h => h.active).length +
+                                         Object.values(manifest.gallery || {}).flat().filter(g => g.active).length +
+                                         (manifest.blogImages || []).filter(b => b.active).length;
+  
+  await writeJSON(IMAGES_MANIFEST, manifest);
+  res.json({ success: true, image });
+});
+
+app.delete('/api/images/blog/:id', async (req, res) => {
+  const manifest = await readJSON(IMAGES_MANIFEST, defaultManifest);
+  manifest.blogImages = manifest.blogImages.filter(b => b.id !== req.params.id);
+  manifest.lastUpdated = new Date().toISOString();
+  manifest.metadata.totalImages = (manifest.heroImages || []).length + 
+                                   Object.values(manifest.gallery || {}).reduce((sum, arr) => sum + arr.length, 0) +
+                                   (manifest.blogImages || []).length;
+  manifest.metadata.totalActiveImages = (manifest.heroImages || []).filter(h => h.active).length +
+                                         Object.values(manifest.gallery || {}).flat().filter(g => g.active).length +
+                                         (manifest.blogImages || []).filter(b => b.active).length;
+  
+  await writeJSON(IMAGES_MANIFEST, manifest);
+  res.json({ success: true });
+});
+
+// Legacy Images (kept for backward compatibility)
 app.get('/api/images', async (req, res) => {
   const data = await readJSON(IMAGES_FILE, { images: [] });
   const folder = req.query.folder;

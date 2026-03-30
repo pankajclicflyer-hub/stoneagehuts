@@ -153,17 +153,17 @@ async function loadGallery(cat = 'all') {
   const grid = document.getElementById('gallery-grid');
   grid.innerHTML = '<div class="loading-section"><div class="spinner"></div><p style="color:var(--text-muted);font-size:0.9rem;">Loading gallery...</p></div>';
   try {
-    const url = cat === 'all' ? '/api/images' : `/api/images?folder=${cat}`;
+    const url = cat === 'all' ? '/api/images/gallery' : `/api/images/gallery?category=${cat}`;
     const res = await fetch(url);
     const data = await res.json();
-    const imgs = (data.images || []).filter(img => img.folder !== 'hero' && img.folder !== 'blog');
+    const imgs = (data.galleryImages || []).filter(img => img.active);
     if (!imgs.length) {
       grid.innerHTML = '<div class="gallery-empty"><p>No images in this category yet.</p></div>';
       return;
     }
     grid.innerHTML = imgs.map(img => `
-      <div class="gallery-item" data-cat="${img.folder}" onclick="openModal('${img.path}')">
-        <img src="${img.path}" alt="${img.name}" loading="lazy" onerror="this.parentElement.style.display='none'" />
+      <div class="gallery-item" data-cat="${img.category}" onclick="openModal('${img.path}')">
+        <img src="${img.path}" alt="${img.filename}" loading="lazy" onerror="this.parentElement.style.display='none'" />
       </div>`).join('');
   } catch(e) {
     grid.innerHTML = '<div class="gallery-empty"><p>Could not load images.</p></div>';

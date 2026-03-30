@@ -876,12 +876,16 @@ const FALLBACKS=[{emoji:'🌿',bg:'s0'},{emoji:'🦜',bg:'s1'},{emoji:'🏕️',
 async function loadHeroImages(){
   let images=[];
   try{
-    const res = await fetch('/api/images?folder=hero');
-    const data = await res.json();
-    if(data.images && data.images.length){
-      images = data.images.map(img=>({url:img.path, title:img.name, order:0}));
+    const res = await fetch('/api/images/hero?active=true');
+    if(res.ok){
+      const data = await res.json();
+      if(data.heroImages && Array.isArray(data.heroImages)){
+        images = data.heroImages
+          .sort((a,b) => (a.order||0) - (b.order||0))
+          .map(img=>({url:img.path, title:img.filename, order:img.order||0}));
+      }
     }
-  }catch(e){}
+  }catch(e){console.error('Error loading hero images:',e);}
   buildCarousel(images.length?images:null);
 }
 function buildCarousel(images){
@@ -1081,11 +1085,22 @@ let allGalleryItems=[];
 async function loadGallery(){
   const grid=document.getElementById('gallery-grid');
   try{
-    // Only fetch active images (isActive !== false)
-    const snap=await getDocs(query(collection(db,'gallery'),orderBy('order','asc')));
-    allGalleryItems=snap.docs.map(d=>({id:d.id,...d.data()})).filter(i=>i.isActive!==false);
-    renderGallery('all');
+    // Fetch only active images from the new API
+    const res = await fetch('/api/images/gallery?active=true');
+    if(res.ok){
+      const data = await res.json();
+      if(data.galleryImages && Array.isArray(data.galleryImages)){
+        allGalleryItems = data.galleryImages
+          .sort((a,b) => (a.order||0) - (b.order||0));
+      }
+    }
+    if(allGalleryItems.length===0){
+      grid.innerHTML='<div class="gallery-empty" style="grid-column:1/-1"><i class="fas fa-images" style="font-size:2rem;opacity:0.3;display:block;margin-bottom:0.5rem;"></i>Gallery images will appear here once added from the admin panel.</div>';
+    } else {
+      renderGallery('all');
+    }
   }catch(e){
+    console.error('Error loading gallery:',e);
     grid.innerHTML='<div class="gallery-empty" style="grid-column:1/-1"><i class="fas fa-images" style="font-size:2rem;opacity:0.3;display:block;margin-bottom:0.5rem;"></i>Gallery images will appear here once added from the admin panel.</div>';
   }
 }
@@ -1129,15 +1144,41 @@ const DEFAULT_POSTS=[
 ];
 
 let _blogPosts=[];
+let _blogFeaturedImages={};
+
+async function loadBlogFeaturedImages(){
+  try{
+    const res = await fetch('/api/images/blog');
+    if(res.ok){
+      const data = await res.json();
+      if(data.blogImages && Array.isArray(data.blogImages)){
+        data.blogImages.forEach(img => {
+          if(img.active && img.postId){
+            _blogFeaturedImages[img.postId] = img;
+          }
+        });
+      }
+    }
+  }catch(e){console.error('Error loading blog featured images:',e);}
+}
 
 async function loadPosts(){
   const grid=document.getElementById('posts-grid');
   try{
+    // Load featured images first
+    await loadBlogFeaturedImages();
+    
     // Try 'blog' collection first, fall back to 'posts'
     let snap=await getDocs(query(collection(db,'blog'),where('isActive','==',true),orderBy('date','desc')));
     if(snap.empty)snap=await getDocs(query(collection(db,'posts'),where('published','==',true),orderBy('date','desc')));
     if(snap.empty){_blogPosts=DEFAULT_POSTS;renderPosts();return;}
     _blogPosts=snap.docs.map(d=>({id:d.id,...d.data()}));
+    // Merge featured images if available
+    _blogPosts = _blogPosts.map(post => {
+      const featured = _blogFeaturedImages[post.id];
+      if(featured && featured.path) post.featuredImagePath = featured.path;
+      return post;
+    });
     renderPosts();
   }catch(e){_blogPosts=DEFAULT_POSTS;renderPosts();}
 }
@@ -1169,10 +1210,11 @@ function renderPosts(){
 window.openBlogModal=function(idx){
   const p=_blogPosts[idx];
   if(!p)return;
-  // Image or fallback
+  // Image or fallback - prefer featured image from API
   const imgWrap=document.getElementById('blog-modal-img-wrap');
-  if(p.imageUrl||p.image){
-    imgWrap.innerHTML=`<img class="blog-modal-img" src="${p.imageUrl||p.image}" alt="${p.title||''}" onerror="this.style.display='none'" />`;
+  const imageSource = p.featuredImagePath || p.imageUrl || p.image;
+  if(imageSource){
+    imgWrap.innerHTML=`<img class="blog-modal-img" src="${imageSource}" alt="${p.title||''}" onerror="this.style.display='none'" />`;
   }else{
     imgWrap.innerHTML=`<div class="blog-modal-img-fallback">${p.emoji||'📝'}</div>`;
   }
