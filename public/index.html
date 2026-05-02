@@ -3,13 +3,283 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>stoneagehuts — Background Image Demo</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏕️</text></svg>">
+  <title>Stone Age Huts - Experience Nature's Embrace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="hero">
-    <h1>Stone Age Huts</h1>
-    <p>Background image set from the repository image file.</p>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <span class="brand-icon">🏕️</span>
+        <span class="brand-text">Stone Age Huts</span>
+      </div>
+      <div class="nav-links">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#stay" class="nav-link">Stay</a>
+        <a href="#activities" class="nav-link">Activities</a>
+        <a href="#gallery" class="nav-link">Gallery</a>
+        <a href="#reviews" class="nav-link">Reviews</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button id="btn-en" class="lang-btn active">EN</button>
+        <button id="btn-hi" class="lang-btn">हि</button>
+        <a href="#contact" class="btn primary inquire">Book Now</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <main class="hero" id="home">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Experience Nature's Embrace</h1>
+      <p class="hero-sub">Resort • Hostel • Bird Watching Retreat</p>
+      <div class="hero-actions">
+        <a href="#stay" class="btn primary">Explore</a>
+        <a href="#contact" class="btn secondary inquire">Book Now</a>
+      </div>
+    </div>
   </main>
+
+  <!-- Stay Section -->
+  <section id="stay" class="section">
+    <div class="container">
+      <h2 class="section-title">Our Accommodations</h2>
+      <div class="stay-grid">
+        <div class="stay-card">
+          <div class="stay-image">
+            <img src="images/rooms/room1.jpg" alt="Deluxe Room" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect width=%22400%22 height=%22300%22 fill=%22%23f0f0f0%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23666%22>Room Image</text></svg>'">
+          </div>
+          <div class="stay-content">
+            <h3>Deluxe Room</h3>
+            <p>Spacious rooms with modern amenities and stunning valley views.</p>
+            <div class="stay-features">
+              <span><i class="fas fa-wifi"></i> Free WiFi</span>
+              <span><i class="fas fa-utensils"></i> Restaurant</span>
+              <span><i class="fas fa-car"></i> Parking</span>
+            </div>
+            <a href="#contact" class="btn primary inquire">Book Now</a>
+          </div>
+        </div>
+        <div class="stay-card">
+          <div class="stay-image">
+            <img src="images/rooms/room2.jpg" alt="Hostel Beds" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect width=%22400%22 height=%22300%22 fill=%22%23f0f0f0%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23666%22>Hostel Image</text></svg>'">
+          </div>
+          <div class="stay-content">
+            <h3>Hostel Beds</h3>
+            <p>Comfortable shared accommodation perfect for budget travelers.</p>
+            <div class="stay-features">
+              <span><i class="fas fa-users"></i> Shared</span>
+              <span><i class="fas fa-utensils"></i> Kitchen</span>
+              <span><i class="fas fa-mountain"></i> Views</span>
+            </div>
+            <a href="#contact" class="btn primary inquire">Book Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Activities Section -->
+  <section id="activities" class="section">
+    <div class="container">
+      <h2 class="section-title">Activities & Experiences</h2>
+      <div class="activities-grid">
+        <div class="activity-card">
+          <div class="activity-icon">
+            <i class="fas fa-binoculars"></i>
+          </div>
+          <h3>Bird Watching</h3>
+          <p>Observe diverse bird species in their natural habitat with expert guides.</p>
+        </div>
+        <div class="activity-card">
+          <div class="activity-icon">
+            <i class="fas fa-hiking"></i>
+          </div>
+          <h3>Trekking</h3>
+          <p>Explore scenic trails and enjoy breathtaking views of the valley.</p>
+        </div>
+        <div class="activity-card">
+          <div class="activity-icon">
+            <i class="fas fa-utensils"></i>
+          </div>
+          <h3>Local Cuisine</h3>
+          <p>Experience authentic local flavors and traditional cooking methods.</p>
+        </div>
+        <div class="activity-card">
+          <div class="activity-icon">
+            <i class="fas fa-camera"></i>
+          </div>
+          <h3>Photography</h3>
+          <p>Capture stunning landscapes and wildlife in perfect lighting conditions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery" class="section">
+    <div class="container">
+      <h2 class="section-title">Image Gallery</h2>
+      <div class="gallery-filters">
+        <button class="filter active" data-cat="all" onclick="filterGallery('all', this)">All</button>
+        <button class="filter" data-cat="nature" onclick="filterGallery('nature', this)">Nature</button>
+        <button class="filter" data-cat="resort" onclick="filterGallery('resort', this)">Resort</button>
+        <button class="filter" data-cat="activities" onclick="filterGallery('activities', this)">Activities</button>
+      </div>
+      <div id="gallery-grid" class="gallery-grid">
+        <!-- Gallery images will be loaded here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section id="reviews" class="section">
+    <div class="container">
+      <h2 class="section-title">Guest Reviews</h2>
+      <div id="reviews-list" class="reviews-list">
+        <!-- Reviews will be loaded here -->
+      </div>
+      <div class="review-form-container">
+        <h3>Share Your Experience</h3>
+        <form id="review-form" class="review-form">
+          <div class="form-group">
+            <input type="text" name="name" placeholder="Your Name" required>
+          </div>
+          <div class="form-group">
+            <select name="rating" required>
+              <option value="">Select Rating</option>
+              <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+              <option value="4">⭐⭐⭐⭐ Very Good</option>
+              <option value="3">⭐⭐⭐ Good</option>
+              <option value="2">⭐⭐ Fair</option>
+              <option value="1">⭐ Poor</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <textarea name="text" placeholder="Your Review" rows="4"></textarea>
+          </div>
+          <button type="submit" class="btn primary">Submit Review</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2 class="section-title">Contact Us</h2>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <h4>Location</h4>
+              <p>Stone Age Huts, Valley View Resort</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <div>
+              <h4>Phone</h4>
+              <p>+91 XXXXX XXXXX</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <h4>Email</h4>
+              <p>info@stoneagehuts.com</p>
+            </div>
+          </div>
+        </div>
+        <div class="contact-form-container">
+          <form id="contact-form" class="contact-form">
+            <div class="form-row">
+              <div class="form-group">
+                <input type="text" name="name" placeholder="Your Name" required>
+              </div>
+              <div class="form-group">
+                <input type="email" name="email" placeholder="Your Email" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" name="subject" placeholder="Subject" required>
+            </div>
+            <div class="form-group">
+              <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn primary">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="newsletter-content">
+        <h3>Stay Updated</h3>
+        <p>Get the latest updates on new activities and special offers.</p>
+        <form id="newsletter-form" class="newsletter-form">
+          <input type="email" name="email" placeholder="Your Email" required>
+          <button type="submit" class="btn primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="brand-icon">🏕️</span>
+          <span class="brand-text">Stone Age Huts</span>
+          <p>Experience nature's embrace in the heart of the valley.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-section">
+            <h4>Quick Links</h4>
+            <a href="#stay">Accommodations</a>
+            <a href="#activities">Activities</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <div class="footer-section">
+            <h4>Follow Us</h4>
+            <div class="social-links">
+              <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-tripadvisor"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Stone Age Huts. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Gallery Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <img id="modal-img" src="" alt="Gallery Image">
+      <button id="modal-close" class="modal-close">&times;</button>
+    </div>
+  </div>
+
+  <!-- Blog Posts Container (for dynamic loading) -->
+  <div id="posts" style="display: none;"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>
