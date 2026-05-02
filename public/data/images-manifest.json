@@ -1,0 +1,35 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-05-02T12:52:15.268Z",
+  "heroImages": [
+    {
+      "id": "hero_1777726335268",
+      "filename": "1777726332526_Updated.png",
+      "path": "/images/hero/1777726332526_Updated.png",
+      "active": true,
+      "order": 1,
+      "createdAt": "2026-05-02T12:52:15.268Z",
+      "updatedAt": "2026-05-02T12:52:15.268Z"
+    }
+  ],
+  "gallery": {
+    "resort": [],
+    "hotel": [],
+    "activities": [],
+    "nature": [],
+    "bird": []
+  },
+  "blogImages": [],
+  "metadata": {
+    "totalImages": 1,
+    "totalActiveImages": 1,
+    "categories": [
+      "resort",
+      "hotel",
+      "activities",
+      "nature",
+      "bird"
+    ],
+    "lastModified": "2026-05-02T12:50:27.772Z"
+  }
+}
